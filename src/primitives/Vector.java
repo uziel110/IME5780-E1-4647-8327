@@ -27,52 +27,52 @@ public class Vector {
         _end = new Point3D(other._end);
     }
 
-    Vector subtract(Vector other) {
+    public Vector subtract(Vector other) {
         return new Vector(new Coordinate(_end._a._coord - other._end._a._coord),
                 new Coordinate(_end._b._coord - other._end._a._coord),
                 new Coordinate(_end._c._coord - other._end._c._coord));
     }
 
-    Vector add(Vector other) {
+    public Vector add(Vector other) {
         return new Vector(new Coordinate(_end._a._coord + other._end._a._coord),
                 new Coordinate(_end._b._coord + other._end._a._coord),
                 new Coordinate(_end._c._coord + other._end._c._coord));
     }
 
-    Vector scale(double scalar) {
+    public Vector scale(double scalar) {
         return new Vector(new Coordinate(_end._a._coord * scalar),
                 new Coordinate(_end._b._coord * scalar),
                 new Coordinate(_end._c._coord * scalar));
     }
 
-    Vector dotProduct(Vector other) {
+    public Vector dotProduct(Vector other) {
         return new Vector(new Coordinate(_end._a._coord * other._end._a._coord),
                 new Coordinate(_end._b._coord * other._end._a._coord),
                 new Coordinate(_end._c._coord * other._end._c._coord));
     }
 
-    Vector crossProduct(Vector other) {
+    public Vector crossProduct(Vector other) {
         return new Vector(new Coordinate(_end._b._coord * other._end._c._coord - _end._c._coord * other._end._b._coord),
                 new Coordinate(_end._c._coord * other._end._a._coord - _end._a._coord * other._end._c._coord),
                 new Coordinate(_end._a._coord * other._end._b._coord - _end._b._coord * other._end._a._coord));
     }
 
-    Double lengthSquared(){
+    public double lengthSquared(){
         return this._end.distanceSquared(Point3D.ZERO);
     }
 
-    Double length(){
+    public double length(){
         return Math.sqrt(this.lengthSquared());
     }
 
-    Vector normalize(){
+    public Vector normalize(){
         Double norma = this.length();
         _end._a = new Coordinate(_end._a._coord/norma);
         _end._b = new Coordinate(_end._b._coord/norma);
         _end._c = new Coordinate(_end._c._coord/norma);
         return this;
     }
-    Vector normalized (){
+    public Vector normalized (){
         return new Vector(this).normalize();
     }
 }
