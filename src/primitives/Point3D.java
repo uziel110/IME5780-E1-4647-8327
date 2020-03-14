@@ -14,33 +14,33 @@ public class Point3D {
     /**
      * ctor that receive 3 coordinates
      *
-     * @param one
-     * @param two
-     * @param three
+     * @param x
+     * @param y
+     * @param z
      */
-    public Point3D(Coordinate one, Coordinate two, Coordinate three) {
-        _x = new Coordinate(one);
-        _y = new Coordinate(two);
-        _z = new Coordinate(three);
+    public Point3D(Coordinate x, Coordinate y, Coordinate z) {
+        _x = new Coordinate(x);
+        _y = new Coordinate(y);
+        _z = new Coordinate(z);
     }
 
     /**
      * ctor that receive 3 double parameters
      *
-     * @param one
-     * @param two
-     * @param three
+     * @param x
+     * @param y
+     * @param z
      */
-    public Point3D(double one, double two, double three) {
-        _x = new Coordinate(one);
-        _y = new Coordinate(two);
-        _z = new Coordinate(three);
+    public Point3D(double x, double y, double z) {
+        _x = new Coordinate(x);
+        _y = new Coordinate(y);
+        _z = new Coordinate(z);
     }
 
     /**
      * copy ctor - receive another point
      *
-     * @param other
+     * @param other 3d point
      */
     public Point3D(Point3D other) {
         _x = new Coordinate(other._x);

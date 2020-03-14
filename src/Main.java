@@ -1,3 +1,8 @@
+/**
+ * Uziel Shemesh 037084647 uziel110@gmail.com
+ * Ari Lazar
+ */
+
 import primitives.*;
 import static java.lang.System.out;
 import static primitives.Util.*;

@@ -11,18 +11,19 @@ public class Vector {
         return _end;
     }
 
-    public Vector(Coordinate one, Coordinate two, Coordinate three) {
-        if (Util.isZero(one._coord) && Util.isZero(two._coord) && Util.isZero(three._coord))
+    public Vector(Coordinate x, Coordinate y, Coordinate z) {
+        if (Util.isZero(x._coord) && Util.isZero(y._coord) && Util.isZero(z._coord))
             throw new IllegalArgumentException();
-        _end = new Point3D(one, two, three);
+        _end = new Point3D(x, y, z);
     }
 
-    public Vector(double one, double two, double three) {
-        if (Util.isZero(one) && Util.isZero(two) && Util.isZero(three))
+    public Vector(double x, double y, double z) {
+        if (Util.isZero(x) && Util.isZero(y) && Util.isZero(z))
             throw new IllegalArgumentException();
-        _end = new Point3D(one, two, three);
+        _end = new Point3D(x, y, z);
     }
 
+    //TODO check individual x y z
     public Vector(Point3D end) {
         if (_end.equals(Point3D.ZERO))
             throw new IllegalArgumentException();
@@ -93,6 +94,6 @@ public class Vector {
 
     @Override
     public String toString() {
-        return "Vector(" + _end + ')';
+        return "Vector" + _end ;
     }
 }
