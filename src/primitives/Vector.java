@@ -1,5 +1,7 @@
 package primitives;
 
+import java.awt.*;
+
 /**
  * @author Uziel Shemesh
  * class that implements Vector
@@ -12,20 +14,22 @@ public class Vector {
     }
 
     public Vector(Coordinate x, Coordinate y, Coordinate z) {
-        if (Util.isZero(x._coord) && Util.isZero(y._coord) && Util.isZero(z._coord))
+        Point3D point = new Point3D(x ,y, z);
+        if(point.equals(Point3D.ZERO))
             throw new IllegalArgumentException();
-        _end = new Point3D(x, y, z);
+        _end = point;
     }
 
     public Vector(double x, double y, double z) {
-        if (Util.isZero(x) && Util.isZero(y) && Util.isZero(z))
+        Point3D point = new Point3D(x ,y, z);
+        if(point.equals(Point3D.ZERO))
             throw new IllegalArgumentException();
-        _end = new Point3D(x, y, z);
+        _end = point;
     }
 
     //TODO check individual x y z
     public Vector(Point3D end) {
-        if (_end.equals(Point3D.ZERO))
+        if (end.equals(Point3D.ZERO))
             throw new IllegalArgumentException();
         _end = new Point3D(end);
     }
