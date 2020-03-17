@@ -2,10 +2,19 @@ package geometries;
 
 import primitives.*;
 
+/**
+ * class that implement a plane
+ */
 public class Plane implements Geometry  {
     protected Point3D _p;
     protected Vector _normal;
 
+    /**
+     * ctor of Plane
+     * @param Point3D pointOne
+     * @param Point3D pointTwo
+     * @param Point3D pointThree
+     */
     public Plane(Point3D pointOne, Point3D pointTwo, Point3D pointThree) {
         Vector vector1 = new Vector(pointOne.subtract(pointTwo));
         Vector vector2 = new Vector(pointOne.subtract(pointThree));
@@ -13,15 +22,28 @@ public class Plane implements Geometry  {
         _p = new Point3D(pointOne);
     }
 
-    public Plane(Point3D _p, Vector _normal) {
-        this._p = _p;
-        this._normal = _normal.normalize();
+    /**
+     * ctor of Plane
+     * @param Point3D point
+     * @param Vector normal
+     */
+    public Plane(Point3D point, Vector normal) {
+        _p = point;
+        _normal = normal.normalize();
     }
 
+    /**
+     *
+     * @return point on the plane
+     */
     public Point3D getPoint() {
         return _p;
     }
 
+    /**
+     *
+     * @return Vector normal to the plane
+     */
     public Vector getNormal() {
         return _normal;
     }

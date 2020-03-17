@@ -1,7 +1,6 @@
 package primitives;
 
 /**
- * @author Uziel Shemesh
  * class that implements 3d point
  */
 public class Point3D {
@@ -9,6 +8,7 @@ public class Point3D {
     Coordinate _y;
     Coordinate _z;
 
+    //static point ZERO
     public final static Point3D ZERO = new Point3D(0, 0, 0);
 
     /**
@@ -105,14 +105,26 @@ public class Point3D {
         return _x.equals(other._x) && _y.equals(other._y) && _z.equals(other._z);
     }
 
+    /**
+     *
+     * @return x coord
+     */
     public Coordinate getX() {
         return _x;
     }
 
+    /**
+     *
+     * @return y coord
+     */
     public Coordinate getY() {
         return _y;
     }
 
+    /**
+     *
+     * @return z coord
+     */
     public Coordinate getZ() {
         return _z;
     }

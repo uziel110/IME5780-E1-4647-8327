@@ -2,22 +2,44 @@ package primitives;
 
 import static primitives.Util.*;
 
+/**
+ * class that implemnts ray
+ */
 public class Ray {
     Point3D _point;
     Vector _vector;
 
+    /**
+     * ctor of Ray
+     * @param point
+     * @param vector
+     */
     public Ray(Point3D point, Vector vector) {
         _point = point;
         _vector = vector.normalized();
     }
+
+    /**
+     * ctor of Ray
+     * @param other
+     */
     public Ray(Ray other) {
         _point = new Point3D(other._point);
         _vector = new Vector(other._vector);
     }
+
+    /**
+     *
+     * @return point of start of Ray
+     */
     public Point3D getPoint() {
         return _point;
     }
 
+    /**
+     *
+     * @return direction vector of the Ray
+     */
     public Vector getVector() {
         return _vector;
     }

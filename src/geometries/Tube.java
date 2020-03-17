@@ -4,20 +4,38 @@ import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
 
+/**
+ * class that implements Tube
+ */
 public class Tube extends RadialGeometry {
     Ray _axisRay;
 
+    /**
+     * ctor of Tube
+     * @param Point3D start point
+     * @param Vector direction
+     * @param double radius of the Tube
+     */
     public Tube( Point3D point,Vector vector, double radius){
         super(radius);
         _axisRay = new Ray(point, vector);
     }
 
+    /**
+     * ctor of Tube
+     * @param Ray axisRay
+     * @param double radius of the Tube
+     */
     public Tube(Ray axisRay, double radius){
         super(radius);
         _axisRay = new Ray(axisRay);
     }
 
-    public Ray get_axisRay() {
+    /**
+     *
+     * @return axis ray
+     */
+    public Ray getAxisRay() {
         return _axisRay;
     }
 
