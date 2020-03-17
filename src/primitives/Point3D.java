@@ -9,7 +9,7 @@ public class Point3D {
     Coordinate _y;
     Coordinate _z;
 
-    final static Point3D ZERO = new Point3D(0, 0, 0);
+    public final static Point3D ZERO = new Point3D(0, 0, 0);
 
     /**
      * ctor that receive 3 coordinates

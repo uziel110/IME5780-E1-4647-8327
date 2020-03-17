@@ -10,7 +10,10 @@ public class Ray {
         _point = point;
         _vector = vector.normalized();
     }
-
+    public Ray(Ray other) {
+        _point = new Point3D(other._point);
+        _vector = new Vector(other._vector);
+    }
     public Point3D getPoint() {
         return _point;
     }
@@ -30,6 +33,6 @@ public class Ray {
 
     @Override
     public String toString() {
-        return "Ray{ " + _point + _vector + '}';
+        return "Ray{ " + _point + " " + _vector + '}';
     }
 }

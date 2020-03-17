@@ -3,6 +3,7 @@
  * Ari Lazar
  */
 
+import geometries.Tube;
 import primitives.*;
 import static java.lang.System.out;
 import static primitives.Util.*;
@@ -66,7 +67,11 @@ public final class Main {
 		Vector u = v.normalized();
 		if (u == v)
 			out.println("ERROR: normalizated() function does not create a new vector");
-		
+
+		//My tests
+		Tube t = new Tube(new Point3D(0,0,0),new Vector(0,0,1),1);
+		Point3D p = new Point3D(0,1,0);
+		out.println(t.getNormal(p));
 		out.println("If there were no any other outputs - all tests succeeded!");
 	}
 }
