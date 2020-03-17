@@ -10,9 +10,9 @@ public class Ray {
     Vector _vector;
 
     /**
-     * ctor of Ray
-     * @param point
-     * @param vector
+     * constructor of Ray
+     * @param Point3D point
+     * @param Vector vector
      */
     public Ray(Point3D point, Vector vector) {
         _point = point;
@@ -20,8 +20,8 @@ public class Ray {
     }
 
     /**
-     * ctor of Ray
-     * @param other
+     * constructor of Ray
+     * @param Ray other
      */
     public Ray(Ray other) {
         _point = new Point3D(other._point);

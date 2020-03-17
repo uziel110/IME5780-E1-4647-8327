@@ -75,6 +75,14 @@ public class Polygon implements Geometry {
         }
     }
 
+    /**
+     *
+     * @return normal to the polygon
+     */
+    public Vector getNormal() {
+        return _plane.getNormal();
+    }
+
     @Override
     public Vector getNormal(Point3D point) {
         return _plane.getNormal();

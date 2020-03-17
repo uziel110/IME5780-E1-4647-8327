@@ -12,8 +12,8 @@ public abstract class RadialGeometry implements Geometry {
     protected double _radius;
 
     /**
-     * ctor of RadialGeometry
-     * @param radius of the shape
+     * constructor of RadialGeometry
+     * @param double radius of the shape
      */
     public RadialGeometry(double radius) {
         if (Util.isZero(radius))
@@ -22,11 +22,11 @@ public abstract class RadialGeometry implements Geometry {
     }
 
     /**
-     * copy ctor of RadialGeometry
-     * @param geometry
+     * copy constructor of RadialGeometry
+     * @param RadialGeometry other
      */
-    public RadialGeometry(RadialGeometry geometry) {
-        _radius = geometry._radius;
+    public RadialGeometry(RadialGeometry other) {
+        _radius = other._radius;
     }
 
     /**

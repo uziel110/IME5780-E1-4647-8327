@@ -12,11 +12,11 @@ public class Point3D {
     public final static Point3D ZERO = new Point3D(0, 0, 0);
 
     /**
-     * ctor that receive 3 coordinates
+     * constructor that receive 3 coordinates
      *
-     * @param x
-     * @param y
-     * @param z
+     * @param Coordinate x
+     * @param Coordinate y
+     * @param Coordinate z
      */
     public Point3D(Coordinate x, Coordinate y, Coordinate z) {
         _x = new Coordinate(x);
@@ -25,11 +25,11 @@ public class Point3D {
     }
 
     /**
-     * ctor that receive 3 double parameters
+     * constructor that receive 3 double parameters
      *
-     * @param x
-     * @param y
-     * @param z
+     * @param double x
+     * @param double y
+     * @param double z
      */
     public Point3D(double x, double y, double z) {
         _x = new Coordinate(x);
@@ -38,9 +38,9 @@ public class Point3D {
     }
 
     /**
-     * copy ctor - receive another point
+     * copy constructor - receive another point
      *
-     * @param other 3d point
+     * @param Point3D other
      */
     public Point3D(Point3D other) {
         _x = new Coordinate(other._x);
@@ -51,7 +51,7 @@ public class Point3D {
     /**
      * subtract other point from this point
      *
-     * @param other 3d point
+     * @param Point3D other
      * @return new Vector from this point to other point
      */
     public Vector subtract(Point3D other) {
@@ -73,7 +73,7 @@ public class Point3D {
     }
 
     /**
-     * @param other point
+     * @param Point3D other
      * @return distance from this point to other point squared
      */
     public double distanceSquared(Point3D other) {
@@ -83,7 +83,7 @@ public class Point3D {
     }
 
     /**
-     * @param other point
+     * @param Point3D other
      * @return distance from this point to other point
      */
     public double distance(Point3D other) {
@@ -91,9 +91,9 @@ public class Point3D {
     }
 
     /**
-     * check equality between two points
+     * check equality between two points that close by the accuracy of Util Class
      *
-     * @param obj
+     * @param Object obj
      * @return true if this point is equals to other point or close by the accuracy of Util Class
      */
     @Override
@@ -107,7 +107,7 @@ public class Point3D {
 
     /**
      *
-     * @return x coord
+     * @return Coordinate x
      */
     public Coordinate getX() {
         return _x;
@@ -115,7 +115,7 @@ public class Point3D {
 
     /**
      *
-     * @return y coord
+     * @return Coordinate y
      */
     public Coordinate getY() {
         return _y;
@@ -123,7 +123,7 @@ public class Point3D {
 
     /**
      *
-     * @return z coord
+     * @return Coordinate z
      */
     public Coordinate getZ() {
         return _z;

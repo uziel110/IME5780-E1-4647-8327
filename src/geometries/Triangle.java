@@ -9,7 +9,7 @@ import primitives.Vector;
 public class Triangle extends Polygon {
 
     /**
-     * ctor of Cylinder that receive 3 points of the edges of the triangle
+     * constructor of Cylinder that receive 3 points of the edges of the triangle
      * @param Point3D pointOne
      * @param Point3D pointTwo
      * @param Point3D pointThree

@@ -9,8 +9,8 @@ public class Sphere extends RadialGeometry {
     protected Point3D _center;
 
     /**
-     * ctor of sphere
-     * @param radius of the sphere
+     * constructor of sphere
+     * @param double radius of the sphere
      */
     public Sphere(double radius) {
         super(radius);

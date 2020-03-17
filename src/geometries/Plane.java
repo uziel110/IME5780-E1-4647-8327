@@ -10,7 +10,7 @@ public class Plane implements Geometry  {
     protected Vector _normal;
 
     /**
-     * ctor of Plane
+     * constructor of Plane
      * @param Point3D pointOne
      * @param Point3D pointTwo
      * @param Point3D pointThree
@@ -23,7 +23,7 @@ public class Plane implements Geometry  {
     }
 
     /**
-     * ctor of Plane
+     * constructor of Plane
      * @param Point3D point
      * @param Vector normal
      */

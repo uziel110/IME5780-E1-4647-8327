@@ -11,7 +11,7 @@ public class Cylinder extends Tube{
     double _height;
 
     /**
-     * ctor of Cylinder
+     * constructor of Cylinder
      * @param Point3D start point
      * @param Vector direction
      * @param double radius of the Cylinder
@@ -23,7 +23,7 @@ public class Cylinder extends Tube{
     }
 
     /**
-     * ctor of Cylinder
+     * constructor of Cylinder
      * @param Ray axisRay
      * @param double radius of the Cylinder
      * @param double height of the Cylinder

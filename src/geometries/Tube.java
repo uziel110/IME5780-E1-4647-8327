@@ -11,7 +11,7 @@ public class Tube extends RadialGeometry {
     Ray _axisRay;
 
     /**
-     * ctor of Tube
+     * constructor of Tube
      * @param Point3D start point
      * @param Vector direction
      * @param double radius of the Tube
@@ -22,7 +22,7 @@ public class Tube extends RadialGeometry {
     }
 
     /**
-     * ctor of Tube
+     * constructor of Tube
      * @param Ray axisRay
      * @param double radius of the Tube
      */
@@ -47,7 +47,7 @@ public class Tube extends RadialGeometry {
                 '}';
     }
 
-    // ראשית הצירים יוצרת בעיה
+    // "first the hinges" make problem
     @Override
     public Vector getNormal(Point3D point) {
         Vector p = new Vector(point.subtract(_axisRay.getPoint()));

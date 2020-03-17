@@ -9,10 +9,11 @@ public class Vector {
     Point3D _end;
 
     /**
-     * ctor of Vector that receive 3 coordinates
-     * @param x
-     * @param y
-     * @param z
+     * constructor of Vector that receive 3 coordinates
+     * @param Coordinate x
+     * @param Coordinate y
+     * @param Coordinate z
+     * @throws IllegalArgumentException in case of zero point
      */
     public Vector(Coordinate x, Coordinate y, Coordinate z) {
         Point3D point = new Point3D(x ,y, z);
@@ -22,10 +23,11 @@ public class Vector {
     }
 
     /**
-     * ctor of Vector that receive 3 double values
-     * @param x
-     * @param y
-     * @param z
+     * constructor of Vector that receive 3 double values
+     * @param double x
+     * @param double y
+     * @param double z
+     * @throws IllegalArgumentException in case of zero point
      */
     public Vector(double x, double y, double z) {
         Point3D point = new Point3D(x ,y, z);
@@ -35,7 +37,7 @@ public class Vector {
     }
 
     /**
-     * ctor of Vector that receive point of end of the vector
+     * constructor of Vector that receive point of end of the vector
      * @param Point3D end
      */
     public Vector(Point3D end) {
@@ -45,7 +47,7 @@ public class Vector {
     }
 
     /**
-     * copy ctor
+     * copy constructor
      * @param Vector other
      */
     public Vector(Vector other) {
@@ -109,7 +111,7 @@ public class Vector {
 
     /**
      *
-     * @return the length Squared
+     * @return the length squared
      */
     public double lengthSquared() {
         return this._end.distanceSquared(Point3D.ZERO);
