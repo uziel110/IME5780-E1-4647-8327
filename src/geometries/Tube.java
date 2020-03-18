@@ -50,6 +50,7 @@ public class Tube extends RadialGeometry {
     // "first the hinges" make problem
     @Override
     public Vector getNormal(Point3D point) {
+/*
         Vector p = new Vector(point.subtract(_axisRay.getPoint()));
         Vector t = new Vector(_axisRay.getVector());
         double p1 = p.dotProduct(t);
@@ -61,5 +62,7 @@ public class Tube extends RadialGeometry {
         if (!(_axisRay.getPoint().equals(Point3D.ZERO)))
             r = r.add(new Vector(_axisRay.getPoint()));
         return (new Vector(point)).subtract(r);
+    */
+        return null;
     }
 }
