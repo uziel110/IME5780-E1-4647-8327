@@ -63,7 +63,7 @@ public class Point3D {
     /**
      * add vector to this point
      *
-     * @param vector
+     * @param Vector vector
      * @return new Point at the end of vector that begin from this point
      */
     public Point3D add(Vector vector) {
