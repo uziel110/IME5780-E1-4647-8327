@@ -25,6 +25,15 @@ public class VectorTests {
      */
     @Test
     public void subtract() {
+
+
+        Vector v1 = new Vector(1,1,1);
+        Vector v2 = new Vector(2,3,4);
+        assertEquals("subtract failed!",v2.subtract(v1),new Vector(1,2,3));
+
+        Vector v3 = new Vector(1,1,1);
+        assertEquals("subtract failed!",v3.subtract(v1),new Vector(1,2,3));
+
     }
 
     /**
@@ -32,6 +41,9 @@ public class VectorTests {
      */
     @Test
     public void add() {
+        Vector v1 = new Vector(1,1,1);
+        Vector v2 = new Vector(2,3,4);
+        assertEquals("subtract failed!",v2.subtract(v1),new Vector(1,2,3));
     }
 
     /**
