@@ -8,12 +8,6 @@ import static primitives.Util.isZero;
 
 public class VectorTests {
 
-    // ============ Equivalence Partitions Tests ==============
-
-
-    // =============== Boundary Values Tests ==================
-
-
     /**
      * Test method for zero vector
      */

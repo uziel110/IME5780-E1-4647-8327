@@ -16,6 +16,11 @@ public class Sphere extends RadialGeometry {
         super(radius);
     }
 
+    public Sphere(double v, Point3D point) {
+        this(v);
+        _center = new Point3D(point);
+    }
+
     /**
      *
      * @return the center of the sphere
