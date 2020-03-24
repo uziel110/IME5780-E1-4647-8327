@@ -11,9 +11,9 @@ public class Vector {
     /**
      * constructor of Vector that receive 3 coordinates
      *
-     * @param Coordinate x
-     * @param Coordinate y
-     * @param Coordinate z
+     * @param x Coordinate x
+     * @param y Coordinate y
+     * @param z Coordinate z
      * @throws IllegalArgumentException in case of zero point
      */
     public Vector(Coordinate x, Coordinate y, Coordinate z) {
@@ -26,9 +26,9 @@ public class Vector {
     /**
      * constructor of Vector that receive 3 double values
      *
-     * @param double x
-     * @param double y
-     * @param double z
+     * @param x double value of x coordinate
+     * @param y double value of y coordinate
+     * @param z double value of z coordinate
      * @throws IllegalArgumentException in case of zero point
      */
     public Vector(double x, double y, double z) {
@@ -41,7 +41,7 @@ public class Vector {
     /**
      * constructor of Vector that receive point of end of the vector
      *
-     * @param Point3D end
+     * @param end Point3D end of other vector
      */
     public Vector(Point3D end) {
         if (end.equals(Point3D.ZERO))
@@ -52,7 +52,7 @@ public class Vector {
     /**
      * copy constructor
      *
-     * @param Vector other
+     * @param other Vector to copy
      */
     public Vector(Vector other) {
         _end = new Point3D(other._end);
@@ -61,7 +61,7 @@ public class Vector {
     /**
      * subtract this vector from other
      *
-     * @param Vector other
+     * @param other Vector to subtract
      * @return new Vector from end of other to end of this
      * @throws IllegalArgumentException when try to create zero vector
      */
@@ -79,7 +79,7 @@ public class Vector {
     /**
      * add this vector to other vector
      *
-     * @param Vector other
+     * @param other Vector to add
      * @return new Vector of the adding
      * @throws IllegalArgumentException when try to create zero vector
      */
@@ -97,7 +97,7 @@ public class Vector {
     /**
      * multiply this vector by scalar
      *
-     * @param double scalar
+     * @param scalar double value to scale by
      * @return new Vector of the multiply
      * @throws IllegalArgumentException when try to multiply by zero
      */
@@ -112,7 +112,7 @@ public class Vector {
     /**
      * implementation of dot product
      *
-     * @param double scalar
+     * @param other vector to multiply
      * @return double value of dot product
      */
     public double dotProduct(Vector other) {
@@ -124,7 +124,7 @@ public class Vector {
     /**
      * implementation of cross product
      *
-     * @param Vector other
+     * @param other vector for cross product
      * @return new Vector - the result of cross product
      */
     public Vector crossProduct(Vector other) {

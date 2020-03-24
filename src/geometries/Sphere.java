@@ -10,14 +10,19 @@ public class Sphere extends RadialGeometry {
 
     /**
      * constructor of sphere
-     * @param double radius of the sphere
+     * @param radius double value of Sphere radius
      */
     public Sphere(double radius) {
         super(radius);
     }
 
-    public Sphere(double v, Point3D point) {
-        this(v);
+    /**
+     *
+     * @param radius double value of Sphere radius
+     * @param point a point of sphere center
+     */
+    public Sphere(double radius, Point3D point) {
+        super(radius);
         _center = new Point3D(point);
     }
 

@@ -8,14 +8,14 @@ import primitives.Vector;
  * class that implements cylinder
  */
 public class Cylinder extends Tube{
-    double _height;
+    private double _height;
 
     /**
      * constructor of Cylinder
-     * @param Point3D start point
-     * @param Vector direction
-     * @param double radius of the Cylinder
-     * @param double height of the Cylinder
+     * @param point Point3D of start of the axis ray
+     * @param vector vector direction
+     * @param radius double value of cylinder radius
+     * @param height double value of Cylinder height
      */
     public Cylinder(Point3D point,Vector vector, double radius, double height){
         super(point,vector, radius);
@@ -24,9 +24,9 @@ public class Cylinder extends Tube{
 
     /**
      * constructor of Cylinder
-     * @param Ray axisRay
-     * @param double radius of the Cylinder
-     * @param double height of the Cylinder
+     * @param axisRay Ray of cylinder axis
+     * @param radius double value of cylinder radius
+     * @param height double value of cylinder height
      */
     public Cylinder(Ray axisRay, double radius, double height){
         super(axisRay,radius);

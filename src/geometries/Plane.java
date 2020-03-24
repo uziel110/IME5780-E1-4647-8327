@@ -10,10 +10,10 @@ public class Plane implements Geometry  {
     protected Vector _normal;
 
     /**
-     * constructor of Plane
-     * @param Point3D pointOne
-     * @param Point3D pointTwo
-     * @param Point3D pointThree
+     * constructor of Plane that receive 3 points on the plane
+     * @param pointOne Point3D on the plane
+     * @param pointTwo Point3D on the plane
+     * @param pointThree Point3D on the plane
      */
     public Plane(Point3D pointOne, Point3D pointTwo, Point3D pointThree) {
         Vector vector1 = new Vector(pointOne.subtract(pointTwo));
@@ -24,8 +24,8 @@ public class Plane implements Geometry  {
 
     /**
      * constructor of Plane
-     * @param Point3D point
-     * @param Vector normal
+     * @param point Point3D on the plane
+     * @param normal vector normal to the plane
      */
     public Plane(Point3D point, Vector normal) {
         _p = point;

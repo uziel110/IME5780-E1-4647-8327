@@ -6,13 +6,13 @@ import static primitives.Util.*;
  * class that implemnts ray
  */
 public class Ray {
-    Point3D _point;
-    Vector _vector;
+    private Point3D _point;
+    private Vector _vector;
 
     /**
      * constructor of Ray
-     * @param Point3D point
-     * @param Vector vector
+     * @param point Point3D start of the ray
+     * @param vector Vector direction of the ray
      */
     public Ray(Point3D point, Vector vector) {
         _point = point;
@@ -21,7 +21,7 @@ public class Ray {
 
     /**
      * constructor of Ray
-     * @param Ray other
+     * @param other Ray to copy
      */
     public Ray(Ray other) {
         _point = new Point3D(other._point);

@@ -13,10 +13,9 @@ public class Point3D {
 
     /**
      * constructor that receive 3 coordinates
-     *
-     * @param Coordinate x
-     * @param Coordinate y
-     * @param Coordinate z
+     * @param x Coordinate x
+     * @param y Coordinate y
+     * @param z Coordinate z
      */
     public Point3D(Coordinate x, Coordinate y, Coordinate z) {
         _x = new Coordinate(x);
@@ -27,9 +26,9 @@ public class Point3D {
     /**
      * constructor that receive 3 double parameters
      *
-     * @param double x
-     * @param double y
-     * @param double z
+     * @param x double value of x coordinate
+     * @param y double value of y coordinate
+     * @param z double value of z coordinate
      */
     public Point3D(double x, double y, double z) {
         _x = new Coordinate(x);
@@ -40,7 +39,7 @@ public class Point3D {
     /**
      * copy constructor - receive another point
      *
-     * @param Point3D other
+     * @param other other point3D to copy
      */
     public Point3D(Point3D other) {
         _x = new Coordinate(other._x);
@@ -51,7 +50,7 @@ public class Point3D {
     /**
      * subtract other point from this point
      *
-     * @param Point3D other
+     * @param other Point3D to start from
      * @return new Vector from this point to other point
      */
     public Vector subtract(Point3D other) {
@@ -63,7 +62,7 @@ public class Point3D {
     /**
      * add vector to this point
      *
-     * @param Vector vector
+     * @param vector Vector to add
      * @return new Point at the end of vector that begin from this point
      */
     public Point3D add(Vector vector) {
@@ -73,7 +72,7 @@ public class Point3D {
     }
 
     /**
-     * @param Point3D other
+     * @param other Point3D to measure distance to it
      * @return distance from this point to other point squared
      */
     public double distanceSquared(Point3D other) {
@@ -83,7 +82,7 @@ public class Point3D {
     }
 
     /**
-     * @param Point3D other
+     * @param other Point3D to measure distance to it
      * @return distance from this point to other point
      */
     public double distance(Point3D other) {
@@ -93,7 +92,7 @@ public class Point3D {
     /**
      * check equality between two points that close by the accuracy of Util Class
      *
-     * @param Object obj
+     * @param obj Object
      * @return true if this point is equals to other point or close by the accuracy of Util Class
      */
     @Override
