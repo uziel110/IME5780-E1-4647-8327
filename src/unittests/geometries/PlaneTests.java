@@ -13,7 +13,7 @@ public class PlaneTests {
      */
     @Test
     public void getNormal() {
-        Plane p = new Plane(new Point3D(0,0,0),new Point3D(1,0,0),new Point3D(0,1,0));
+        Plane p = new Plane(new Point3D(0, 0, 0), new Point3D(1, 0, 0), new Point3D(0, 1, 0));
         Vector n = p.getNormal();
     }
 
@@ -22,7 +22,7 @@ public class PlaneTests {
      */
     @Test
     public void testGetNormal() {
-        Plane p = new Plane(new Point3D(0,0,0),new Point3D(1,0,0),new Point3D(0,1,0));
-        Vector n = p.getNormal(new Point3D(1,1,0));
+        Plane p = new Plane(new Point3D(0, 0, 0), new Point3D(1, 0, 0), new Point3D(0, 1, 0));
+        Vector n = p.getNormal(new Point3D(1, 1, 0));
     }
 }
