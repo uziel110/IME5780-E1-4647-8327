@@ -11,9 +11,10 @@ public class Plane implements Geometry  {
 
     /**
      * constructor of Plane
-     * @param Point3D pointOne
-     * @param Point3D pointTwo
-     * @param Point3D pointThree
+     * @param  pointOne
+     * @param  pointTwo
+     * @param  pointThree
+     * @throws IllegalArgumentException if one or two points or all three points are on the same line
      */
     public Plane(Point3D pointOne, Point3D pointTwo, Point3D pointThree) {
         Vector vector1 = new Vector(pointOne.subtract(pointTwo));

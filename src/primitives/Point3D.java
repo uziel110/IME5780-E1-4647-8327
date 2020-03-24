@@ -14,9 +14,9 @@ public class Point3D {
     /**
      * constructor that receive 3 coordinates
      *
-     * @param Coordinate x
-     * @param Coordinate y
-     * @param Coordinate z
+     * @param  x coordinate X
+     * @param  y
+     * @param  z
      */
     public Point3D(Coordinate x, Coordinate y, Coordinate z) {
         _x = new Coordinate(x);
