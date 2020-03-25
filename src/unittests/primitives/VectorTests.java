@@ -25,15 +25,9 @@ public class VectorTests {
      */
     @Test
     public void subtract() {
-
-
         Vector v1 = new Vector(1,1,1);
         Vector v2 = new Vector(2,3,4);
-        assertEquals("subtract failed!",v2.subtract(v1),new Vector(1,2,3));
-
-        Vector v3 = new Vector(1,1,1);
-        assertEquals("subtract failed!",v3.subtract(v1),new Vector(1,2,3));
-
+        assertEquals("subtract failed!",new Vector(1,2,3),v2.subtract(v1));
     }
 
     /**
@@ -42,8 +36,8 @@ public class VectorTests {
     @Test
     public void add() {
         Vector v1 = new Vector(1,1,1);
-        Vector v2 = new Vector(2,3,4);
-        assertEquals("subtract failed!",v2.subtract(v1),new Vector(1,2,3));
+        Vector v2 = new Vector(1,2,3);
+        assertEquals("add failed!",new Vector(2,3,4),v2.subtract(v1));
     }
 
     /**
@@ -51,6 +45,9 @@ public class VectorTests {
      */
     @Test
     public void scale() {
+        Vector v1 = new Vector(1,1,1);
+        double scalar = 2;
+        assertEquals("scale failed!",new Vector(2,2,2),v1.scale(scalar));
     }
 
     /**
@@ -59,13 +56,9 @@ public class VectorTests {
     @Test
     public void dotProduct() {
         Vector v1 = new Vector(1, 2, 3);
-        Vector v2 = new Vector(-2, -4, -6);
-        Vector v3 = new Vector(0, 3, -2);
+        Vector v2 = new Vector(0, 3, -2);
 
-        if (!isZero(v1.dotProduct(v3)))
-            out.println("ERROR: dotProduct() for orthogonal vectors is not zero");
-        if (!isZero(v1.dotProduct(v2) + 28))
-            out.println("ERROR: dotProduct() wrong value");
+        assertEquals("ERROR: dotProduct() for orthogonal vectors is not zero",0,v1.dotProduct(v2),0.00000001);
     }
 
     /**
@@ -100,19 +93,14 @@ public class VectorTests {
      */
     @Test
     public void lengthSquared() {
-        // test length..
-        if (!isZero(new Vector(1, 2, 3).lengthSquared() - 14))
-            out.println("ERROR: lengthSquared() wrong value");
+        assertEquals("ERROR: lengthSquared() wrong value", 14, new Vector(1, 2, 3).lengthSquared(), 0.000001);
     }
-
     /**
      * Test method for {@link primitives.Vector#length(primitives.Vector)}.
      */
     @Test
     public void length() {
-        // test length..
-        if (!isZero(new Vector(0, 3, 4).length() - 5))
-            out.println("ERROR: length() wrong value");
+        assertEquals("ERROR: length() wrong value",5,new Vector(0, 3, 4).length(),0.00000001);
     }
 
     /**
@@ -124,10 +112,8 @@ public class VectorTests {
         Vector v = new Vector(1, 2, 3);
         Vector vCopy = new Vector(v);
         Vector vCopyNormalize = vCopy.normalize();
-        if (vCopy != vCopyNormalize)
-            out.println("ERROR: normalize() function creates a new vector");
-        if (!isZero(vCopyNormalize.length() - 1))
-            out.println("ERROR: normalize() result is not a unit vector");
+        assertTrue("ERROR: normalize() function creates a new vector",vCopy == vCopyNormalize);
+        assertEquals("ERROR: normalize() result is not a unit vector",1,vCopyNormalize.length(),0.00000001);
     }
 
     /**
@@ -138,7 +124,6 @@ public class VectorTests {
         // test vector normalization vs vector length and cross-product
         Vector v = new Vector(1, 2, 3);
         Vector u = v.normalized();
-        if (u == v)
-            out.println("ERROR: normalized() function does not create a new vector");
+        assertFalse("ERROR: normalized() function does not create a new vector",u == v);
     }
 }
