@@ -4,22 +4,7 @@ package primitives;
  * class that implements Vector
  */
 public class Vector {
-    Point3D _end;
-
-    /**
-     * constructor of Vector that receive 3 coordinates
-     *
-     * @param x Coordinate x
-     * @param y Coordinate y
-     * @param z Coordinate z
-     * @throws IllegalArgumentException in case of zero point
-     */
-    public Vector(Coordinate x, Coordinate y, Coordinate z) {
-        Point3D point = new Point3D(x, y, z);
-        if (point.equals(Point3D.ZERO))
-            throw new IllegalArgumentException();
-        _end = point;
-    }
+    private Point3D _end;
 
     /**
      * constructor of Vector that receive 3 double values
@@ -37,15 +22,25 @@ public class Vector {
     }
 
     /**
+     * constructor of Vector that receive 3 coordinates
+     *
+     * @param x Coordinate x
+     * @param y Coordinate y
+     * @param z Coordinate z
+     * @throws IllegalArgumentException in case of zero point
+     */
+    public Vector(Coordinate x, Coordinate y, Coordinate z) {
+        this(x._coord, y._coord, z._coord);
+    }
+
+    /**
      * constructor of Vector that receive point of end of the vector
      *
      * @param end Point3D end of other vector
      * @throws IllegalArgumentException when try to create zero vector
      */
     public Vector(Point3D end) {
-        if (end.equals(Point3D.ZERO))
-            throw new IllegalArgumentException();
-        _end = new Point3D(end);
+        this(end._x._coord, end._y._coord, end._z._coord);
     }
 
     /**
@@ -64,9 +59,7 @@ public class Vector {
      * @return new Vector from end of other to end of this
      */
     public Vector subtract(Vector other) {
-        return new Vector((_end._x._coord - other._end._x._coord),
-                (_end._y._coord - other._end._x._coord),
-                (_end._z._coord - other._end._z._coord));
+        return this._end.subtract(other._end);
     }
 
     /**
@@ -76,9 +69,7 @@ public class Vector {
      * @return new Vector of the adding
      */
     public Vector add(Vector other) {
-        return new Vector((_end._x._coord + other._end._x._coord),
-                (_end._y._coord + other._end._x._coord),
-                (_end._z._coord + other._end._z._coord));
+        return new Vector( this._end.add(other));
     }
 
     /**
@@ -88,9 +79,9 @@ public class Vector {
      * @return new Vector of the multiply
      */
     public Vector scale(double scalar) {
-        return new Vector((_end._x._coord * scalar),
-                (_end._y._coord * scalar),
-                (_end._z._coord * scalar));
+        return new Vector(_end._x._coord * scalar,
+                _end._y._coord * scalar,
+                _end._z._coord * scalar);
     }
 
     /**
@@ -137,7 +128,7 @@ public class Vector {
      * @return this vector normalized
      */
     public Vector normalize() {
-        Double norma = this.length();
+        double norma = this.length();
         _end._x = new Coordinate(_end._x._coord / norma);
         _end._y = new Coordinate(_end._y._coord / norma);
         _end._z = new Coordinate(_end._z._coord / norma);

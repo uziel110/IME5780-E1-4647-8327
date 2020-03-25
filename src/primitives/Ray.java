@@ -22,8 +22,7 @@ public class Ray {
      * @param other Ray to copy
      */
     public Ray(Ray other) {
-        _point = new Point3D(other._point);
-        _vector = new Vector(other._vector);
+        this(other._point, other._vector);
     }
 
     /**

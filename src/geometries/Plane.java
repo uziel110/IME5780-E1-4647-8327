@@ -16,6 +16,8 @@ public class Plane implements Geometry  {
      * @param pointThree Point3D on the plane
      */
     public Plane(Point3D pointOne, Point3D pointTwo, Point3D pointThree) {
+
+        //need to check the direction of the normal?
         Vector vector1 = pointOne.subtract(pointTwo);
         Vector vector2 = pointOne.subtract(pointThree);
         _normal = vector1.crossProduct(vector2).normalize();

@@ -4,25 +4,11 @@ package primitives;
  * class that implements 3d point
  */
 public class Point3D {
+    //static point ZERO
+    public final static Point3D ZERO = new Point3D(0, 0, 0);
     Coordinate _x;
     Coordinate _y;
     Coordinate _z;
-
-    //static point ZERO
-    public final static Point3D ZERO = new Point3D(0, 0, 0);
-
-    /**
-     * constructor that receive 3 coordinates
-     *
-     * @param x Coordinate x
-     * @param y Coordinate y
-     * @param z Coordinate z
-     */
-    public Point3D(Coordinate x, Coordinate y, Coordinate z) {
-        _x = new Coordinate(x);
-        _y = new Coordinate(y);
-        _z = new Coordinate(z);
-    }
 
     /**
      * constructor that receive 3 double parameters
@@ -38,14 +24,23 @@ public class Point3D {
     }
 
     /**
+     * constructor that receive 3 coordinates
+     *
+     * @param x Coordinate x
+     * @param y Coordinate y
+     * @param z Coordinate z
+     */
+    public Point3D(Coordinate x, Coordinate y, Coordinate z) {
+        this(x._coord, y._coord, z._coord);
+    }
+
+    /**
      * copy constructor - receive another point
      *
      * @param other other point3D to copy
      */
     public Point3D(Point3D other) {
-        _x = new Coordinate(other._x);
-        _y = new Coordinate(other._y);
-        _z = new Coordinate(other._z);
+        this(other._x._coord, other._y._coord, other._z._coord);
     }
 
     /**
@@ -55,9 +50,9 @@ public class Point3D {
      * @return new Vector from this point to other point
      */
     public Vector subtract(Point3D other) {
-        return new Vector((_x._coord - other._x._coord),
-                (_y._coord - other._y._coord),
-                (_z._coord - other._z._coord));
+        return new Vector(_x._coord - other._x._coord,
+                _y._coord - other._y._coord,
+                _z._coord - other._z._coord);
     }
 
     /**
@@ -67,9 +62,9 @@ public class Point3D {
      * @return new Point at the end of vector that begin from this point
      */
     public Point3D add(Vector vector) {
-        return new Point3D(_x._coord + vector._end._x._coord,
-                _y._coord + vector._end._y._coord,
-                _z._coord + vector._end._z._coord);
+        return new Point3D(_x._coord + vector.getEnd()._x._coord,
+                _y._coord + vector.getEnd()._y._coord,
+                _z._coord + vector.getEnd()._z._coord);
     }
 
     /**

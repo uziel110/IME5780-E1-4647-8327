@@ -12,27 +12,28 @@ public class Tube extends RadialGeometry {
 
     /**
      * constructor of Tube
-     * @param point Point3D of start of axis ray
+     *
+     * @param point  Point3D of start of axis ray
      * @param vector vector direction
      * @param radius double value of Tube radius
      */
-    public Tube( Point3D point,Vector vector, double radius){
+    public Tube(Point3D point, Vector vector, double radius) {
         super(radius);
         _axisRay = new Ray(point, vector);
     }
 
     /**
      * constructor of Tube
+     *
      * @param axisRay Ray of Tube axis
-     * @param radius double value of Tube radius
+     * @param radius  double value of Tube radius
      */
-    public Tube(Ray axisRay, double radius){
+    public Tube(Ray axisRay, double radius) {
         super(radius);
         _axisRay = new Ray(axisRay);
     }
 
     /**
-     *
      * @return axis ray
      */
     public Ray getAxisRay() {
