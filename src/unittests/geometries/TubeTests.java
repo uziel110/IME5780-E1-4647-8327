@@ -9,6 +9,9 @@ import static org.junit.Assert.*;
 
 public class TubeTests {
 
+    /**
+     * Test method for {@link geometries.Tube#getNormal(geometries.Tube)}.
+     */
     @Test
     public void getNormal() {
 //todo

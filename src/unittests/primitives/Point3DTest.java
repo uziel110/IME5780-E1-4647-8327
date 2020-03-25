@@ -46,6 +46,6 @@ public class Point3DTest {
     public void distance() {
         Point3D p1 = new Point3D(3, 0, 0);
         assertEquals("ERROR: distanceSquared() wrong value",
-                5, p1.distanceSquared(new Point3D(0, 4, 0)), 0.00000001);
+                5, p1.distance(new Point3D(0, 4, 0)), 0.00000001);
     }
 }
