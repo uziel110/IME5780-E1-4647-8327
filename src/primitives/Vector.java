@@ -1,7 +1,5 @@
 package primitives;
 
-import java.awt.*;
-
 /**
  * class that implements Vector
  */
@@ -42,6 +40,7 @@ public class Vector {
      * constructor of Vector that receive point of end of the vector
      *
      * @param end Point3D end of other vector
+     * @throws IllegalArgumentException when try to create zero vector
      */
     public Vector(Point3D end) {
         if (end.equals(Point3D.ZERO))
@@ -63,17 +62,11 @@ public class Vector {
      *
      * @param other Vector to subtract
      * @return new Vector from end of other to end of this
-     * @throws IllegalArgumentException when try to create zero vector
      */
     public Vector subtract(Vector other) {
-        try {
-            return new Vector(new Coordinate(_end._x._coord - other._end._x._coord),
-                    new Coordinate(_end._y._coord - other._end._x._coord),
-                    new Coordinate(_end._z._coord - other._end._z._coord));
-        }
-        catch (Exception e){
-            throw e;
-        }
+        return new Vector((_end._x._coord - other._end._x._coord),
+                (_end._y._coord - other._end._x._coord),
+                (_end._z._coord - other._end._z._coord));
     }
 
     /**
@@ -81,17 +74,11 @@ public class Vector {
      *
      * @param other Vector to add
      * @return new Vector of the adding
-     * @throws IllegalArgumentException when try to create zero vector
      */
     public Vector add(Vector other) {
-        try {
-            return new Vector(new Coordinate(_end._x._coord + other._end._x._coord),
-                new Coordinate(_end._y._coord + other._end._x._coord),
-                new Coordinate(_end._z._coord + other._end._z._coord));
-        }
-        catch (Exception e){
-            throw e;
-        }
+        return new Vector((_end._x._coord + other._end._x._coord),
+                (_end._y._coord + other._end._x._coord),
+                (_end._z._coord + other._end._z._coord));
     }
 
     /**
@@ -99,14 +86,11 @@ public class Vector {
      *
      * @param scalar double value to scale by
      * @return new Vector of the multiply
-     * @throws IllegalArgumentException when try to multiply by zero
      */
     public Vector scale(double scalar) {
-        if (scalar == 0)
-            throw new IllegalArgumentException();
-        return new Vector(new Coordinate(_end._x._coord * scalar),
-                new Coordinate(_end._y._coord * scalar),
-                new Coordinate(_end._z._coord * scalar));
+        return new Vector((_end._x._coord * scalar),
+                (_end._y._coord * scalar),
+                (_end._z._coord * scalar));
     }
 
     /**
@@ -128,9 +112,9 @@ public class Vector {
      * @return new Vector - the result of cross product
      */
     public Vector crossProduct(Vector other) {
-        return new Vector(new Coordinate(_end._y._coord * other._end._z._coord - _end._z._coord * other._end._y._coord),
-                new Coordinate(_end._z._coord * other._end._x._coord - _end._x._coord * other._end._z._coord),
-                new Coordinate(_end._x._coord * other._end._y._coord - _end._y._coord * other._end._x._coord));
+        return new Vector((_end._y._coord * other._end._z._coord - _end._z._coord * other._end._y._coord),
+                (_end._z._coord * other._end._x._coord - _end._x._coord * other._end._z._coord),
+                (_end._x._coord * other._end._y._coord - _end._y._coord * other._end._x._coord));
     }
 
     /**

@@ -6,7 +6,7 @@ import primitives.*;
  * class that implements sphere
  */
 public class Sphere extends RadialGeometry {
-    protected Point3D _center;
+    private Point3D _center;
 
     /**
      * constructor of sphere
@@ -30,20 +30,20 @@ public class Sphere extends RadialGeometry {
      *
      * @return the center of the sphere
      */
-    public Point3D get_center() {
+    public Point3D getCenter() {
         return _center;
     }
 
     @Override
     public Vector getNormal(Point3D other) {
-        return new Vector(other.subtract(_center));
+        return other.subtract(_center);
     }
 
     @Override
     public String toString() {
         return "Sphere{" +
                 "center=" + _center +
-                ", radius=" + _radius +
+                ", radius=" + getRadius() +
                 '}';
     }
 }

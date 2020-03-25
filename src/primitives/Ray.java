@@ -1,9 +1,7 @@
 package primitives;
 
-import static primitives.Util.*;
-
 /**
- * class that implemnts ray
+ * class that implements ray
  */
 public class Ray {
     private Point3D _point;
@@ -30,7 +28,7 @@ public class Ray {
 
     /**
      *
-     * @return point of start of Ray
+     * @return Point3D start point of the Ray
      */
     public Point3D getPoint() {
         return _point;

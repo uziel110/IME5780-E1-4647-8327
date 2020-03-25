@@ -13,6 +13,7 @@ public class Point3D {
 
     /**
      * constructor that receive 3 coordinates
+     *
      * @param x Coordinate x
      * @param y Coordinate y
      * @param z Coordinate z
@@ -54,9 +55,9 @@ public class Point3D {
      * @return new Vector from this point to other point
      */
     public Vector subtract(Point3D other) {
-        return new Vector(new Coordinate(_x._coord - other._x._coord),
-                new Coordinate(_y._coord - other._y._coord),
-                new Coordinate(_z._coord - other._z._coord));
+        return new Vector((_x._coord - other._x._coord),
+                (_y._coord - other._y._coord),
+                (_z._coord - other._z._coord));
     }
 
     /**
@@ -105,24 +106,21 @@ public class Point3D {
     }
 
     /**
-     *
-     * @return Coordinate x
+     * @return Coordinate x of the point
      */
     public Coordinate getX() {
         return _x;
     }
 
     /**
-     *
-     * @return Coordinate y
+     * @return Coordinate y of the point
      */
     public Coordinate getY() {
         return _y;
     }
 
     /**
-     *
-     * @return Coordinate z
+     * @return Coordinate z of the point
      */
     public Coordinate getZ() {
         return _z;

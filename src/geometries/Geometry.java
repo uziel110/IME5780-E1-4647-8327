@@ -9,8 +9,8 @@ import primitives.Vector;
 public interface Geometry {
     /**
      *
-     * @param point point on the surface
-     * @return normal to the geometry shape
+     * @param point point on the surface to gey normal from it
+     * @return normal to the geometry shape from the received point
      */
-    public Vector getNormal(Point3D point);
+    Vector getNormal(Point3D point);
 }

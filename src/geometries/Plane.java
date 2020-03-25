@@ -6,8 +6,8 @@ import primitives.*;
  * class that implement a plane
  */
 public class Plane implements Geometry  {
-    protected Point3D _p;
-    protected Vector _normal;
+    private Point3D _p;
+    private Vector _normal;
 
     /**
      * constructor of Plane that receive 3 points on the plane
@@ -16,9 +16,9 @@ public class Plane implements Geometry  {
      * @param pointThree Point3D on the plane
      */
     public Plane(Point3D pointOne, Point3D pointTwo, Point3D pointThree) {
-        Vector vector1 = new Vector(pointOne.subtract(pointTwo));
-        Vector vector2 = new Vector(pointOne.subtract(pointThree));
-        _normal = new Vector(vector1.crossProduct(vector2).normalize());
+        Vector vector1 = pointOne.subtract(pointTwo);
+        Vector vector2 = pointOne.subtract(pointThree);
+        _normal = vector1.crossProduct(vector2).normalize();
         _p = new Point3D(pointOne);
     }
 
