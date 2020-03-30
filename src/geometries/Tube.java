@@ -58,10 +58,17 @@ public class Tube extends RadialGeometry {
         //qp: q - p
         Vector v = new Vector(_axisRay.getVector());
         Vector qp = point.subtract(_axisRay.getPoint());
-        double p = v.dotProduct(qp);
-        if (p==0)
+        //double p = v.dotProduct(qp);
+
+        double t = v.dotProduct(qp);
+        if(t == 0)
             return qp;
-        return qp.subtract(v.scale(p)).normalize();
+        Point3D o = _axisRay.getPoint().add(v.scale(t));
+        return point.subtract(o).normalize();
+
+      /*  if (p==0)
+            return qp;
+        return qp.subtract(v.scale(p)).normalize();*/
 
 /*
         Vector p = new Vector(point.subtract(_axisRay.getPoint()));

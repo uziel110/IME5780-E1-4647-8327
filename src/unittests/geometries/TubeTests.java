@@ -16,10 +16,11 @@ public class TubeTests {
     public void getNormal() {
 //todo
         Tube t = new Tube(new Point3D(0,0,0), new Vector(0,0,1) , 1);
+        Vector v = new Vector(0,-1,0);
         // ============ Equivalence Partitions Tests ==============
-        assertEquals("wrong normal",t.getNormal(new Point3D(0,1,1)),new Point3D(0,1,0));
+        assertEquals("wrong normal",new Point3D(0,1,0),t.getNormal(new Point3D(0,1,1)));
         // =============== Boundary Values Tests ==================
         //Normal on the bottom of the tube
-        assertEquals("wrong normal on the bottom",t.getNormal(new Point3D(0,1,0)),new Point3D(0,1,0));
+        assertEquals("wrong normal on the bottom",new Vector(0,1,0),t.getNormal(new Point3D(0,1,0)));
     }
 }
