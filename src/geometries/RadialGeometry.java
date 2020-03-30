@@ -13,7 +13,7 @@ public abstract class RadialGeometry implements Geometry {
      * @param radius double value of shape radius
      */
     public RadialGeometry(double radius) {
-        if (Util.isZero(radius))
+        if (Util.isZero(radius) || radius < 0.0)
             throw new IllegalArgumentException();
         _radius = radius;
     }

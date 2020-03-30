@@ -59,14 +59,11 @@ public class Polygon implements Geometry {
         Vector edge2 = vertices[0].subtract(vertices[vertices.length - 1]);
 
         // Cross Product of any subsequent edges will throw an IllegalArgumentException
-        // because of Zero Vector if they connect three vertices that lay in the same
-        // line.
+        // because of Zero Vector if they connect three vertices that lay in the same line.
         // Generate the direction of the polygon according to the angle between last and
         // first edge being less than 180 deg. It is hold by the sign of its dot product
-        // with
-        // the normal. If all the rest consequent edges will generate the same sign -
-        // the
-        // polygon is convex ("kamur" in Hebrew).
+        // with the normal. If all the rest consequent edges will generate the same sign -
+        // the polygon is convex ("kamur" in Hebrew).
         boolean positive = edge1.crossProduct(edge2).dotProduct(n) > 0;
         for (int i = 1; i < vertices.length; ++i) {
             // Test that the point is in the same plane as calculated originally

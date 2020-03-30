@@ -2,6 +2,7 @@ package geometries;
 
 import primitives.Point3D;
 import primitives.Ray;
+import primitives.Util;
 import primitives.Vector;
 
 /**
@@ -48,41 +49,20 @@ public class Tube extends RadialGeometry {
                 '}';
     }
 
-    // "first the hinges" make problem
     @Override
     public Vector getNormal(Point3D point) {
-
         //v: vector of the ray
         //p: point of the ray
         //q: point on the surface
         //qp: q - p
         Vector v = new Vector(_axisRay.getVector());
         Vector qp = point.subtract(_axisRay.getPoint());
-        //double p = v.dotProduct(qp);
 
         double t = v.dotProduct(qp);
-        if(t == 0)
+        // if t == 0 v is orthogonal to qp so return qp
+        if(Util.isZero(t))
             return qp;
         Point3D o = _axisRay.getPoint().add(v.scale(t));
         return point.subtract(o).normalize();
-
-      /*  if (p==0)
-            return qp;
-        return qp.subtract(v.scale(p)).normalize();*/
-
-/*
-        Vector p = new Vector(point.subtract(_axisRay.getPoint()));
-        Vector t = new Vector(_axisRay.getVector());
-        double p1 = p.dotProduct(t);
-        double t1 = t.dotProduct(t);
-        double res = (-p1)/t1;
-
-        Vector r;
-            r = new Vector(_axisRay.getVector().scale(res));
-        if (!(_axisRay.getPoint().equals(Point3D.ZERO)))
-            r = r.add(new Vector(_axisRay.getPoint()));
-        return (new Vector(point)).subtract(r);
-*/
-
     }
 }

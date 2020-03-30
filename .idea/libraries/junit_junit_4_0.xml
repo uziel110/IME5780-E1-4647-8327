@@ -2,9 +2,11 @@
   <library name="junit:junit:4.0" type="repository">
     <properties maven-id="junit:junit:4.0" />
     <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/junit/junit/4.0/junit-4.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/junit-4.0.jar!/" />
     </CLASSES>
-    <JAVADOC />
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/lib/junit-4.0-javadoc.jar!/" />
+    </JAVADOC>
     <SOURCES />
   </library>
 </component>

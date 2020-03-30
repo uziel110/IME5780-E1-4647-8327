@@ -18,8 +18,10 @@ public class Plane implements Geometry  {
     public Plane(Point3D pointOne, Point3D pointTwo, Point3D pointThree) {
 
         //need to check the direction of the normal?
-        Vector vector1 = pointOne.subtract(pointTwo);
-        Vector vector2 = pointOne.subtract(pointThree);
+
+        // if two or three points are equal then an exception will be created at vector constructor
+        Vector vector1 = pointTwo.subtract(pointOne);
+        Vector vector2 = pointThree.subtract(pointOne);
         _normal = vector1.crossProduct(vector2).normalize();
         _p = new Point3D(pointOne);
     }
@@ -52,7 +54,7 @@ public class Plane implements Geometry  {
 
     @Override
     public Vector getNormal(Point3D point) {
-        return _normal;
+        return getNormal();
     }
 
     @Override
