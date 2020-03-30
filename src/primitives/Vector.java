@@ -1,10 +1,21 @@
 package primitives;
 
+import java.util.Objects;
+
 /**
  * class that implements Vector
  */
 public class Vector {
     private Point3D _end;
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (!(obj instanceof Vector)) return false;
+        Vector other = (Vector) obj;
+        return this._end.equals(((Vector) obj)._end);
+    }
 
     /**
      * constructor of Vector that receive 3 double values

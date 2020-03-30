@@ -26,7 +26,7 @@ public class Point3DTest {
     public void add() {
         Point3D p1 = new Point3D(5, 3, 5);
         Vector v2 = new Vector(1, 3, 2);
-        assertEquals("add failed!", new Vector(6, 6, 7), p1.add(v2));
+        assertEquals("add failed!", new Point3D(6, 6, 7), p1.add(v2));
     }
 
     /**

@@ -37,7 +37,7 @@ public class VectorTests {
     public void add() {
         Vector v1 = new Vector(1,1,1);
         Vector v2 = new Vector(1,2,3);
-        assertEquals("add failed!",new Vector(2,3,4),v2.subtract(v1));
+        assertEquals("add failed!",new Vector(2,3,4),v2.add(v1));
     }
 
     /**
