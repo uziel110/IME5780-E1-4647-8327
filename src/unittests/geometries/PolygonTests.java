@@ -1,13 +1,9 @@
-/**
- * 
- */
 package geometries;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import geometries.*;
 import primitives.*;
 
 /**
@@ -19,7 +15,7 @@ public class PolygonTests {
 
     /**
      * Test method for
-     * {@link geometries.Polygon#Polygon(primitives.Point3D, primitives.Point3D, primitives.Point3D, primitives.Point3D)}.
+     * {@link Polygon#Polygon(Point3D...)}.
      */
     @Test
     public void testConstructor() {
@@ -92,4 +88,10 @@ public class PolygonTests {
         assertEquals("Bad normal to trinagle", new Vector(sqrt3, sqrt3, sqrt3), pl.getNormal(new Point3D(0, 0, 1)));
     }
 
+    /**
+     * Test method for {@link Polygon#findIntersections(Ray)} (geometries.Polygon)}.
+     */
+    @Test
+    public void findIntsersections() {
+    }
 }

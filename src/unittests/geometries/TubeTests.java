@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
 public class TubeTests {
 
     /**
-     * Test method for {@link geometries.Tube#getNormal(geometries.Tube)}.
+     * Test method for {@link Tube#getNormal(Point3D)(geometries.Tube)}.
      */
     @Test
     public void getNormal() {
@@ -25,5 +25,12 @@ public class TubeTests {
         // =============== Boundary Values Tests ==================
         //Normal on the ray's point of the tube
         assertEquals("wrong normal on the bottom",new Vector(0,1,0),t.getNormal(new Point3D(0,1,0)));
+    }
+
+    /**
+     * Test method for {@link Tube#findIntersections(Ray)} (geometries.Tube)}.
+     */
+    @Test
+    public void findIntsersections() {
     }
 }

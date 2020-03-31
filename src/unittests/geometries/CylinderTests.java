@@ -9,7 +9,7 @@ import static org.junit.Assert.*;
 public class CylinderTests {
 
     /**
-     * Test method for {@link Cylinder#getNormal() (geometries.Cylinder)}
+     * Test method for {@link Cylinder#getNormal(Point3D) (geometries.Cylinder)}
      */
     @Test
     public void getNormal() {
@@ -31,5 +31,12 @@ public class CylinderTests {
         // TC02:
         // intersection of the bottom base with the side
         assertEquals("wrong normal intersection of the bottom cylinder base with the side",new Vector(0,0,1),c.getNormal(new Point3D(0,1,0)));
+    }
+
+    /**
+     * Test method for {@link Cylinder#findIntsersections(Ray)} (geometries.Cylinder)}.
+     */
+    @Test
+    public void findIntsersections() {
     }
 }

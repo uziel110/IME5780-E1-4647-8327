@@ -5,6 +5,8 @@ import primitives.Ray;
 import primitives.Util;
 import primitives.Vector;
 
+import java.util.List;
+
 /**
  * class that implements cylinder
  */
@@ -61,5 +63,9 @@ public class Cylinder extends Tube{
         if(Util.isZero(t) || Util.isZero(t-_height))
             return getAxisRay().getVector();
         return  super.getNormal(point);
+    }
+    @Override
+    public List<Point3D> findIntersections(Ray ray) {
+        return null;
     }
 }

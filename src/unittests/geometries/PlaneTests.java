@@ -24,4 +24,11 @@ public class PlaneTests {
     public void testGetNormal() {
         assertEquals("wrong plane normal with point", new Vector (0,0,1), p.getNormal(new Point3D(1, 1, 0)));
     }
+
+    /**
+     * Test method for {@link Plane#findIntsersections(Ray)} (geometries.Plane)}.
+     */
+    @Test
+    public void findIntsersections() {
+    }
 }

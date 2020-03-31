@@ -2,6 +2,8 @@ package geometries;
 
 import primitives.*;
 
+import java.util.List;
+
 /**
  * class that implements sphere
  */
@@ -35,5 +37,10 @@ public class Sphere extends RadialGeometry {
                 "center=" + _center +
                 ", radius=" + getRadius() +
                 '}';
+    }
+
+    @Override
+    public List<Point3D> findIntersections(Ray ray) {
+        return null;
     }
 }
