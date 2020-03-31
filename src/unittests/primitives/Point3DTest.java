@@ -9,6 +9,7 @@ import static org.junit.Assert.assertEquals;
  */
 
 public class Point3DTest {
+
     /**
      * Test method for {@link primitives.Point3D#subtract(primitives.Point3D)}.
      */
@@ -24,9 +25,9 @@ public class Point3DTest {
      */
     @Test
     public void add() {
-        Point3D p1 = new Point3D(5, 3, 5);
+        Point3D p1 = new Point3D(2, 3, 4);
         Vector v2 = new Vector(1, 3, 2);
-        assertEquals("add failed!", new Point3D(6, 6, 7), p1.add(v2));
+        assertEquals("add failed!", new Point3D(3, 6, 6), p1.add(v2));
     }
 
     /**
