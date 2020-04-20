@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import primitives.*;
 
+import java.util.List;
+
 /**
  * Testing Polygons
  * @author Dan
@@ -93,5 +95,32 @@ public class PolygonTests {
      */
     @Test
     public void findIntsersections() {
+
+        Polygon polygon = new Polygon(new Point3D(0,2,0), new Point3D(2,0,0), new Point3D(1,1,2));
+
+        // ============ Equivalence Partitions Tests ==============
+        // TC01: Inside polygon (1 point)
+        assertEquals("Inside polygon", List.of(new Point3D(1, 1, 1)),
+                polygon.findIntersections(new Ray(new Point3D(0, 0, 1), new Vector(1, 1, 0))));
+        // TC02: Outside against edge (0 points)
+        assertNull("Ray intersects the plane",
+                polygon.findIntersections(new Ray(new Point3D(0, 0, -1), new Vector(1, 1, 0))));
+        // TC03: Outside against vertex (0 points)
+        assertNull("Ray intersects the plane",
+                polygon.findIntersections(new Ray(new Point3D(0, 4, -1), new Vector(1, 1, 0))));
+
+        // =============== Boundary Values Tests ==================
+        // TC04: On edge (0 points)
+        assertNull("Ray intersects the plane",
+                polygon.findIntersections(new Ray(new Point3D(0, 0, 1), new Vector(0.5, 1.5, 0))));
+
+        // TC05: In vertex
+        assertNull("Ray intersects the plane",
+                polygon.findIntersections(new Ray(new Point3D(0, 0, 1), new Vector(0, 2, -1))));
+        // TC06: On edge's continuation
+        assertNull("Ray intersects the plane",
+                polygon.findIntersections(new Ray(new Point3D(0, 0, 1), new Vector(2, 0, 3))));
+
+
     }
 }

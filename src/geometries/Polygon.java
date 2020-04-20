@@ -1,13 +1,19 @@
 package geometries;
 
+import primitives.Point3D;
+import primitives.Ray;
+import primitives.Vector;
+
+import java.util.ArrayList;
 import java.util.List;
-import primitives.*;
-import static primitives.Util.*;
+
+import static primitives.Util.alignZero;
+import static primitives.Util.isZero;
 
 /**
  * Polygon class represents two-dimensional polygon in 3D Cartesian coordinate
  * system
- * 
+ *
  * @author Dan
  */
 public class Polygon implements Geometry {
@@ -23,7 +29,7 @@ public class Polygon implements Geometry {
     /**
      * Polygon constructor based on vertices list. The list must be ordered by edge
      * path. The polygon must be convex.
-     * 
+     *
      * @param vertices list of vertices according to their order by edge path
      * @throws IllegalArgumentException in any case of illegal combination of
      *                                  vertices:
@@ -84,6 +90,38 @@ public class Polygon implements Geometry {
 
     @Override
     public List<Point3D> findIntersections(Ray ray) {
-        return null;
+
+        List<Point3D> list = _plane.findIntersections(ray);
+        if (list == null)
+            return null;
+
+        Point3D p0 = ray.getPoint();
+
+        List<Vector> pList = new ArrayList<Vector>();
+
+        for (int i = 0; i < _vertices.size(); ++i) {
+            pList.add(_vertices.get(i).subtract(p0));
+        }
+
+        List<Vector> nList = new ArrayList<Vector>();
+
+        for (int i = 0; i < pList.size() - 1; ++i) {
+            nList.add((pList.get(i).crossProduct(pList.get(i + 1))).normalize());
+        }
+        nList.add((pList.get(pList.size() - 1).crossProduct(pList.get(0))).normalize());
+        Vector v = ray.getVector();
+
+        double d = alignZero(v.dotProduct(nList.get(0)));
+        boolean positive = d > 0 ? true : false;
+        boolean positive1;
+        for (int i = 1; i < nList.size(); ++i) {
+            d = alignZero(v.dotProduct(nList.get(i)));
+            positive1 = d > 0 ? true : false;
+            if (positive != positive1 || isZero(d))
+                return null;
+        }
+
+        return list;
+
     }
 }

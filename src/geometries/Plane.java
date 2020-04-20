@@ -1,20 +1,26 @@
 package geometries;
 
-import primitives.*;
+import primitives.Point3D;
+import primitives.Ray;
+import primitives.Vector;
 
 import java.util.List;
+
+import static primitives.Util.alignZero;
+import static primitives.Util.isZero;
 
 /**
  * class that implement a plane
  */
-public class Plane implements Geometry  {
+public class Plane implements Geometry {
     private Point3D _p;
     private Vector _normal;
 
     /**
      * constructor of Plane that receive 3 points on the plane
-     * @param pointOne Point3D on the plane
-     * @param pointTwo Point3D on the plane
+     *
+     * @param pointOne   Point3D on the plane
+     * @param pointTwo   Point3D on the plane
      * @param pointThree Point3D on the plane
      */
     public Plane(Point3D pointOne, Point3D pointTwo, Point3D pointThree) {
@@ -30,7 +36,8 @@ public class Plane implements Geometry  {
 
     /**
      * constructor of Plane
-     * @param point Point3D on the plane
+     *
+     * @param point  Point3D on the plane
      * @param normal vector normal to the plane
      */
     public Plane(Point3D point, Vector normal) {
@@ -39,7 +46,6 @@ public class Plane implements Geometry  {
     }
 
     /**
-     *
      * @return point on the plane
      */
     public Point3D getPoint() {
@@ -47,7 +53,6 @@ public class Plane implements Geometry  {
     }
 
     /**
-     *
      * @return Vector normal to the plane
      */
     public Vector getNormal() {
@@ -69,6 +74,21 @@ public class Plane implements Geometry  {
 
     @Override
     public List<Point3D> findIntersections(Ray ray) {
-        return null;
+        Point3D p0 = ray.getPoint();
+        Vector v = ray.getVector();
+        if (_p.equals(p0))
+            return null;
+
+        Vector c = _p.subtract(p0);
+        double t1 = alignZero(_normal.dotProduct(c));
+        double t2 = alignZero(_normal.dotProduct(v));
+        if (isZero(t2) || isZero(t1))
+            return null;
+        double t = alignZero(t1 / t2);
+        if (t <= 0)
+            return null;
+
+        Point3D returnPoint = p0.add(v.scale(t));
+        return List.of(returnPoint);
     }
 }
