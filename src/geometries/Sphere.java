@@ -16,6 +16,7 @@ public class Sphere extends RadialGeometry {
 
     /**
      * constructor of sphere that receive center point and radius as parameters
+     *
      * @param radius double value of Sphere radius
      * @param point  a point of sphere center
      */
@@ -26,6 +27,7 @@ public class Sphere extends RadialGeometry {
 
     /**
      * return the center of the sphere
+     *
      * @return Point3D in the center of the sphere
      */
     public Point3D getCenter() {
@@ -56,9 +58,9 @@ public class Sphere extends RadialGeometry {
             return List.of(_center.add(v.scale(radius)));
 
         Vector u = _center.subtract(p0);
-        double tm = alignZero( v.dotProduct(u));
+        double tm = alignZero(v.dotProduct(u));
         double d = alignZero(Math.sqrt(u.lengthSquared() - tm * tm));
-        if (d >= radius)
+        if (alignZero(d - radius) >= 0)
             return null;
 
         double th = alignZero(Math.sqrt(radius * radius - d * d));
