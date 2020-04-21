@@ -103,22 +103,22 @@ public class PolygonTests {
         assertEquals("Inside polygon", List.of(new Point3D(1, 1, 1)),
                 polygon.findIntersections(new Ray(new Point3D(0, 0, 1), new Vector(1, 1, 0))));
         // TC02: Outside against edge (0 points)
-        assertNull("Ray intersects the plane",
+        assertNull("Outside against edge",
                 polygon.findIntersections(new Ray(new Point3D(0, 0, -1), new Vector(1, 1, 0))));
         // TC03: Outside against vertex (0 points)
-        assertNull("Ray intersects the plane",
+        assertNull("Outside against vertex",
                 polygon.findIntersections(new Ray(new Point3D(0, 4, -1), new Vector(1, 1, 0))));
 
         // =============== Boundary Values Tests ==================
         // TC04: On edge (0 points)
-        assertNull("Ray intersects the plane",
+        assertNull("Ray start before the polygon and go through the edge",
                 polygon.findIntersections(new Ray(new Point3D(0, 0, 1), new Vector(0.5, 1.5, 0))));
 
         // TC05: In vertex
-        assertNull("Ray intersects the plane",
+        assertNull("Ray start before the polygon and go through the vertex",
                 polygon.findIntersections(new Ray(new Point3D(0, 0, 1), new Vector(0, 2, -1))));
         // TC06: On edge's continuation
-        assertNull("Ray intersects the plane",
+        assertNull("Ray start before the polygon and go through and intersects the plane",
                 polygon.findIntersections(new Ray(new Point3D(0, 0, 1), new Vector(2, 0, 3))));
 
 
