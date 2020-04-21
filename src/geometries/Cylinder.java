@@ -37,6 +37,7 @@ public class Cylinder extends Tube{
     }
 
     /**
+     * return double value the height of the Cylinder
      * @return double height of the Cylinder
      */
     public double getHeight() {
@@ -62,7 +63,9 @@ public class Cylinder extends Tube{
         // if t == 0 v is orthogonal to qp so return qp
         if(Util.isZero(t) || Util.isZero(t-_height))
             return getAxisRay().getVector();
-        return  super.getNormal(point);
+
+        Point3D o = this.getAxisRay().getPoint().add(v.scale(t));
+        return point.subtract(o).normalize();
     }
     @Override
     public List<Point3D> findIntersections(Ray ray) {

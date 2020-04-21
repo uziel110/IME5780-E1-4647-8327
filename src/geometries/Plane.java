@@ -25,8 +25,6 @@ public class Plane implements Geometry {
      */
     public Plane(Point3D pointOne, Point3D pointTwo, Point3D pointThree) {
 
-        //need to check the direction of the normal?
-
         // if two or three points are equal then an exception will be created at vector constructor
         Vector vector1 = pointTwo.subtract(pointOne);
         Vector vector2 = pointThree.subtract(pointOne);
@@ -46,6 +44,7 @@ public class Plane implements Geometry {
     }
 
     /**
+     * return a point on the plane
      * @return point on the plane
      */
     public Point3D getPoint() {
@@ -53,6 +52,7 @@ public class Plane implements Geometry {
     }
 
     /**
+     * return Vector normal to the plane
      * @return Vector normal to the plane
      */
     public Vector getNormal() {
@@ -79,8 +79,7 @@ public class Plane implements Geometry {
         if (_p.equals(p0))
             return null;
 
-        Vector c = _p.subtract(p0);
-        double t1 = alignZero(_normal.dotProduct(c));
+        double t1 = alignZero(_normal.dotProduct(_p.subtract(p0)));
         double t2 = alignZero(_normal.dotProduct(v));
         if (isZero(t2) || isZero(t1))
             return null;
@@ -88,7 +87,6 @@ public class Plane implements Geometry {
         if (t <= 0)
             return null;
 
-        Point3D returnPoint = p0.add(v.scale(t));
-        return List.of(returnPoint);
+        return List.of(ray.getPoint(t));
     }
 }

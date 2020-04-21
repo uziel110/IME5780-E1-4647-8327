@@ -8,8 +8,8 @@ import primitives.Vector;
  */
 public interface Geometry extends Intersectable {
     /**
-     *
-     * @param point point on the surface to gey normal from it
+     * return normal to the geometry shape from the received point
+     * @param point point on the surface
      * @return normal to the geometry shape from the received point
      */
     Vector getNormal(Point3D point);

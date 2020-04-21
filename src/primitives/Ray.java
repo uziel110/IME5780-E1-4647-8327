@@ -26,7 +26,7 @@ public class Ray {
     }
 
     /**
-     *
+     * return start point of the Ray
      * @return Point3D start point of the Ray
      */
     public Point3D getPoint() {
@@ -34,7 +34,18 @@ public class Ray {
     }
 
     /**
-     *
+     * return the point that lies on the ray: p0 + t * v;
+     * p0 - start point of the ray
+     * v - vector of the ray
+     * @param t double value to scale vector of the ray
+     * @return new Point3D
+     */
+    public Point3D getPoint(double t) {
+        return _point.add(_vector.scale(t));
+    }
+
+    /**
+     * return direction vector of the Ray
      * @return direction vector of the Ray
      */
     public Vector getVector() {

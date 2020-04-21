@@ -120,14 +120,16 @@ public class Vector {
     }
 
     /**
-     * @return the length squared
+     * return the length squared
+     * @return double value of the length squared
      */
     public double lengthSquared() {
         return this._end.distanceSquared(Point3D.ZERO);
     }
 
     /**
-     * @return the length
+     * return the length
+     * @return double value of the length
      */
     public double length() {
         return Math.sqrt(this.lengthSquared());
@@ -147,13 +149,15 @@ public class Vector {
     }
 
     /**
-     * @return new normalized vector from this vector
+     * return normalized vector from this vector
+     * @return new normalized vector
      */
     public Vector normalized() {
         return new Vector(this).normalize();
     }
 
     /**
+     * return point that presents the end point of the vector that start from first the hinges
      * @return point of end of vector that start from "first the hinges"
      */
     public Point3D getEnd() {

@@ -15,6 +15,7 @@ public class Sphere extends RadialGeometry {
     private Point3D _center;
 
     /**
+     * constructor of sphere that receive center point and radius as parameters
      * @param radius double value of Sphere radius
      * @param point  a point of sphere center
      */
@@ -24,7 +25,8 @@ public class Sphere extends RadialGeometry {
     }
 
     /**
-     * @return the center of the sphere
+     * return the center of the sphere
+     * @return Point3D in the center of the sphere
      */
     public Point3D getCenter() {
         return _center;
@@ -45,15 +47,15 @@ public class Sphere extends RadialGeometry {
 
     @Override
     public List<Point3D> findIntersections(Ray ray) {
-        Point3D p0 = new Point3D(ray.getPoint());
-        Vector v = new Vector(ray.getVector());
+        Point3D p0 = ray.getPoint();
+        Vector v = ray.getVector();
 
         double radius = this.getRadius();
 
         if (_center.equals(p0))
-            return List.of(new Point3D(_center.add(v.scale(radius))));
+            return List.of(_center.add(v.scale(radius)));
 
-        Vector u = new Vector(_center.subtract(p0));
+        Vector u = _center.subtract(p0);
         double tm = alignZero( v.dotProduct(u));
         double d = alignZero(Math.sqrt(u.lengthSquared() - tm * tm));
         if (d >= radius)
@@ -66,8 +68,8 @@ public class Sphere extends RadialGeometry {
             return null;
 
         if (t1 <= 0)
-            return List.of(new Point3D(p0.add(v.scale(t2))));
+            return List.of(ray.getPoint(t2));
 
-        return List.of(new Point3D(p0.add(v.scale(t1))), new Point3D(p0.add(v.scale(t2))));
+        return List.of(ray.getPoint(t1), ray.getPoint(t2));
     }
 }

@@ -96,32 +96,26 @@ public class Polygon implements Geometry {
             return null;
 
         Point3D p0 = ray.getPoint();
+        Vector v = ray.getVector();
 
         List<Vector> pList = new ArrayList<Vector>();
-
         for (int i = 0; i < _vertices.size(); ++i) {
             pList.add(_vertices.get(i).subtract(p0));
         }
 
         List<Vector> nList = new ArrayList<Vector>();
-
         for (int i = 0; i < pList.size() - 1; ++i) {
             nList.add((pList.get(i).crossProduct(pList.get(i + 1))).normalize());
         }
         nList.add((pList.get(pList.size() - 1).crossProduct(pList.get(0))).normalize());
-        Vector v = ray.getVector();
 
         double d = alignZero(v.dotProduct(nList.get(0)));
-        boolean positive = d > 0 ? true : false;
-        boolean positive1;
+        boolean positive = d > 0;
         for (int i = 1; i < nList.size(); ++i) {
             d = alignZero(v.dotProduct(nList.get(i)));
-            positive1 = d > 0 ? true : false;
-            if (positive != positive1 || isZero(d))
+            if (positive != (d > 0) || isZero(d))
                 return null;
         }
-
         return list;
-
     }
 }

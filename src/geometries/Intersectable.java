@@ -11,8 +11,8 @@ import java.util.List;
 public interface Intersectable {
 
     /**
-     *
-     * @param ray from the camera
+     * find all the Intersections between the geometry shape and a ray that receive as parameter
+     * @param ray (in our situation - from the camera)
      * @return list of intersections points
      */
 

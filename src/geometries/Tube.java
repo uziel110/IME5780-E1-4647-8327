@@ -14,7 +14,10 @@ public class Tube extends RadialGeometry {
     private Ray _axisRay;
 
     /**
-     * constructor of Tube
+     * constructor of Tube that receive
+     * point on the center axis the direction
+     * vector of the ray from that point
+     * and the radius of the tube
      *
      * @param point  Point3D of start of axis ray
      * @param vector vector direction
@@ -27,6 +30,8 @@ public class Tube extends RadialGeometry {
 
     /**
      * constructor of Tube
+     * ray of the tube direction
+     * and the radius of the tube
      *
      * @param axisRay Ray of Tube axis
      * @param radius  double value of Tube radius
@@ -37,6 +42,7 @@ public class Tube extends RadialGeometry {
     }
 
     /**
+     * return axis ray
      * @return axis ray
      */
     public Ray getAxisRay() {
@@ -70,6 +76,7 @@ public class Tube extends RadialGeometry {
 
     @Override
     public List<Point3D> findIntersections(Ray ray) {
+
         return null;
     }
 }

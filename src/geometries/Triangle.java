@@ -27,8 +27,4 @@ public class Triangle extends Polygon {
                 ", plane=" + _plane +
                 '}';
     }
-    @Override
-    public List<Point3D> findIntersections(Ray ray) {
-        return null;
-    }
 }
