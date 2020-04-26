@@ -8,15 +8,6 @@ import java.util.Objects;
 public class Vector {
     private Point3D _end;
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null) return false;
-        if (!(obj instanceof Vector)) return false;
-        Vector other = (Vector) obj;
-        return this._end.equals(((Vector) obj)._end);
-    }
-
     /**
      * constructor of Vector that receive 3 double values
      *
@@ -167,5 +158,14 @@ public class Vector {
     @Override
     public String toString() {
         return "Vector" + _end;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (!(obj instanceof Vector)) return false;
+        Vector other = (Vector) obj;
+        return this._end.equals(((Vector) obj)._end);
     }
 }
