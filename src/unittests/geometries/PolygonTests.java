@@ -96,7 +96,7 @@ public class PolygonTests {
     @Test
     public void findIntsersections() {
 
-        Polygon polygon = new Polygon(new Point3D(0,2,0), new Point3D(2,0,0), new Point3D(1,1,2));
+        Polygon polygon = new Polygon(new Point3D(0,2,0), new Point3D(2,0,0), new Point3D(1,1,2), new Point3D(0.5,1.5,1.5));
 
         // ============ Equivalence Partitions Tests ==============
         // TC01: Inside polygon (1 point)
@@ -112,7 +112,7 @@ public class PolygonTests {
         // =============== Boundary Values Tests ==================
         // TC04: On edge (0 points)
         assertNull("Ray start before the polygon and go through the edge",
-                polygon.findIntersections(new Ray(new Point3D(0, 0, 1), new Vector(0.5, 1.5, 0))));
+                polygon.findIntersections(new Ray(new Point3D(0, 0, 1), new Vector(0.5, 1.5, -1))));
 
         // TC05: In vertex
         assertNull("Ray start before the polygon and go through the vertex",
@@ -120,7 +120,5 @@ public class PolygonTests {
         // TC06: On edge's continuation
         assertNull("Ray start before the polygon and go through and intersects the plane",
                 polygon.findIntersections(new Ray(new Point3D(0, 0, 1), new Vector(2, 0, 3))));
-
-
     }
 }

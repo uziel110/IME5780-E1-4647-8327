@@ -111,6 +111,8 @@ public class Polygon implements Geometry {
 
         double d = alignZero(v.dotProduct(nList.get(0)));
         boolean positive = d > 0;
+        if (isZero(d))
+            return null;
         for (int i = 1; i < nList.size(); ++i) {
             d = alignZero(v.dotProduct(nList.get(i)));
             if (positive != (d > 0) || isZero(d))
