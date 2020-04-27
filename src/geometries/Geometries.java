@@ -11,13 +11,14 @@ import java.util.List;
  * class that implements collection of shapes
  */
 public class Geometries implements Intersectable {
-    private List<Intersectable> intersections;
+
+    private List<Intersectable> _shapes;
 
     /**
      * default constructor of Geometries
      */
     public Geometries() {
-        intersections = new LinkedList<Intersectable>();
+        _shapes = new LinkedList<Intersectable>();
     }
 
     /**
@@ -26,8 +27,8 @@ public class Geometries implements Intersectable {
      * @param geometries list of Intersctable
      */
     public Geometries(Intersectable... geometries) {
-        intersections = new LinkedList<Intersectable>();
-        intersections.addAll(Arrays.asList(geometries));
+        _shapes = new LinkedList<Intersectable>();
+        _shapes.addAll(Arrays.asList(geometries));
     }
 
     /**
@@ -36,15 +37,18 @@ public class Geometries implements Intersectable {
      * @param geometries list of Intersctable
      */
     public void add(Intersectable... geometries) {
-        ;
+        _shapes.addAll(Arrays.asList(geometries));
     }
 
+    public List<Intersectable> getShapes() {
+        return _shapes;
+    }
 
     @Override
     public List<Point3D> findIntersections(Ray ray) {
         List<Point3D> returnList = new LinkedList<Point3D>();
         List<Point3D> list;
-        for (Intersectable shape : intersections) {
+        for (Intersectable shape : _shapes) {
             list = shape.findIntersections(ray);
             if (list != null)
                 returnList.addAll(list);
