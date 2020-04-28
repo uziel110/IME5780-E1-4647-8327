@@ -1,7 +1,5 @@
 package primitives;
 
-import java.util.Objects;
-
 /**
  * class that implements Vector
  */
@@ -165,7 +163,6 @@ public class Vector {
         if (this == obj) return true;
         if (obj == null) return false;
         if (!(obj instanceof Vector)) return false;
-        Vector other = (Vector) obj;
         return this._end.equals(((Vector) obj)._end);
     }
 }

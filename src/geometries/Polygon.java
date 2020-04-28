@@ -98,12 +98,12 @@ public class Polygon implements Geometry {
         Point3D p0 = ray.getPoint();
         Vector v = ray.getVector();
 
-        List<Vector> pList = new ArrayList<Vector>();
-        for (int i = 0; i < _vertices.size(); ++i) {
-            pList.add(_vertices.get(i).subtract(p0));
+        List<Vector> pList = new ArrayList<>();
+        for (Point3D vertex : _vertices) {
+            pList.add(vertex.subtract(p0));
         }
 
-        List<Vector> nList = new ArrayList<Vector>();
+        List<Vector> nList = new ArrayList<>();
         for (int i = 0; i < pList.size() - 1; ++i) {
             nList.add((pList.get(i).crossProduct(pList.get(i + 1))).normalize());
         }

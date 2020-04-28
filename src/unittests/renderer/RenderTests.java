@@ -43,7 +43,7 @@ public class RenderTests {
         render.renderImage();
         render.printGrid(50, java.awt.Color.YELLOW);
         // ._imageWriter is my change
-        render._imageWriter.writeToImage();
+        render.getImageWriter().writeToImage();
     }
 
     /**
@@ -70,6 +70,6 @@ public class RenderTests {
         render.renderImage();
         render.printGrid(50, java.awt.Color.YELLOW);
         // ._imageWriter is my change
-        render._imageWriter.writeToImage();
+        render.getImageWriter().writeToImage();
     }
 }

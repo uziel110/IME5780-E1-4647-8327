@@ -8,32 +8,63 @@ import primitives.Point3D;
 import primitives.Ray;
 import scene.Scene;
 
-import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * class that create image from the scene
+ */
 public class Render {
-    ImageWriter _imageWriter;
-    Scene _scene;
 
+    private ImageWriter _imageWriter;
+    private Scene _scene;
+
+    /**
+     * Constructor of Render class, get two parameters - imageWriter and scene
+     *
+     * @param writer ImageWriter - image parameters
+     * @param scene  Scene - scene details
+     */
     public Render(ImageWriter writer, Scene scene) {
         _imageWriter = writer;
         _scene = scene;
     }
 
+    /**
+     * return imageWriter
+     *
+     * @return imageWriter
+     */
+    public ImageWriter getImageWriter() {
+        return _imageWriter;
+    }
+
+    /**
+     * return scene
+     *
+     * @return scene
+     */
+    public Scene getScene() {
+        return _scene;
+    }
+
+    /**
+     * create image from the scene
+     */
     public void renderImage() {
+        // scene parameters
         Camera camera = _scene.getCamera();
         Intersectable geometries = _scene.getGeometries();
         java.awt.Color background = _scene.getBackground().getColor();
-        AmbientLight ambientLight = _scene.getAmbientLight();
         double distance = _scene.getDistance();
 
+        // imageWriter parameters
         int nX = _imageWriter.getNx();
         int nY = _imageWriter.getNy();
         double width = _imageWriter.getWidth();
         double height = _imageWriter.getHeight();
 
         Ray ray;
-        List<Point3D> intersectionPoints = new ArrayList<Point3D>();
+        List<Point3D> intersectionPoints;
         Point3D closestPoint;
         for (int i = 0; i < nY; ++i) {
             for (int j = 0; j < nX; ++j) {
@@ -49,10 +80,11 @@ public class Render {
         }
     }
 
-    private Color calcColor(Point3D p) {
-        return _scene.getAmbientLight().getIntensity();
-    }
-
+    /**
+     * print grid on the image
+     * @param interval distance between the lines of the grid
+     * @param color Color
+     */
     public void printGrid(int interval, java.awt.Color color) {
         int nX = _imageWriter.getNx();
         int nY = _imageWriter.getNy();
@@ -65,6 +97,21 @@ public class Render {
         }
     }
 
+    /**
+     * return color color of this point
+     * @param p Point3D
+     * @return Color of this point
+     */
+    private Color calcColor(Point3D p) {
+        return _scene.getAmbientLight().getIntensity();
+    }
+
+    /**
+     * return Point3D the closest point to the camera
+     *
+     * @param points list of Point3D
+     * @return Point3D the closest point to the camera
+     */
     private Point3D getClosestPoint(List<Point3D> points) {
         Point3D cameraLocation = _scene.getCamera().getLocation(),
                 closestPoint = null;

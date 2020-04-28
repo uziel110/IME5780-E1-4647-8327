@@ -18,7 +18,7 @@ public class Geometries implements Intersectable {
      * default constructor of Geometries
      */
     public Geometries() {
-        _shapes = new LinkedList<Intersectable>();
+        _shapes = new LinkedList<>();
     }
 
     /**
@@ -27,7 +27,7 @@ public class Geometries implements Intersectable {
      * @param geometries list of Intersctable
      */
     public Geometries(Intersectable... geometries) {
-        _shapes = new LinkedList<Intersectable>();
+        _shapes = new LinkedList<>();
         _shapes.addAll(Arrays.asList(geometries));
     }
 
@@ -46,7 +46,7 @@ public class Geometries implements Intersectable {
 
     @Override
     public List<Point3D> findIntersections(Ray ray) {
-        List<Point3D> returnList = new LinkedList<Point3D>();
+        List<Point3D> returnList = new LinkedList<>();
         List<Point3D> list;
         for (Intersectable shape : _shapes) {
             list = shape.findIntersections(ray);
