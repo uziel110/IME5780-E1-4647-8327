@@ -58,10 +58,11 @@ public class RenderTests {
         scene.setBackground(new Color(75, 127, 90));
         scene.setAmbientLight(new AmbientLight(new Color(255, 191, 191), 1));
 
-        scene.addGeometries(new Sphere(50, new Point3D(75, 50, 100)),
-                new Sphere(50, new Point3D(-75, 50, 100)));
+        scene.addGeometries(new Sphere(50, new Point3D(75, -50, 150)),
+                new Sphere(50, new Point3D(-75, -50, 150)));
 
-        scene.addGeometries(new Triangle(new Point3D(-50, -50, 100), new Point3D(50, -50, 100), new Point3D(0, 0, 100)));
+        scene.addGeometries(new Triangle(new Point3D(-30, 50, 150), new Point3D(30, 50, 150), new Point3D(0, 0, 150)),
+                new Triangle(new Point3D(100, 100, 150), new Point3D(-100, 100, 150), new Point3D(0, 150, 150)));
 
         ImageWriter imageWriter = new ImageWriter("ourImage", 500, 500, 500, 500);
         Render render = new Render(imageWriter, scene);
