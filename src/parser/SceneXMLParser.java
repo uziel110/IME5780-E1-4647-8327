@@ -7,16 +7,14 @@ import javax.xml.parsers.SAXParserFactory;
 import java.io.File;
 
 public class SceneXMLParser {
-    public SceneXMLParser() {
-    }
-    public Scene parseXML(){
+    public Scene parseXML(String XMLName){
         SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
         SAXParser saxParser;
         Scene importedScene = null;
         try {
             saxParser = saxParserFactory.newSAXParser();
             SaxHandler handler = new SaxHandler();
-            saxParser.parse(new File("/Users/pankaj/employees.xml"), handler);
+            saxParser.parse(new File(XMLName), handler);
             importedScene = handler.getScene();
         } catch (Exception e) {
         }

@@ -13,8 +13,8 @@ public class SceneDescriptor {
     private List<Map<String, String>> _spheres;
     private List<Map<String, String>> _triangles;
 
-    public void InitializeFromXMLstring(String xmlText) {
+    public Scene InitializeFromXMLstring(String xmlText) {
         SceneXMLParser XMLParser = new SceneXMLParser();
-        Scene scene = XMLParser.parseXML();
+        return XMLParser.parseXML(xmlText);
     }
 }

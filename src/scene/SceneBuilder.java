@@ -11,7 +11,8 @@ public class SceneBuilder {
     ImageWriter _imageWriter;
     String _filePath;
 
-    public void loadSceneFromFile(File) {
-
+    public void loadSceneFromFile(File file) {
+        _sceneDescriptor = new SceneDescriptor();
+        _scene = _sceneDescriptor.InitializeFromXMLstring(_filePath);
     }
 }
