@@ -17,7 +17,7 @@ public final class Coordinate {
 
     /**
      * Coordinate constructor receiving a coordinate value
-     * 
+     *
      * @param coord coordinate value
      */
     public Coordinate(double coord) {
@@ -27,7 +27,7 @@ public final class Coordinate {
 
     /**
      * Copy constructor for coordinate
-     * 
+     *
      * @param other
      */
     public Coordinate(Coordinate other) {
@@ -36,7 +36,7 @@ public final class Coordinate {
 
     /**
      * Coordinate value getter
-     * 
+     *
      * @return coordinate value
      */
     public double get() {
@@ -49,7 +49,7 @@ public final class Coordinate {
         if (this == obj) return true;
         if (obj == null) return false;
         if (!(obj instanceof Coordinate)) return false;
-        return isZero(_coord - ((Coordinate)obj)._coord);
+        return isZero(_coord - ((Coordinate) obj)._coord);
     }
 
     @Override

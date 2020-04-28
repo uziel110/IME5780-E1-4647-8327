@@ -43,6 +43,7 @@ public class Tube extends RadialGeometry {
 
     /**
      * return axis ray
+     *
      * @return axis ray
      */
     public Ray getAxisRay() {
@@ -68,7 +69,7 @@ public class Tube extends RadialGeometry {
 
         double t = v.dotProduct(qp);
         // if t == 0 v is orthogonal to qp so return qp
-        if(Util.isZero(t))
+        if (Util.isZero(t))
             return qp;
         Point3D o = _axisRay.getPoint().add(v.scale(t));
         return point.subtract(o).normalize();

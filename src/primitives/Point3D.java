@@ -69,6 +69,7 @@ public class Point3D {
 
     /**
      * return distance from this point to other point squared
+     *
      * @param other Point3D to measure distance to it
      * @return double value of the distance squared
      */
@@ -80,6 +81,7 @@ public class Point3D {
 
     /**
      * return distance from this point to other point
+     *
      * @param other Point3D to measure distance to it
      * @return double value of the distance
      */
@@ -104,6 +106,7 @@ public class Point3D {
 
     /**
      * return Coordinate x of the point
+     *
      * @return Coordinate x of the point
      */
     public Coordinate getX() {
@@ -112,6 +115,7 @@ public class Point3D {
 
     /**
      * return Coordinate y of the point
+     *
      * @return Coordinate y of the point
      */
     public Coordinate getY() {
@@ -120,6 +124,7 @@ public class Point3D {
 
     /**
      * return Coordinate z of the point
+     *
      * @return Coordinate z of the point
      */
     public Coordinate getZ() {

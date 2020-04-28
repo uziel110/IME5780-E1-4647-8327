@@ -10,34 +10,37 @@ import java.util.List;
 /**
  * class that implements cylinder
  */
-public class Cylinder extends Tube{
+public class Cylinder extends Tube {
     private double _height;
 
     /**
      * constructor of Cylinder
-     * @param point Point3D of start of the axis ray
+     *
+     * @param point  Point3D of start of the axis ray
      * @param vector vector direction
      * @param radius double value of cylinder radius
      * @param height double value of Cylinder height
      */
-    public Cylinder(Point3D point,Vector vector, double radius, double height){
-        super(point,vector, radius);
+    public Cylinder(Point3D point, Vector vector, double radius, double height) {
+        super(point, vector, radius);
         _height = height;
     }
 
     /**
      * constructor of Cylinder
+     *
      * @param axisRay Ray of cylinder axis
-     * @param radius double value of cylinder radius
-     * @param height double value of cylinder height
+     * @param radius  double value of cylinder radius
+     * @param height  double value of cylinder height
      */
-    public Cylinder(Ray axisRay, double radius, double height){
-        super(axisRay,radius);
+    public Cylinder(Ray axisRay, double radius, double height) {
+        super(axisRay, radius);
         _height = height;
     }
 
     /**
      * return double value the height of the Cylinder
+     *
      * @return double height of the Cylinder
      */
     public double getHeight() {
@@ -61,12 +64,13 @@ public class Cylinder extends Tube{
         double t = v.dotProduct(qp);
 
         // if t == 0 v is orthogonal to qp so return qp
-        if(Util.isZero(t) || Util.isZero(t-_height))
+        if (Util.isZero(t) || Util.isZero(t - _height))
             return getAxisRay().getVector();
 
         Point3D o = this.getAxisRay().getPoint().add(v.scale(t));
         return point.subtract(o).normalize();
     }
+
     @Override
     public List<Point3D> findIntersections(Ray ray) {
         return null;

@@ -45,6 +45,7 @@ public class Plane implements Geometry {
 
     /**
      * return a point on the plane
+     *
      * @return point on the plane
      */
     public Point3D getPoint() {
@@ -53,6 +54,7 @@ public class Plane implements Geometry {
 
     /**
      * return Vector normal to the plane
+     *
      * @return Vector normal to the plane
      */
     public Vector getNormal() {

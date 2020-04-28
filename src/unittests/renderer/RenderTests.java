@@ -55,7 +55,7 @@ public class RenderTests {
         Scene scene = new Scene("Test scene");
         scene.setCamera(new Camera(Point3D.ZERO, new Vector(0, 0, 1), new Vector(0, -1, 0)));
         scene.setDistance(100);
-        scene.setBackground(new Color(75, 127, 90));
+        scene.setBackground(new Color(56, 21, 240));
         scene.setAmbientLight(new AmbientLight(new Color(255, 191, 191), 1));
 
         scene.addGeometries(new Sphere(50, new Point3D(75, -50, 150)),
@@ -68,7 +68,7 @@ public class RenderTests {
         Render render = new Render(imageWriter, scene);
 
         render.renderImage();
-        render.printGrid(50, java.awt.Color.YELLOW);
+        render.printGrid(75, java.awt.Color.MAGENTA);
         // ._imageWriter is my change
         render.getImageWriter().writeToImage();
     }

@@ -15,7 +15,7 @@ public class GeometriesTests {
     @Test
     public void add() {
         Geometries geometries = new Geometries();
-        geometries.add(new Sphere(1,new Point3D(0,0,0)));
+        geometries.add(new Sphere(1, new Point3D(0, 0, 0)));
         assertEquals("Intersections with some shapes , Wrong number of points", 1, geometries.getShapes().size());
     }
 

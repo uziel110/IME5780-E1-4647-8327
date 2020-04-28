@@ -1,6 +1,10 @@
 package parser;
 
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+import primitives.Color;
+import scene.Scene;
 
 public class SaxHandler extends DefaultHandler {
 
@@ -8,28 +12,31 @@ public class SaxHandler extends DefaultHandler {
     boolean bName = false;
     boolean bGender = false;
     boolean bRole = false;
-    // List to hold Employees object
-    private List<Employee> empList = null;
-    private Employee emp = null;
-    private StringBuilder data = null;
+
+    // List to hold Scene objects
+    private Scene _scene = null;
+    private StringBuilder _data = null;
 
     // getter method for employee list
-    public List<Employee> getEmpList() {
-        return empList;
+    public Scene getScene() {
+        return _scene;
     }
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 
-        if (qName.equalsIgnoreCase("Employee")) {
-            // create a new Employee and put it in Map
-            String id = attributes.getValue("id");
+        if (qName.equalsIgnoreCase("Scene")) {
+            // create a new Scene and put it in Map
+            String backgroundColor = attributes.getValue("background-color");
+            String[] RGB = backgroundColor.split(" ");
+
+            String distance = attributes.getValue("screen-distance");
+
             // initialize Employee object and set id attribute
-            emp = new Employee();
-            emp.setId(Integer.parseInt(id));
-            // initialize list
-            if (empList == null)
-                empList = new ArrayList<>();
+            _scene = new Scene("scene import from XML");
+            _scene.setBackground(new Color(Integer.parseInt(RGB[0]), Integer.parseInt(RGB[1]), Integer.parseInt(RGB[2])));
+            _scene.setDistance(Integer.parseInt(distance));
+
         } else if (qName.equalsIgnoreCase("name")) {
             // set boolean values for fields, will be used in setting Employee variables
             bName = true;
@@ -41,34 +48,16 @@ public class SaxHandler extends DefaultHandler {
             bRole = true;
         }
         // create the data container
-        data = new StringBuilder();
+        _data = new StringBuilder();
     }
 
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
-        if (bAge) {
-            // age element, set Employee age
-            emp.setAge(Integer.parseInt(data.toString()));
-            bAge = false;
-        } else if (bName) {
-            emp.setName(data.toString());
-            bName = false;
-        } else if (bRole) {
-            emp.setRole(data.toString());
-            bRole = false;
-        } else if (bGender) {
-            emp.setGender(data.toString());
-            bGender = false;
-        }
 
-        if (qName.equalsIgnoreCase("Employee")) {
-            // add Employee object to list
-            empList.add(emp);
-        }
     }
 
     @Override
     public void characters(char ch[], int start, int length) throws SAXException {
-        data.append(new String(ch, start, length));
+        _data.append(new String(ch, start, length));
     }
 }

@@ -9,6 +9,7 @@ import primitives.Vector;
 public interface Geometry extends Intersectable {
     /**
      * return normal to the geometry shape from the received point
+     *
      * @param point point on the surface
      * @return normal to the geometry shape from the received point
      */

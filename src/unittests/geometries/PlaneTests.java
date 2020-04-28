@@ -18,7 +18,7 @@ public class PlaneTests {
      */
     @Test
     public void getNormal() {
-        assertEquals("wrong plane normal without parameters", new Vector (0,0,1), p.getNormal());
+        assertEquals("wrong plane normal without parameters", new Vector(0, 0, 1), p.getNormal());
     }
 
     /**
@@ -26,16 +26,16 @@ public class PlaneTests {
      */
     @Test
     public void testGetNormal() {
-        assertEquals("wrong plane normal with point", new Vector (0,0,1), p.getNormal(new Point3D(1, 1, 0)));
+        assertEquals("wrong plane normal with point", new Vector(0, 0, 1), p.getNormal(new Point3D(1, 1, 0)));
     }
 
     /**
-     * Test method for {@link Plane#findIntsersections(Ray)} (geometries.Plane)}.
+     * Test method for {@link Plane#findIntersections(Ray)} (geometries.Plane)}.
      */
     @Test
     public void findIntsersections() {
 
-        Plane plane = new Plane(new Point3D(0,1,0) , new Vector(-1,-1,1));
+        Plane plane = new Plane(new Point3D(0, 1, 0), new Vector(-1, -1, 1));
 
         // ============ Equivalence Partitions Tests ==============
 
@@ -57,7 +57,7 @@ public class PlaneTests {
         assertNull("Ray is parallel to the plane, ray not included in the plane",
                 plane.findIntersections(new Ray(new Point3D(0.5, 0, 0), new Vector(1, -1, 0))));
 
-        plane = new Plane(new Point3D(0,1,0) , new Vector(-1,-1,0));
+        plane = new Plane(new Point3D(0, 1, 0), new Vector(-1, -1, 0));
 
         // **** Group: Ray is orthogonal to the plane (according to p0)
         // TC05: before the plane (1 points)

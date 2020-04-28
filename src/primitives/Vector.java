@@ -69,7 +69,7 @@ public class Vector {
      * @return new Vector of the adding
      */
     public Vector add(Vector other) {
-        return new Vector( this._end.add(other));
+        return new Vector(this._end.add(other));
     }
 
     /**
@@ -110,6 +110,7 @@ public class Vector {
 
     /**
      * return the length squared
+     *
      * @return double value of the length squared
      */
     public double lengthSquared() {
@@ -118,6 +119,7 @@ public class Vector {
 
     /**
      * return the length
+     *
      * @return double value of the length
      */
     public double length() {
@@ -139,6 +141,7 @@ public class Vector {
 
     /**
      * return normalized vector from this vector
+     *
      * @return new normalized vector
      */
     public Vector normalized() {
@@ -147,6 +150,7 @@ public class Vector {
 
     /**
      * return point that presents the end point of the vector that start from first the hinges
+     *
      * @return point of end of vector that start from "first the hinges"
      */
     public Point3D getEnd() {

@@ -9,7 +9,8 @@ public class Ray {
 
     /**
      * constructor of Ray
-     * @param point Point3D start of the ray
+     *
+     * @param point  Point3D start of the ray
      * @param vector Vector direction of the ray
      */
     public Ray(Point3D point, Vector vector) {
@@ -19,6 +20,7 @@ public class Ray {
 
     /**
      * constructor of Ray
+     *
      * @param other Ray to copy
      */
     public Ray(Ray other) {
@@ -27,6 +29,7 @@ public class Ray {
 
     /**
      * return start point of the Ray
+     *
      * @return Point3D start point of the Ray
      */
     public Point3D getPoint() {
@@ -37,6 +40,7 @@ public class Ray {
      * return the point that lies on the ray: p0 + t * v;
      * p0 - start point of the ray
      * v - vector of the ray
+     *
      * @param t double value to scale vector of the ray
      * @return new Point3D
      */
@@ -46,6 +50,7 @@ public class Ray {
 
     /**
      * return direction vector of the Ray
+     *
      * @return direction vector of the Ray
      */
     public Vector getVector() {
