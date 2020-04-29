@@ -1,7 +1,15 @@
 package scene;
 
+import elements.AmbientLight;
+import elements.Camera;
+import geometries.Sphere;
+import geometries.Triangle;
 import org.junit.Test;
-import parser.SceneDescriptor;
+import parser.SaxHandler;
+//import parser.SceneDescriptor;
+import primitives.Color;
+import primitives.Point3D;
+import primitives.Vector;
 import renderer.ImageWriter;
 import renderer.Render;
 
@@ -19,10 +27,18 @@ public class SceneBuilderTest {
      */
     @Test
     public void loadSceneFromFile() {
-        SceneBuilder sceneBuilder = new SceneBuilder();
+        SaxHandler Handler = new SaxHandler("basicRenderTestTwoColors.xml");
+        Render render = Handler.getRender();
+
+        render.renderImage();
+        render.printGrid(75, java.awt.Color.MAGENTA);
+        // ._imageWriter is my change
+        render.getImageWriter().writeToImage();
+
+        /*SceneBuilder sceneBuilder = new SceneBuilder();
         sceneBuilder.loadSceneFromFile(new File("basicRenderTestTwoColors.xml"));
         Render render = new Render(sceneBuilder._imageWriter,sceneBuilder._scene);
         render.renderImage();
-        render.getImageWriter().writeToImage();
+        render.getImageWriter().writeToImage();*/
     }
 }

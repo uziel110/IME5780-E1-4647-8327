@@ -1,4 +1,4 @@
-package parser;
+/*package parser;
 
 import scene.Scene;
 
@@ -17,4 +17,4 @@ public class SceneDescriptor {
         SceneXMLParser XMLParser = new SceneXMLParser();
         return XMLParser.parseXML(xmlText);
     }
-}
+}*/

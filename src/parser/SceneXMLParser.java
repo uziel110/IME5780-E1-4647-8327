@@ -1,4 +1,4 @@
-package parser;
+/*package parser;
 
 import scene.Scene;
 
@@ -6,7 +6,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.File;
 
-public class SceneXMLParser {
+/*public class SceneXMLParser {
     public Scene parseXML(String XMLName){
         SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
         SAXParser saxParser;
@@ -21,3 +21,4 @@ public class SceneXMLParser {
         return importedScene;
     }
 }
+*/

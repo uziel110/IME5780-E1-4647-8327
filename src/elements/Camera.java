@@ -76,9 +76,9 @@ public class Camera {
     }
 
     /**
-     * return a point Location on the camera
+     * return a point Location of the camera
      *
-     * @return point Location on the camera
+     * @return Point3D Location of the camera
      */
     public Point3D getLocation() {
         return _location;

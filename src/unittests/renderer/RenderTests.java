@@ -7,8 +7,13 @@ import geometries.Triangle;
 import org.junit.Test;
 import primitives.Color;
 import primitives.Point3D;
+import primitives.Ray;
 import primitives.Vector;
 import scene.Scene;
+
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Test rendering abasic image
@@ -72,4 +77,21 @@ public class RenderTests {
         // ._imageWriter is my change
         render.getImageWriter().writeToImage();
     }
+
+    /**
+     * test for getClosestPoint. check if the function returns the closest intersection
+     * point of the geometry shape to the camera
+     */
+    /*@Test
+    public void getClosestPoint() {
+        Scene scene = new Scene("ClosestPoint test");
+        scene.setCamera(new Camera(Point3D.ZERO, new Vector(0, 0, 1), new Vector(0, -1, 0)));
+        scene.addGeometries(new Sphere(1d, new Point3D(0, 0, 2)));
+        ImageWriter imageWriter = new ImageWriter("testImage", 500, 500, 500, 500);
+        Render render = new Render(imageWriter, scene);
+        assertEquals("Wrong closestPoint", new Point3D(0, 0, 1),
+              render.getClosestPoint(List.of(new Point3D(0, 0, 1),new Point3D(0, 0, 3))));
+
+    }*/
+
 }

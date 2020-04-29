@@ -1,4 +1,4 @@
-package scene;
+/*package scene;
 
 import parser.SceneDescriptor;
 import renderer.ImageWriter;
@@ -15,4 +15,4 @@ public class SceneBuilder {
         _sceneDescriptor = new SceneDescriptor();
         _scene = _sceneDescriptor.InitializeFromXMLstring(_filePath);
     }
-}
+}*/

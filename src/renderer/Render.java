@@ -112,6 +112,7 @@ public class Render {
      * @param points list of Point3D
      * @return Point3D the closest point to the camera
      */
+    //for the test the access permission needs to be changed to public
     private Point3D getClosestPoint(List<Point3D> points) {
         Point3D cameraLocation = _scene.getCamera().getLocation(),
                 closestPoint = null;
