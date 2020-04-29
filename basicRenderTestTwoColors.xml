@@ -6,8 +6,8 @@
 	<ambient-light color="0 255 0" />
 	<geometries>
 		<sphere center="0 0 100" radius="50" />
+		<sphere center="0 50 0" radius="50" />
 	
-		
 		
 		<triangle p0="100 0 100" p1="0 -100 100" p2="100 -100 100" />
 		<triangle p0="-100 0 100" p1="0 -100 100" p2="-100 -100 100" />

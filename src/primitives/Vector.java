@@ -79,9 +79,16 @@ public class Vector {
      * @return new Vector of the multiply
      */
     public Vector scale(double scalar) {
-        return new Vector(_end._x._coord * scalar,
-                _end._y._coord * scalar,
-                _end._z._coord * scalar);
+        Vector returnVector;
+        try{
+            returnVector = new Vector(_end._x._coord * scalar,
+                    _end._y._coord * scalar,
+                    _end._z._coord * scalar);
+        }
+        catch (Exception e){
+            return null;
+        }
+        return returnVector;
     }
 
     /**

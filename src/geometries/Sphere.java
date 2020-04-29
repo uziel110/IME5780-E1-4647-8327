@@ -7,6 +7,7 @@ import primitives.Vector;
 import java.util.List;
 
 import static primitives.Util.alignZero;
+import static primitives.Util.isZero;
 
 /**
  * class that implements sphere
@@ -64,13 +65,16 @@ public class Sphere extends RadialGeometry {
             return null;
 
         double th = alignZero(Math.sqrt(radius * radius - d * d));
-        double t1 = alignZero(tm - th);
-        double t2 = alignZero(tm + th);
-        if (t1 <= 0 && t2 <= 0)
+        double t1 = tm - th;
+        double t2 = tm + th;
+        if ((t1 < 0 && t2 < 0) || (isZero(t1) && isZero(t2)))
             return null;
 
-        if (t1 <= 0)
+        if (t1 < 0 || isZero(t1))
+        {
+            System.out.println(t2);
             return List.of(ray.getPoint(t2));
+        }
 
         return List.of(ray.getPoint(t1), ray.getPoint(t2));
     }
