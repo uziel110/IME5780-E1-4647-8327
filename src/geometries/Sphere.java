@@ -64,6 +64,7 @@ public class Sphere extends RadialGeometry {
         if (alignZero(d - radius) >= 0)
             return null;
 
+
         double th = alignZero(Math.sqrt(radius * radius - d * d));
         double t1 = alignZero(tm - th);
         double t2 = alignZero(tm + th);
