@@ -5,7 +5,7 @@
 	<camera P0="0 0 0" Vto="0 0 1" Vup="0 -1 0" />
 	<ambient-light color="255 191 191" />
 	<geometries>
-		<sphere center="0 0 100" radius="50" />
+		<sphere center="0 0 75" radius="50" />
 
 		<triangle p0="100 0 100" p1="0 100 100" p2="100 100 100" />
 		<triangle p0="-100 0 100" p1="0 100 100" p2="-100 100 100" />
