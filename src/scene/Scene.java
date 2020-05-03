@@ -20,7 +20,7 @@ public class Scene {
     /**
      * Constructor of scene class, get parameter - name of the scene
      *
-     * @param name
+     * @param name string
      */
     public Scene(String name) {
         _name = name;
@@ -112,7 +112,7 @@ public class Scene {
 
     /**
      * set distance
-     * @param distance
+     * @param distance double
      */
     public void setDistance(double distance) {
         _distance = distance;

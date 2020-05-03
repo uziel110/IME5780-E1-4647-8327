@@ -41,7 +41,7 @@ public class VectorTests {
     }
 
     /**
-     * Test method for {@link primitives.Vector#scale(primitives.Vector)}.
+     * Test method for {@link primitives.Vector#scale(double)}.
      */
     @Test
     public void scale() {
@@ -90,7 +90,7 @@ public class VectorTests {
     }
 
     /**
-     * Test method for {@link primitives.Vector#lengthSquared(primitives.Vector)}.
+     * Test method for {@link primitives.Vector#lengthSquared()}.
      */
     @Test
     public void lengthSquared() {
@@ -98,7 +98,7 @@ public class VectorTests {
     }
 
     /**
-     * Test method for {@link primitives.Vector#length(primitives.Vector)}.
+     * Test method for {@link primitives.Vector#length()}.
      */
     @Test
     public void length() {
@@ -106,7 +106,7 @@ public class VectorTests {
     }
 
     /**
-     * Test method for {@link primitives.Vector#normalize(primitives.Vector)}.
+     * Test method for {@link primitives.Vector#normalize()}.
      */
     @Test
     public void normalize() {
@@ -119,7 +119,7 @@ public class VectorTests {
     }
 
     /**
-     * Test method for {@link primitives.Vector#normalized(primitives.Vector)}.
+     * Test method for {@link primitives.Vector#normalized()}.
      */
     @Test
     public void normalized() {

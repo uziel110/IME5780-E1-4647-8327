@@ -21,15 +21,15 @@ import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 
 /**
- * create Render Scene and Image from xml file
+ * create Render Scene and Image from xml file.
  * if file incorrect then render = null
  */
 public class SaxHandler extends DefaultHandler {
 
-    Render render = null;
-    ImageWriter image = null;
+    Render _render = null;
+    ImageWriter _image = null;
     String _sceneXmlFileName;
-    String tmpValue;
+    String _tmpValue;
     Scene _scene = null;
 
     /**
@@ -42,7 +42,8 @@ public class SaxHandler extends DefaultHandler {
     }
 
     /**
-     * @return render
+     * create render object from xml file
+     * @return render object
      */
     public Render parseDocument() {
         SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -56,7 +57,7 @@ public class SaxHandler extends DefaultHandler {
         } catch (IOException e) {
             System.out.println("IO error");
         }
-        return render;
+        return _render;
     }
 
     @Override
@@ -123,7 +124,7 @@ public class SaxHandler extends DefaultHandler {
                 double screenHeight = Double.parseDouble(attributes.getValue("screen-height"));
                 int nX = Integer.parseInt(attributes.getValue("Nx"));
                 int nY = Integer.parseInt(attributes.getValue("Ny"));
-                image = new ImageWriter("image from XML",
+                _image = new ImageWriter("image from XML",
                         screenWidth, screenHeight, nX, nY);
             }
         } catch (Exception e) {
@@ -160,12 +161,12 @@ public class SaxHandler extends DefaultHandler {
     @Override
     public void endElement(String uri, String localName, String qName) {
         if (qName.equals("scene")) {
-            render = new Render(image, _scene);
+            _render = new Render(_image, _scene);
         }
     }
 
     @Override
     public void characters(char[] ch, int start, int length) {
-        tmpValue = new String(ch, start, length);
+        _tmpValue = new String(ch, start, length);
     }
 }

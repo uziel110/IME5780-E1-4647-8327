@@ -1,6 +1,5 @@
 package renderer;
 
-import elements.AmbientLight;
 import elements.Camera;
 import org.junit.Before;
 import org.junit.Test;

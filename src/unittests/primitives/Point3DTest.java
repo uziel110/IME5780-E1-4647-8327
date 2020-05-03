@@ -21,7 +21,7 @@ public class Point3DTest {
     }
 
     /**
-     * Test method for {@link primitives.Point3D#add(primitives.Point3D)}.
+     * Test method for {@link primitives.Point3D#add(primitives.Vector)}.
      */
     @Test
     public void add() {
