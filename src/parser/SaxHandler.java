@@ -28,11 +28,10 @@ public class SaxHandler extends DefaultHandler {
     String tmpValue;
     Scene _scene = null;
 
-
     /**
-     * ctor
+     * constructor of sceneXmlFileName that receive a file name and create scene from it
      *
-     * @param sceneXmlFileName
+     * @param sceneXmlFileName the name of the XML file
      */
     public SaxHandler(String sceneXmlFileName) {
         _sceneXmlFileName = sceneXmlFileName;
@@ -59,18 +58,8 @@ public class SaxHandler extends DefaultHandler {
     }
 
     @Override
-    public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+    public void startElement(String uri, String localName, String qName, Attributes attributes) {
         double[] doubleArr;
-        int[] intArr;
-        /*if (qName.equalsIgnoreCase("Scene")) {
-
-            _scene = new Scene("scene import from XML");
-            intArr = getIntArray(attributes, "background-color");
-
-            _scene.setBackground(new Color(intArr[0], intArr[1], intArr[2]));
-            String distance = attributes.getValue("screen-distance");
-            _scene.setDistance(Integer.parseInt(distance));
-        }*/
 
         if (qName.equalsIgnoreCase("Scene")) {
 
@@ -96,12 +85,6 @@ public class SaxHandler extends DefaultHandler {
             _scene.setCamera(new Camera(point, vecTo, vecUp));
         }
 
-       /* if (qName.equalsIgnoreCase("ambient-light")) {
-
-            intArr = getIntArray(attributes, "color");
-            _scene.setAmbientLight(new AmbientLight(new Color(intArr[0], intArr[1], intArr[2]), 1));
-        }*/
-
         if (qName.equalsIgnoreCase("ambient-light")) {
 
             doubleArr = getDoubleArray(attributes, "color");
@@ -110,40 +93,28 @@ public class SaxHandler extends DefaultHandler {
 
         if (qName.equalsIgnoreCase("sphere")) {
 
-            doubleArr = getDoubleArray(attributes, "center");
-
             double radius = Double.parseDouble(attributes.getValue("radius"));
-            _scene.addGeometries(new Sphere(radius, new Point3D(doubleArr[0], doubleArr[1], doubleArr[2])));
+            _scene.addGeometries(new Sphere(radius, getPointFromStr(attributes, "center")));
 
         }
         if (qName.equalsIgnoreCase("triangle")) {
 
-            doubleArr = getDoubleArray(attributes, "p0");
-            Point3D p0 = new Point3D(doubleArr[0], doubleArr[1], doubleArr[2]);
-
-            doubleArr = getDoubleArray(attributes, "p1");
-            Point3D p1 = new Point3D(doubleArr[0], doubleArr[1], doubleArr[2]);
-
-            doubleArr = getDoubleArray(attributes, "p2");
-            Point3D p2 = new Point3D(doubleArr[0], doubleArr[1], doubleArr[2]);
+            Point3D p0 = getPointFromStr(attributes, "p0");
+            Point3D p1 = getPointFromStr(attributes, "p1");
+            Point3D p2 = getPointFromStr(attributes, "p2");
 
             _scene.addGeometries(new Triangle(p0, p1, p2));
         }
 
         if (qName.equalsIgnoreCase("plane")) {
-            doubleArr = getDoubleArray(attributes, "p0");
-            Point3D p0 = new Point3D(doubleArr[0], doubleArr[1], doubleArr[2]);
 
-            doubleArr = getDoubleArray(attributes, "p1");
-            Point3D p1 = new Point3D(doubleArr[0], doubleArr[1], doubleArr[2]);
-
-            doubleArr = getDoubleArray(attributes, "p2");
-            Point3D p2 = new Point3D(doubleArr[0], doubleArr[1], doubleArr[2]);
+            Point3D p0 = getPointFromStr(attributes, "p0");
+            Point3D p1 = getPointFromStr(attributes, "p1");
+            Point3D p2 = getPointFromStr(attributes, "p2");
 
             _scene.addGeometries(new Plane(p0, p1, p2));
         }
 
-        /**/
         if (qName.equalsIgnoreCase("image")) {
 
             double screenWidth = Double.parseDouble(attributes.getValue("screen-width"));
@@ -153,11 +124,7 @@ public class SaxHandler extends DefaultHandler {
             image = new ImageWriter("image from XML",
                     screenWidth, screenHeight, nX, nY);
 
-            //_scene.set
         }
-        /**/
-        // create the data container
-        // _data = new StringBuilder();
     }
 
     private double[] getDoubleArray(Attributes attributes, String str) {
@@ -166,16 +133,21 @@ public class SaxHandler extends DefaultHandler {
         return new double[]{Double.parseDouble(number[0]), Double.parseDouble(number[1]), Double.parseDouble(number[2])};
     }
 
+    private Point3D getPointFromStr(Attributes attributes, String str) {
+        String num = attributes.getValue(str);
+        String[] number = num.split(" ");
+        return new Point3D(Double.parseDouble(number[0]), Double.parseDouble(number[1]), Double.parseDouble(number[2]));
+    }
+
     @Override
-    public void endElement(String uri, String localName, String qName) throws SAXException {
+    public void endElement(String uri, String localName, String qName) {
         if (qName.equals("scene")) {
             render = new Render(image, _scene);
         }
     }
 
     @Override
-    public void characters(char ch[], int start, int length) throws SAXException {
+    public void characters(char[] ch, int start, int length) {
         tmpValue = new String(ch, start, length);
-        //_data.append(new String(ch, start, length));
     }
 }
