@@ -3,14 +3,17 @@ package parser;
 import org.junit.Test;
 import renderer.Render;
 
+/**
+ *
+ */
 public class SaxHandlerTest {
     /**
-     * test loadSceneFromFile method
+     * Test method for {@link SaxHandler#parseDocument()} (parser.SaxHandler)}.
      */
     @Test
-    public void loadSceneFromFile() {
+    public void parseDocumentTest() {
         SaxHandler Handler = new SaxHandler("basicRenderTestTwoColors.xml");
-        Render render = Handler.getRender();
+        Render render = Handler.parseDocument();
         if (render != null) {
             render.renderImage();
             render.printGrid(50, java.awt.Color.MAGENTA);
