@@ -58,7 +58,7 @@ public class SaxHandler extends DefaultHandler {
     }
 
     @Override
-    public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+    public void startElement(String uri, String localName, String qName, Attributes attributes) {
 
         int[] intArr;
         if (qName.equalsIgnoreCase("Scene")) {
@@ -95,7 +95,7 @@ public class SaxHandler extends DefaultHandler {
 
             intArr = getIntArray(attributes, "center");
 
-            Double radius = Double.parseDouble(attributes.getValue("radius"));
+            double radius = Double.parseDouble(attributes.getValue("radius"));
             _scene.addGeometries(new Sphere(radius, new Point3D(intArr[0], intArr[1], intArr[2])));
 
         }
@@ -150,14 +150,14 @@ public class SaxHandler extends DefaultHandler {
     }
 
     @Override
-    public void endElement(String uri, String localName, String qName) throws SAXException {
+    public void endElement(String uri, String localName, String qName) {
         if (qName.equals("scene")) {
             render = new Render(image, _scene);
         }
     }
 
     @Override
-    public void characters(char ch[], int start, int length) throws SAXException {
+    public void characters(char[] ch, int start, int length) {
         tmpValue = new String(ch, start, length);
         //_data.append(new String(ch, start, length));
     }

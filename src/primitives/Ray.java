@@ -45,7 +45,13 @@ public class Ray {
      * @return new Point3D
      */
     public Point3D getPoint(double t) {
-        return _point.add(_vector.scale(t));
+        Vector scaledVector;
+        try {
+            scaledVector = _vector.scale(t);
+        } catch (Exception e) {
+            return _point;
+        }
+        return _point.add(scaledVector);
     }
 
     /**
