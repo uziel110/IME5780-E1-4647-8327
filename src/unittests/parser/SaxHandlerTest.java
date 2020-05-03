@@ -4,7 +4,7 @@ import org.junit.Test;
 import renderer.Render;
 
 /**
- *
+ *test for SaxHandler class
  */
 public class SaxHandlerTest {
     /**
