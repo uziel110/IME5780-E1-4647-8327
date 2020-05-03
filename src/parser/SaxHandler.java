@@ -58,10 +58,10 @@ public class SaxHandler extends DefaultHandler {
     }
 
     @Override
-    public void startElement(String uri, String localName, String qName, Attributes attributes) {
-
+    public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+        double[] doubleArr;
         int[] intArr;
-        if (qName.equalsIgnoreCase("Scene")) {
+        /*if (qName.equalsIgnoreCase("Scene")) {
 
             _scene = new Scene("scene import from XML");
             intArr = getIntArray(attributes, "background-color");
@@ -69,59 +69,75 @@ public class SaxHandler extends DefaultHandler {
             _scene.setBackground(new Color(intArr[0], intArr[1], intArr[2]));
             String distance = attributes.getValue("screen-distance");
             _scene.setDistance(Integer.parseInt(distance));
+        }*/
+
+        if (qName.equalsIgnoreCase("Scene")) {
+
+            _scene = new Scene("scene import from XML");
+            doubleArr = getDoubleArray(attributes, "background-color");
+
+            _scene.setBackground(new Color(doubleArr[0], doubleArr[1], doubleArr[2]));
+            String distance = attributes.getValue("screen-distance");
+            _scene.setDistance(Integer.parseInt(distance));
         }
 
         if (qName.equalsIgnoreCase("camera")) {
 
-            intArr = getIntArray(attributes, "P0");
-            Point3D point = new Point3D(intArr[0], intArr[1], intArr[2]);
+            doubleArr = getDoubleArray(attributes, "P0");
+            Point3D point = new Point3D(doubleArr[0], doubleArr[1], doubleArr[2]);
 
-            intArr = getIntArray(attributes, "Vto");
-            Vector vecTo = new Vector(intArr[0], intArr[1], intArr[2]);
+            doubleArr = getDoubleArray(attributes, "Vto");
+            Vector vecTo = new Vector(doubleArr[0], doubleArr[1], doubleArr[2]);
 
-            intArr = getIntArray(attributes, "Vup");
-            Vector vecUp = new Vector(intArr[0], intArr[1], intArr[2]);
+            doubleArr = getDoubleArray(attributes, "Vup");
+            Vector vecUp = new Vector(doubleArr[0], doubleArr[1], doubleArr[2]);
 
             _scene.setCamera(new Camera(point, vecTo, vecUp));
         }
 
-        if (qName.equalsIgnoreCase("ambient-light")) {
+       /* if (qName.equalsIgnoreCase("ambient-light")) {
 
             intArr = getIntArray(attributes, "color");
             _scene.setAmbientLight(new AmbientLight(new Color(intArr[0], intArr[1], intArr[2]), 1));
+        }*/
+
+        if (qName.equalsIgnoreCase("ambient-light")) {
+
+            doubleArr = getDoubleArray(attributes, "color");
+            _scene.setAmbientLight(new AmbientLight(new Color(doubleArr[0], doubleArr[1], doubleArr[2]), 1));
         }
 
         if (qName.equalsIgnoreCase("sphere")) {
 
-            intArr = getIntArray(attributes, "center");
+            doubleArr = getDoubleArray(attributes, "center");
 
             double radius = Double.parseDouble(attributes.getValue("radius"));
-            _scene.addGeometries(new Sphere(radius, new Point3D(intArr[0], intArr[1], intArr[2])));
+            _scene.addGeometries(new Sphere(radius, new Point3D(doubleArr[0], doubleArr[1], doubleArr[2])));
 
         }
         if (qName.equalsIgnoreCase("triangle")) {
 
-            intArr = getIntArray(attributes, "p0");
-            Point3D p0 = new Point3D(intArr[0], intArr[1], intArr[2]);
+            doubleArr = getDoubleArray(attributes, "p0");
+            Point3D p0 = new Point3D(doubleArr[0], doubleArr[1], doubleArr[2]);
 
-            intArr = getIntArray(attributes, "p1");
-            Point3D p1 = new Point3D(intArr[0], intArr[1], intArr[2]);
+            doubleArr = getDoubleArray(attributes, "p1");
+            Point3D p1 = new Point3D(doubleArr[0], doubleArr[1], doubleArr[2]);
 
-            intArr = getIntArray(attributes, "p2");
-            Point3D p2 = new Point3D(intArr[0], intArr[1], intArr[2]);
+            doubleArr = getDoubleArray(attributes, "p2");
+            Point3D p2 = new Point3D(doubleArr[0], doubleArr[1], doubleArr[2]);
 
             _scene.addGeometries(new Triangle(p0, p1, p2));
         }
 
         if (qName.equalsIgnoreCase("plane")) {
-            intArr = getIntArray(attributes, "p0");
-            Point3D p0 = new Point3D(intArr[0], intArr[1], intArr[2]);
+            doubleArr = getDoubleArray(attributes, "p0");
+            Point3D p0 = new Point3D(doubleArr[0], doubleArr[1], doubleArr[2]);
 
-            intArr = getIntArray(attributes, "p1");
-            Point3D p1 = new Point3D(intArr[0], intArr[1], intArr[2]);
+            doubleArr = getDoubleArray(attributes, "p1");
+            Point3D p1 = new Point3D(doubleArr[0], doubleArr[1], doubleArr[2]);
 
-            intArr = getIntArray(attributes, "p2");
-            Point3D p2 = new Point3D(intArr[0], intArr[1], intArr[2]);
+            doubleArr = getDoubleArray(attributes, "p2");
+            Point3D p2 = new Point3D(doubleArr[0], doubleArr[1], doubleArr[2]);
 
             _scene.addGeometries(new Plane(p0, p1, p2));
         }
@@ -143,21 +159,21 @@ public class SaxHandler extends DefaultHandler {
         // _data = new StringBuilder();
     }
 
-    private int[] getIntArray(Attributes attributes, String str) {
-        String p0 = attributes.getValue(str);
-        String[] p0Det = p0.split(" ");
-        return new int[]{Integer.parseInt(p0Det[0]), Integer.parseInt(p0Det[1]), Integer.parseInt(p0Det[2])};
+    private double[] getDoubleArray(Attributes attributes, String str) {
+        String num = attributes.getValue(str);
+        String[] number = num.split(" ");
+        return new double[]{Double.parseDouble(number[0]), Double.parseDouble(number[1]), Double.parseDouble(number[2])};
     }
 
     @Override
-    public void endElement(String uri, String localName, String qName) {
+    public void endElement(String uri, String localName, String qName) throws SAXException {
         if (qName.equals("scene")) {
             render = new Render(image, _scene);
         }
     }
 
     @Override
-    public void characters(char[] ch, int start, int length) {
+    public void characters(char ch[], int start, int length) throws SAXException {
         tmpValue = new String(ch, start, length);
         //_data.append(new String(ch, start, length));
     }

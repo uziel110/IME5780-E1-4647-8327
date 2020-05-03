@@ -7,6 +7,7 @@ import primitives.Vector;
 import java.util.List;
 
 import static primitives.Util.alignZero;
+import static primitives.Util.isZero;
 
 /**
  * class that implements sphere
@@ -55,29 +56,29 @@ public class Sphere extends RadialGeometry {
         double radius = this.getRadius();
 
         if (_center.equals(p0))
-            return List.of(_center.add(v.scale(radius)));
+          return List.of(_center.add(v.scale(radius)));
 
         Vector u = _center.subtract(p0);
-
         double tm = alignZero(v.dotProduct(u));
         double d = alignZero(Math.sqrt(u.lengthSquared() - tm * tm));
         if (alignZero(d - radius) >= 0)
             return null;
 
+
         double th = alignZero(Math.sqrt(radius * radius - d * d));
         double t1 = alignZero(tm - th);
         double t2 = alignZero(tm + th);
+
         if (t1 <= 0 && t2 <= 0)
             return null;
 
-        if (t1 <= 0) {
+        if (t1 <= 0)
             return List.of(ray.getPoint(t2));
-        }
 
-        if (t2 <= 0) {
+        if (t2 <= 0)
             return List.of(ray.getPoint(t1));
-        }
 
         return List.of(ray.getPoint(t1), ray.getPoint(t2));
     }
+
 }
