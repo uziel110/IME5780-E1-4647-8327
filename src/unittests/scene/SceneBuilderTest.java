@@ -19,6 +19,7 @@ public class SceneBuilderTest {
         SaxHandler Handler = new SaxHandler("basicRenderTestTwoColors.xml");
         Render render = Handler.getRender();
 
+
         render.renderImage();
         render.printGrid(75, java.awt.Color.MAGENTA);
         render.getImageWriter().writeToImage();
