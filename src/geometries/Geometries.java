@@ -45,9 +45,9 @@ public class Geometries implements Intersectable {
     }
 
     @Override
-    public List<Point3D> findIntersections(Ray ray) {
-        List<Point3D> returnList = new LinkedList<>();
-        List<Point3D> list;
+    public List<GeoPoint> findIntersections(Ray ray) {
+        List<GeoPoint> returnList = new LinkedList<>();
+        List<GeoPoint> list;
         for (Intersectable shape : _shapes) {
             list = shape.findIntersections(ray);
             if (list != null)

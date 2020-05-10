@@ -1,20 +1,21 @@
 package elements;
 
-import geometries.Plane;
-import geometries.Sphere;
-import geometries.Triangle;
+import geometries.*;
+import geometries.Intersectable.GeoPoint;
+
 import org.junit.Test;
 import primitives.Point3D;
 import primitives.Vector;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
 public class IntegrationTests {
 
-    List<Point3D> tests;
+    List<GeoPoint> tests;
 
     /**
      * Test method for integration of sphere with the camera
@@ -25,7 +26,7 @@ public class IntegrationTests {
         Sphere sphere = new Sphere(1, new Point3D(0, 0, 3));
         Camera camera = new Camera(new Point3D(0, 0, 0), new Vector(0, 0, 1), new Vector(0, -1, 0));
 
-        List<Point3D> result = new ArrayList<>();
+        List<GeoPoint> result = new LinkedList<>();
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
@@ -54,7 +55,7 @@ public class IntegrationTests {
         sphere = new Sphere(2, new Point3D(0, 0, 2));
         camera = new Camera(new Point3D(0, 0, -0.5), new Vector(0, 0, 1), new Vector(0, -1, 0));
 
-        result = new ArrayList<>();
+        result = new LinkedList<>();
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
                 tests = sphere.findIntersections(camera.constructRayThroughPixel(3, 3, j, i, 1, 3, 3));
@@ -68,7 +69,7 @@ public class IntegrationTests {
         sphere = new Sphere(4, new Point3D(0, 0, 2));
         camera = new Camera(new Point3D(0, 0, -0.5), new Vector(0, 0, 1), new Vector(0, -1, 0));
 
-        result = new ArrayList<>();
+        result = new LinkedList<>();
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
                 tests = sphere.findIntersections(camera.constructRayThroughPixel(3, 3, j, i, 1, 3, 3));
@@ -82,7 +83,7 @@ public class IntegrationTests {
         sphere = new Sphere(0.5, new Point3D(0, 0, -1));
         camera = new Camera(new Point3D(0, 0, -0.5), new Vector(0, 0, 1), new Vector(0, -1, 0));
 
-        result = new ArrayList<>();
+        result = new LinkedList<>();
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
                 tests = sphere.findIntersections(camera.constructRayThroughPixel(3, 3, j, i, 1, 3, 3));
@@ -102,7 +103,7 @@ public class IntegrationTests {
         Plane plane = new Plane(new Point3D(0, 0, 3), new Vector(0, 0, 1));
         Camera camera = new Camera(new Point3D(0, 0, 0), new Vector(0, 0, 1), new Vector(0, -1, 0));
 
-        List<Point3D> result = new ArrayList<>();
+        List<GeoPoint> result = new LinkedList<>();
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
@@ -117,7 +118,7 @@ public class IntegrationTests {
         plane = new Plane(new Point3D(0, 0, 3), new Vector(0, 1, 2));
         camera = new Camera(new Point3D(0, 0, 0), new Vector(0, 0, 1), new Vector(0, -1, 0));
 
-        result = new ArrayList<>();
+        result = new LinkedList<>();
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
@@ -132,7 +133,7 @@ public class IntegrationTests {
         plane = new Plane(new Point3D(0, 0, 3), new Vector(0, 1, 1));
         camera = new Camera(new Point3D(0, 0, 0), new Vector(0, 0, 1), new Vector(0, -1, 0));
 
-        result = new ArrayList<>();
+        result = new LinkedList<>();
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
@@ -147,7 +148,7 @@ public class IntegrationTests {
         plane = new Plane(new Point3D(0, 3, 0), new Vector(0, 1, 0));
         camera = new Camera(new Point3D(0, 0, 0), new Vector(0, 0, 1), new Vector(0, -1, 0));
 
-        result = new ArrayList<>();
+        result = new LinkedList<>();
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
@@ -162,7 +163,7 @@ public class IntegrationTests {
         plane = new Plane(new Point3D(0, 0, -3), new Vector(0, 1, 1));
         camera = new Camera(new Point3D(0, 0, 0), new Vector(0, 0, 1), new Vector(0, -1, 0));
 
-        result = new ArrayList<>();
+        result = new LinkedList<>();
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
@@ -184,7 +185,7 @@ public class IntegrationTests {
         Triangle triangle = new Triangle(new Point3D(1, 1, 2), new Point3D(-1, 1, 2), new Point3D(0, -1, 2));
         Camera camera = new Camera(new Point3D(0, 0, 0), new Vector(0, 0, 1), new Vector(0, -1, 0));
 
-        List<Point3D> result = new ArrayList<>();
+        List<GeoPoint> result = new LinkedList<>();
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
@@ -199,7 +200,7 @@ public class IntegrationTests {
         triangle = new Triangle(new Point3D(1, 1, 2), new Point3D(-1, 1, 2), new Point3D(0, -20, 2));
         camera = new Camera(new Point3D(0, 0, 0), new Vector(0, 0, 1), new Vector(0, -1, 0));
 
-        result = new ArrayList<>();
+        result = new LinkedList<>();
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
