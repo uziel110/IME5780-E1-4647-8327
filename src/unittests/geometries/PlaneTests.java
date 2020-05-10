@@ -1,5 +1,6 @@
 package geometries;
 
+import geometries.Intersectable.GeoPoint;
 import org.junit.Test;
 import primitives.Point3D;
 import primitives.Ray;
@@ -41,7 +42,7 @@ public class PlaneTests {
 
 
         // TC01: Ray intersects the plane (1 points)
-        assertEquals("Ray intersects the plane, worng point ", List.of(new Point3D(1, 0, 0)),
+        assertEquals("Ray intersects the plane, wrong point ", List.of(new GeoPoint(plane, new Point3D(1, 0, 0))),
                 plane.findIntersections(new Ray(new Point3D(0.5, 0, 0), new Vector(1, 0, 0))));
         // TC02: Ray does not intersect the plane (0 points)
         assertNull("Ray does not intersect the plane",
@@ -61,7 +62,8 @@ public class PlaneTests {
 
         // **** Group: Ray is orthogonal to the plane (according to p0)
         // TC05: before the plane (1 points)
-        assertEquals("Ray is orthogonal to the plane and start before the plane, worng point", List.of(new Point3D(0.5, 0.5, 1)),
+        assertEquals("Ray is orthogonal to the plane and start before the plane, worng point",
+                List.of(new GeoPoint(plane, new Point3D(0.5, 0.5, 1))),
                 plane.findIntersections(new Ray(new Point3D(1, 1, 1), new Vector(-1, -1, 0))));
         // TC06: in the plane (0 points)
         assertNull("Ray is orthogonal to the plane and start in the plane",

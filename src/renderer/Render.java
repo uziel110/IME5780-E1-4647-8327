@@ -1,8 +1,8 @@
 package renderer;
 
-import elements.AmbientLight;
 import elements.Camera;
 import geometries.Intersectable;
+import geometries.Intersectable.GeoPoint;
 import primitives.Color;
 import primitives.Point3D;
 import primitives.Ray;
@@ -64,8 +64,8 @@ public class Render {
         double height = _imageWriter.getHeight();
 
         Ray ray;
-        List<Point3D> intersectionPoints;
-        Point3D closestPoint;
+        List<GeoPoint> intersectionPoints;
+        GeoPoint closestPoint;
         for (int i = 0; i < nY; ++i) {
             for (int j = 0; j < nX; ++j) {
                 ray = camera.constructRayThroughPixel(nX, nY, j, i, distance, width, height);
@@ -82,8 +82,9 @@ public class Render {
 
     /**
      * print grid on the image
+     *
      * @param interval distance between the lines of the grid
-     * @param color Color
+     * @param color    Color
      */
     public void printGrid(int interval, java.awt.Color color) {
         int nX = _imageWriter.getNx();
@@ -99,30 +100,31 @@ public class Render {
 
     /**
      * return color color of this point
+     *
      * @param p Point3D
      * @return Color of this point
      */
-    private Color calcColor(Point3D p) {
+    private Color calcColor(GeoPoint p) {
         return _scene.getAmbientLight().getIntensity();
     }
 
     /**
      * return Point3D the closest point to the camera
      *
-     * @param points list of Point3D
+     * @param geoPoints list of Point3D
      * @return Point3D the closest point to the camera
      */
     //for the test the access permission needs to be changed to public
-    private Point3D getClosestPoint(List<Point3D> points) {
-        Point3D cameraLocation = _scene.getCamera().getLocation(),
-                closestPoint = null;
+    private GeoPoint getClosestPoint(List<GeoPoint> geoPoints) {
+        Point3D cameraLocation = _scene.getCamera().getLocation();
+        GeoPoint closestPoint = null;
         double distance,
                 minDistance = Double.MAX_VALUE;
-        for (Point3D point : points) {
-            distance = point.distanceSquared(cameraLocation);
+        for (GeoPoint geoPoint : geoPoints) {
+            distance = geoPoint._point.distanceSquared(cameraLocation);
             if (distance < minDistance) {
                 minDistance = distance;
-                closestPoint = point;
+                closestPoint = geoPoint;
             }
         }
         return closestPoint;

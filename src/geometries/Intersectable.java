@@ -47,8 +47,6 @@ public interface Intersectable {
      * @return list of intersections points if no such points return null
      */
     List<GeoPoint> findIntersections(Ray ray);
-
-
 }
 
 

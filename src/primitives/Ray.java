@@ -13,6 +13,7 @@ public class Ray {
      * @param point  Point3D start of the ray
      * @param vector Vector direction of the ray
      */
+
     public Ray(Point3D point, Vector vector) {
         _point = point;
         _vector = vector.normalized();

@@ -5,6 +5,7 @@ import primitives.Ray;
 import primitives.Vector;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import static primitives.Util.alignZero;
@@ -96,15 +97,20 @@ public class Polygon extends Geometry {
         if (list == null)
             return null;
 
+        List<GeoPoint> polyList = new LinkedList<>();
+        for (int i = 0; i < list.size(); ++i) {
+            polyList.add(new GeoPoint(this, list.get(i)._point));
+        }
+
         Point3D p0 = ray.getPoint();
         Vector v = ray.getVector();
 
-        List<Vector> pList = new ArrayList<>();
+        List<Vector> pList = new LinkedList<>();
         for (Point3D vertex : _vertices) {
             pList.add(vertex.subtract(p0));
         }
 
-        List<Vector> nList = new ArrayList<>();
+        List<Vector> nList = new LinkedList<>();
         for (int i = 0; i < pList.size() - 1; ++i) {
             nList.add((pList.get(i).crossProduct(pList.get(i + 1))).normalize());
         }
@@ -119,6 +125,6 @@ public class Polygon extends Geometry {
             if (positive != (d > 0) || isZero(d))
                 return null;
         }
-        return list;
+        return polyList;
     }
 }

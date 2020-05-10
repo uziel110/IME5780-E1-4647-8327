@@ -9,10 +9,10 @@ import primitives.Vector;
  */
 public abstract class Geometry implements Intersectable {
 
-    protected Color _emmission;
+    protected Color _emission;
 
-    public Geometry(Color emmission) {
-        _emmission = new Color(emmission);
+    public Geometry(Color emission) {
+        _emission = new Color(emission);
     }
 
     public Geometry() {
@@ -23,8 +23,8 @@ public abstract class Geometry implements Intersectable {
      * return emmission light
      * @return emmission light Color
      */
-    public Color get_emmission() {
-        return _emmission;
+    public Color getEmission() {
+        return _emission;
     }
 
     /**

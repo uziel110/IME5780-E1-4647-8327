@@ -1,5 +1,6 @@
 package geometries;
 
+import geometries.Intersectable.GeoPoint;
 import org.junit.Test;
 import primitives.Point3D;
 import primitives.Ray;
@@ -15,13 +16,13 @@ public class TriangleTests {
      * Test method for {@link Triangle#findIntersections(Ray)} (geometries.Triangle)}.
      */
     @Test
-    public void findIntsersections() {
+    public void findIntersections() {
 
         Triangle triangle = new Triangle(new Point3D(0, 2, 0), new Point3D(2, 0, 0), new Point3D(1, 1, 2));
 
         // ============ Equivalence Partitions Tests ==============
         // TC01: Inside polygon (1 point)
-        assertEquals("Inside polygon", List.of(new Point3D(1, 1, 1)),
+        assertEquals("Inside polygon", List.of(new GeoPoint(triangle, new Point3D(1, 1, 1))),
                 triangle.findIntersections(new Ray(new Point3D(0, 0, 1), new Vector(1, 1, 0))));
         // TC02: Outside against edge (0 points)
         assertNull("Outside against edge",

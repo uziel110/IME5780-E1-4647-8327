@@ -4,6 +4,7 @@ import org.junit.Test;
 import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
+import geometries.Intersectable.GeoPoint;
 
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class GeometriesTests {
         Geometries geometries = new Geometries(new Sphere(1, new Point3D(1, 0, 0)),
                 new Plane(new Point3D(1, 0, 0), new Point3D(0, 1, 0), new Point3D(0, 0, 0)),
                 new Polygon(new Point3D(3, 0, 0), new Point3D(3, 2, 0), new Point3D(3, 2, 4), new Point3D(3, 0, 4)));
-        List<Point3D> result;
+        List<GeoPoint> result;
 
         // ============ Equivalence Partitions Tests ==============
         // TC01:
