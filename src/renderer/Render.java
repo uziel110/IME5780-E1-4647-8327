@@ -137,9 +137,8 @@ public class Render {
     private Color calcDiffusive(double kD, Vector l, Vector n, Color lightIntensity) {
         double x = l.dotProduct(n);
         x = x > 0 ? x : -x;
-        x = x * kD;
         // lightIntensity - iL
-        return lightIntensity.scale(x);
+        return lightIntensity.scale(x * kD);
     }
 
     /**
