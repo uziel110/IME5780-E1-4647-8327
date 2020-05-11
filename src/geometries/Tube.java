@@ -14,7 +14,25 @@ public class Tube extends RadialGeometry {
      * constructor of Tube that receive
      * point on the center axis the direction
      * vector of the ray from that point
+     * the radius of the tube, his material and color
+     *
+     * @param emission Color emission color of the Tube
+     * @param material the material of the tube
+     * @param point    Point3D of start of axis ray
+     * @param vector   vector direction
+     * @param radius   double value of Tube radius
+     */
+    public Tube(Color emission, Material material, Point3D point, Vector vector, double radius) {
+        super(emission, material, radius);
+        _axisRay = new Ray(point, vector);
+    }
+
+    /**
+     * constructor of Tube that receive
+     * point on the center axis the direction
+     * vector of the ray from that point
      * the radius of the tube and his color
+     * set material to (0,0,0)
      *
      * @param emission Color emission color of the Tube
      * @param point    Point3D of start of axis ray
@@ -22,7 +40,7 @@ public class Tube extends RadialGeometry {
      * @param radius   double value of Tube radius
      */
     public Tube(Color emission, Point3D point, Vector vector, double radius) {
-        super(emission, radius);
+        super(emission, new Material(0, 0, 0), radius);
         _axisRay = new Ray(point, vector);
     }
 
@@ -32,13 +50,14 @@ public class Tube extends RadialGeometry {
      * vector of the ray from that point
      * and the radius of the tube
      * set the emission color to Black
+     * set material to (0,0,0)
      *
      * @param point  Point3D of start of axis ray
      * @param vector vector direction
      * @param radius double value of Tube radius
      */
     public Tube(Point3D point, Vector vector, double radius) {
-        this(Color.BLACK, point, vector, radius);
+        this(Color.BLACK, new Material(0, 0, 0), point, vector, radius);
     }
 
     /**
@@ -47,11 +66,27 @@ public class Tube extends RadialGeometry {
      * the radius of the tube and his color
      *
      * @param emission Color emission color of the Tube
+     * @param material the material of the tube
+     * @param axisRay  Ray of Tube axis
+     * @param radius   double value of Tube radius
+     */
+    public Tube(Color emission, Material material, Ray axisRay, double radius) {
+        super(emission, material, radius);
+        _axisRay = new Ray(axisRay);
+    }
+
+    /**
+     * constructor of Tube
+     * ray of the tube direction
+     * the radius of the tube and his color
+     * set material to (0,0,0)
+     *
+     * @param emission Color emission color of the Tube
      * @param axisRay  Ray of Tube axis
      * @param radius   double value of Tube radius
      */
     public Tube(Color emission, Ray axisRay, double radius) {
-        super(emission, radius);
+        super(emission, new Material(0, 0, 0), radius);
         _axisRay = new Ray(axisRay);
     }
 
@@ -60,12 +95,13 @@ public class Tube extends RadialGeometry {
      * ray of the tube direction
      * and the radius of the tube
      * set the emission color to Black
+     * set material to (0,0,0)
      *
      * @param axisRay Ray of Tube axis
      * @param radius  double value of Tube radius
      */
     public Tube(Ray axisRay, double radius) {
-        this(Color.BLACK, axisRay, radius);
+        this(Color.BLACK, new Material(0, 0, 0), axisRay, radius);
     }
 
     /**

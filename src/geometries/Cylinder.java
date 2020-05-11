@@ -14,19 +14,36 @@ public class Cylinder extends Tube {
      * constructor of Cylinder with emission color
      *
      * @param emission Color emission color of the cylinder
+     * @param material the material of the cylinder
+     * @param point    Point3D of start of the axis ray
+     * @param vector   vector direction
+     * @param radius   double value of cylinder radius
+     * @param height   double value of Cylinder height
+     */
+    public Cylinder(Color emission, Material material, Point3D point, Vector vector, double radius, double height) {
+        super(emission, material, point, vector, radius);
+        _height = height;
+    }
+
+    /**
+     * constructor of Cylinder with emission color
+     * set material to (0,0,0)
+     *
+     * @param emission Color emission color of the cylinder
      * @param point    Point3D of start of the axis ray
      * @param vector   vector direction
      * @param radius   double value of cylinder radius
      * @param height   double value of Cylinder height
      */
     public Cylinder(Color emission, Point3D point, Vector vector, double radius, double height) {
-        super(emission, point, vector, radius);
+        super(emission, new Material(0, 0, 0), point, vector, radius);
         _height = height;
     }
 
     /**
      * constructor of Cylinder
      * set the emission color to Black
+     * set material to (0,0,0)
      *
      * @param point  Point3D of start of the axis ray
      * @param vector vector direction
@@ -34,32 +51,34 @@ public class Cylinder extends Tube {
      * @param height double value of Cylinder height
      */
     public Cylinder(Point3D point, Vector vector, double radius, double height) {
-        this(Color.BLACK, point, vector, radius, height);
+        this(Color.BLACK, new Material(0, 0, 0), point, vector, radius, height);
     }
 
     /**
      * constructor of Cylinder
      *
      * @param emission Color emission color of the cylinder
+     * @param material the material of the cylinder
      * @param axisRay  Ray of cylinder axis
      * @param radius   double value of cylinder radius
      * @param height   double value of cylinder height
      */
-    public Cylinder(Color emission, Ray axisRay, double radius, double height) {
-        super(emission, axisRay, radius);
+    public Cylinder(Color emission, Material material, Ray axisRay, double radius, double height) {
+        super(emission, material, axisRay, radius);
         _height = height;
     }
 
     /**
      * constructor of Cylinder
      * set the emission color to Black
+     * set material to (0,0,0)
      *
      * @param axisRay Ray of cylinder axis
      * @param radius  double value of cylinder radius
      * @param height  double value of cylinder height
      */
     public Cylinder(Ray axisRay, double radius, double height) {
-        this(Color.BLACK, axisRay, radius, height);
+        this(Color.BLACK, new Material(0, 0, 0), axisRay, radius, height);
     }
 
     /**

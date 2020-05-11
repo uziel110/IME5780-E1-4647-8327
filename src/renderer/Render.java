@@ -1,11 +1,10 @@
 package renderer;
 
 import elements.Camera;
+import elements.LightSource;
 import geometries.Intersectable;
 import geometries.Intersectable.GeoPoint;
-import primitives.Color;
-import primitives.Point3D;
-import primitives.Ray;
+import primitives.*;
 import scene.Scene;
 
 import java.util.List;
@@ -106,9 +105,59 @@ public class Render {
      * @return Color of this point
      */
     private Color calcColor(GeoPoint intersection) {
-        Color color = _scene.getAmbientLight().getIntensity();
-        color = color.add(intersection._geometry.getEmission());
+        Color color = _scene.getAmbientLight().getIntensity(); // ip = ia.dotProduct(ka)
+        color = color.add(intersection._geometry.getEmission()); // ie
+
+        Vector v = intersection._point.subtract(_scene.getCamera().getLocation()).normalize();
+        Vector n = intersection._geometry.getNormal(intersection._point);
+        Material material = intersection._geometry.getMaterial();
+        int nShininess = material.getNShininess();
+        double kD = material.getKD();
+        double kS = material.getKS();
+        for (LightSource lightSource : _scene.getLights()) {
+            Vector l = lightSource.getL(intersection._point);
+            if ((n.dotProduct(l) > 0 && n.dotProduct(v) > 0) || (n.dotProduct(l) < 0 && n.dotProduct(v) < 0)) {
+                Color lightIntensity = lightSource.getIntensity(intersection._point);
+                color = color.add(calcDiffusive(kD, l, n, lightIntensity),
+                        calcSpecular(kS, l, n, v, nShininess, lightIntensity));
+            }
+        }
         return color;
+    }
+
+    /**
+     * return the diffusive color
+     *
+     * @param kD             factor of the diffusive
+     * @param l              vector direction from the light
+     * @param n              vector normal to the geometry surface
+     * @param lightIntensity intensity of the light
+     * @return the diffusive color
+     */
+    private Color calcDiffusive(double kD, Vector l, Vector n, Color lightIntensity) {
+        double x = l.dotProduct(n);
+        x = x > 0 ? x : -x;
+        x = x * kD;
+        // lightIntensity - iL
+        return lightIntensity.scale(x);
+    }
+
+    /**
+     * return the specular color
+     *
+     * @param kS             factor of the specular
+     * @param l              vector direction from the light
+     * @param n              vector normal to the geometry surface
+     * @param v              vector direction from the camera
+     * @param nShininess     the shininess of the surface
+     * @param lightIntensity intensity of the light
+     * @return
+     */
+    private Color calcSpecular(double kS, Vector l, Vector n, Vector v, int nShininess, Color lightIntensity) {
+        Vector r = l.subtract(n.scale(l.dotProduct(n) * 2));
+        double x = r.dotProduct(v.scale(-1));
+        x = Math.pow(x > 0 ? x : 0, nShininess) * kS;
+        return lightIntensity.scale(x);
     }
 
     /**

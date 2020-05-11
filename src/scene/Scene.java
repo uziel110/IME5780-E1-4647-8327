@@ -2,9 +2,14 @@ package scene;
 
 import elements.AmbientLight;
 import elements.Camera;
+import elements.LightSource;
 import geometries.Geometries;
 import geometries.Intersectable;
 import primitives.Color;
+
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * class that implements scene
@@ -16,6 +21,7 @@ public class Scene {
     Geometries _geometries;
     Camera _camera;
     double _distance;
+    List<LightSource> _lights;
 
     /**
      * Constructor of scene class, get parameter - name of the scene
@@ -25,6 +31,7 @@ public class Scene {
     public Scene(String name) {
         _name = name;
         _geometries = new Geometries();
+        _lights = new LinkedList<>();
     }
 
     /**
@@ -34,6 +41,13 @@ public class Scene {
      */
     public void addGeometries(Intersectable... geometries) {
         _geometries.add(geometries);
+    }
+
+    /**
+     * func to add light sources
+     */
+    public void addLights(LightSource... lights) {
+        _lights.addAll(Arrays.asList(lights));
     }
 
     /**
@@ -56,6 +70,7 @@ public class Scene {
 
     /**
      * set new background color to the scene
+     *
      * @param background Color
      */
     public void setBackground(Color background) {
@@ -63,8 +78,9 @@ public class Scene {
     }
 
     /**
-     *  return ambientLight of the scene
-     *  @return AmbientLight of the scene
+     * return ambientLight of the scene
+     *
+     * @return AmbientLight of the scene
      */
     public AmbientLight getAmbientLight() {
         return _ambientLight;
@@ -72,6 +88,7 @@ public class Scene {
 
     /**
      * set new AmbientLight to the scene
+     *
      * @param ambientLight AmbientLight
      */
     public void setAmbientLight(AmbientLight ambientLight) {
@@ -80,6 +97,7 @@ public class Scene {
 
     /**
      * return geometries
+     *
      * @return geometries
      */
     public Geometries getGeometries() {
@@ -88,6 +106,7 @@ public class Scene {
 
     /**
      * return camera
+     *
      * @return Camera
      */
     public Camera getCamera() {
@@ -96,6 +115,7 @@ public class Scene {
 
     /**
      * set camera
+     *
      * @param camera
      */
     public void setCamera(Camera camera) {
@@ -104,6 +124,7 @@ public class Scene {
 
     /**
      * return distance
+     *
      * @return double distance
      */
     public double getDistance() {
@@ -112,9 +133,19 @@ public class Scene {
 
     /**
      * set distance
+     *
      * @param distance double
      */
     public void setDistance(double distance) {
         _distance = distance;
+    }
+
+    /**
+     * return List of the lights in the scene
+     *
+     * @return List of the lights in the scene
+     */
+    public List<LightSource> getLights() {
+        return _lights;
     }
 }
