@@ -68,6 +68,7 @@ public class Render {
         GeoPoint closestPoint;
         for (int i = 0; i < nY; ++i) {
             for (int j = 0; j < nX; ++j) {
+                //todo check the order of nx ny, i j, width height
                 ray = camera.constructRayThroughPixel(nX, nY, j, i, distance, width, height);
                 intersectionPoints = geometries.findIntersections(ray);
                 if (intersectionPoints == null)
@@ -101,18 +102,20 @@ public class Render {
     /**
      * return color color of this point
      *
-     * @param p Point3D
+     * @param intersection Point3D
      * @return Color of this point
      */
-    private Color calcColor(GeoPoint p) {
-        return _scene.getAmbientLight().getIntensity();
+    private Color calcColor(GeoPoint intersection) {
+        Color color = _scene.getAmbientLight().getIntensity();
+        color = color.add(intersection._geometry.getEmission());
+        return color;
     }
 
     /**
-     * return Point3D the closest point to the camera
+     * return Point3D the point with minimal distance from the ray begin point
      *
      * @param geoPoints list of Point3D
-     * @return Point3D the closest point to the camera
+     * @return Point3D the closest point to the ray begin point
      */
     //for the test the access permission needs to be changed to public
     private GeoPoint getClosestPoint(List<GeoPoint> geoPoints) {

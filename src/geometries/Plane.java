@@ -1,5 +1,6 @@
 package geometries;
 
+import primitives.Color;
 import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
@@ -17,14 +18,15 @@ public class Plane extends Geometry {
     private Vector _normal;
 
     /**
-     * constructor of Plane that receive 3 points on the plane
+     * constructor of Plane that receive 3 points on the plane and a color
      *
+     * @param emission   Color emission color of the Plane
      * @param pointOne   Point3D on the plane
      * @param pointTwo   Point3D on the plane
      * @param pointThree Point3D on the plane
      */
-    public Plane(Point3D pointOne, Point3D pointTwo, Point3D pointThree) {
-
+    public Plane(Color emission, Point3D pointOne, Point3D pointTwo, Point3D pointThree) {
+        super(emission);
         // if two or three points are equal then an exception will be created at vector constructor
         Vector vector1 = pointTwo.subtract(pointOne);
         Vector vector2 = pointThree.subtract(pointOne);
@@ -33,14 +35,39 @@ public class Plane extends Geometry {
     }
 
     /**
+     * constructor of Plane that receive 3 points on the plane
+     * set the emission color to Black
+     *
+     * @param pointOne   Point3D on the plane
+     * @param pointTwo   Point3D on the plane
+     * @param pointThree Point3D on the plane
+     */
+    public Plane(Point3D pointOne, Point3D pointTwo, Point3D pointThree) {
+        this(Color.BLACK, pointOne, pointTwo, pointThree);
+    }
+
+    /**
      * constructor of Plane
+     *
+     * @param emission Color emission color of the Plane
+     * @param point    Point3D on the plane
+     * @param normal   vector normal to the plane
+     */
+    public Plane(Color emission, Point3D point, Vector normal) {
+        super(emission);
+        _p = point;
+        _normal = normal.normalize();
+    }
+
+    /**
+     * constructor of Plane
+     * set the emission color to Black
      *
      * @param point  Point3D on the plane
      * @param normal vector normal to the plane
      */
     public Plane(Point3D point, Vector normal) {
-        _p = point;
-        _normal = normal.normalize();
+        this(Color.BLACK, point, normal);
     }
 
     /**

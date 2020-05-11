@@ -1,9 +1,6 @@
 package geometries;
 
-import primitives.Point3D;
-import primitives.Ray;
-import primitives.Util;
-import primitives.Vector;
+import primitives.*;
 
 import java.util.List;
 
@@ -14,7 +11,22 @@ public class Cylinder extends Tube {
     private double _height;
 
     /**
+     * constructor of Cylinder with emission color
+     *
+     * @param emission Color emission color of the cylinder
+     * @param point    Point3D of start of the axis ray
+     * @param vector   vector direction
+     * @param radius   double value of cylinder radius
+     * @param height   double value of Cylinder height
+     */
+    public Cylinder(Color emission, Point3D point, Vector vector, double radius, double height) {
+        super(emission, point, vector, radius);
+        _height = height;
+    }
+
+    /**
      * constructor of Cylinder
+     * set the emission color to Black
      *
      * @param point  Point3D of start of the axis ray
      * @param vector vector direction
@@ -22,20 +34,32 @@ public class Cylinder extends Tube {
      * @param height double value of Cylinder height
      */
     public Cylinder(Point3D point, Vector vector, double radius, double height) {
-        super(point, vector, radius);
+        this(Color.BLACK, point, vector, radius, height);
+    }
+
+    /**
+     * constructor of Cylinder
+     *
+     * @param emission Color emission color of the cylinder
+     * @param axisRay  Ray of cylinder axis
+     * @param radius   double value of cylinder radius
+     * @param height   double value of cylinder height
+     */
+    public Cylinder(Color emission, Ray axisRay, double radius, double height) {
+        super(emission, axisRay, radius);
         _height = height;
     }
 
     /**
      * constructor of Cylinder
+     * set the emission color to Black
      *
      * @param axisRay Ray of cylinder axis
      * @param radius  double value of cylinder radius
      * @param height  double value of cylinder height
      */
     public Cylinder(Ray axisRay, double radius, double height) {
-        super(axisRay, radius);
-        _height = height;
+        this(Color.BLACK, axisRay, radius, height);
     }
 
     /**

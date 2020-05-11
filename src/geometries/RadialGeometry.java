@@ -1,5 +1,6 @@
 package geometries;
 
+import primitives.Color;
 import primitives.Util;
 
 /**
@@ -11,12 +12,24 @@ public abstract class RadialGeometry extends Geometry {
     /**
      * constructor of RadialGeometry
      *
-     * @param radius double value of shape radius
+     * @param emission Color emission color of the RadialGeometry
+     * @param radius   double value of shape radius
      */
-    public RadialGeometry(double radius) {
+    public RadialGeometry(Color emission, double radius) {
+        super(emission);
         if (Util.isZero(radius) || radius < 0.0)
             throw new IllegalArgumentException();
         _radius = radius;
+    }
+
+    /**
+     * constructor of RadialGeometry
+     * set the emission color to Black
+     *
+     * @param radius double value of shape radius
+     */
+    public RadialGeometry(double radius) {
+        this(Color.BLACK, radius);
     }
 
     /**
@@ -26,6 +39,7 @@ public abstract class RadialGeometry extends Geometry {
      */
     public RadialGeometry(RadialGeometry other) {
         _radius = other._radius;
+        _emission = new Color(other._emission);
     }
 
     /**

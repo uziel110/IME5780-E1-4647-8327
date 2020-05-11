@@ -1,4 +1,4 @@
-package unittests;
+package renderer;
 
 import org.junit.Test;
 
@@ -41,7 +41,7 @@ public class RenderTests {
 
         render.renderImage();
         render.printGrid(50, java.awt.Color.YELLOW);
-        render.writeToImage();
+        render.getImageWriter().writeToImage();
     }
     
     @Test
@@ -69,6 +69,6 @@ public class RenderTests {
 
         render.renderImage();
         render.printGrid(50, java.awt.Color.WHITE);
-        render.writeToImage();
+        render.getImageWriter().writeToImage();
     }
 }

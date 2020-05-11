@@ -1,8 +1,10 @@
 package geometries;
 
+import primitives.Color;
 import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
+
 import java.util.List;
 
 import static primitives.Util.alignZero;
@@ -14,14 +16,26 @@ public class Sphere extends RadialGeometry {
     private Point3D _center;
 
     /**
+     * constructor of sphere that receive center point and radius and color as parameters
+     *
+     * @param emission Color emission color of the Sphere
+     * @param radius   double value of Sphere radius
+     * @param point    a point of sphere center
+     */
+    public Sphere(Color emission, double radius, Point3D point) {
+        super(emission, radius);
+        _center = new Point3D(point);
+    }
+
+    /**
      * constructor of sphere that receive center point and radius as parameters
+     * set the emission color to Black
      *
      * @param radius double value of Sphere radius
      * @param point  a point of sphere center
      */
     public Sphere(double radius, Point3D point) {
-        super(radius);
-        _center = new Point3D(point);
+        this(Color.BLACK, radius, point);
     }
 
     /**
@@ -54,14 +68,13 @@ public class Sphere extends RadialGeometry {
         double radius = this.getRadius();
 
         if (_center.equals(p0))
-          return List.of(new GeoPoint(this,_center.add(v.scale(radius))));
+            return List.of(new GeoPoint(this, _center.add(v.scale(radius))));
 
         Vector u = _center.subtract(p0);
         double tm = alignZero(v.dotProduct(u));
         double d = alignZero(Math.sqrt(u.lengthSquared() - tm * tm));
         if (alignZero(d - radius) >= 0)
             return null;
-
 
         double th = alignZero(Math.sqrt(radius * radius - d * d));
         double t1 = alignZero(tm - th);
@@ -71,12 +84,11 @@ public class Sphere extends RadialGeometry {
             return null;
 
         if (t1 <= 0)
-            return List.of(new GeoPoint(this,ray.getPoint(t2)));
+            return List.of(new GeoPoint(this, ray.getPoint(t2)));
 
         if (t2 <= 0)
-            return List.of(new GeoPoint(this,ray.getPoint(t1)));
+            return List.of(new GeoPoint(this, ray.getPoint(t1)));
 
-        return List.of(new GeoPoint(this,ray.getPoint(t1)), new GeoPoint(this, ray.getPoint(t2)));
+        return List.of(new GeoPoint(this, ray.getPoint(t1)), new GeoPoint(this, ray.getPoint(t2)));
     }
-
 }

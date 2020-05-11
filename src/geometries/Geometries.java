@@ -1,6 +1,5 @@
 package geometries;
 
-import primitives.Point3D;
 import primitives.Ray;
 
 import java.util.Arrays;
@@ -12,13 +11,13 @@ import java.util.List;
  */
 public class Geometries implements Intersectable {
 
-    private List<Intersectable> _shapes;
+    private List<Intersectable> _geometries;
 
     /**
      * default constructor of Geometries
      */
     public Geometries() {
-        _shapes = new LinkedList<>();
+        _geometries = new LinkedList<>();
     }
 
     /**
@@ -27,8 +26,8 @@ public class Geometries implements Intersectable {
      * @param geometries list of Intersctable
      */
     public Geometries(Intersectable... geometries) {
-        _shapes = new LinkedList<>();
-        _shapes.addAll(Arrays.asList(geometries));
+        _geometries = new LinkedList<>();
+        _geometries.addAll(Arrays.asList(geometries));
     }
 
     /**
@@ -37,24 +36,26 @@ public class Geometries implements Intersectable {
      * @param geometries list of Intersctable
      */
     public void add(Intersectable... geometries) {
-        _shapes.addAll(Arrays.asList(geometries));
+        _geometries.addAll(Arrays.asList(geometries));
     }
 
     public List<Intersectable> getShapes() {
-        return _shapes;
+        return _geometries;
     }
 
     @Override
     public List<GeoPoint> findIntersections(Ray ray) {
-        List<GeoPoint> returnList = new LinkedList<>();
-        List<GeoPoint> list;
-        for (Intersectable shape : _shapes) {
-            list = shape.findIntersections(ray);
-            if (list != null)
-                returnList.addAll(list);
+        List<GeoPoint> intersectionPoints = null;
+        for (Intersectable geometry : _geometries) {
+            List<GeoPoint> geometryIntersections = geometry.findIntersections(ray);
+            // if geometry intersections is null don't add anything
+            if (geometryIntersections != null) {
+                // first time where there are geometry intersections - create the list
+                if (intersectionPoints == null)
+                    intersectionPoints = new LinkedList<>();
+                intersectionPoints.addAll(geometryIntersections);
+            }
         }
-        if (returnList.size() == 0)
-            return null;
-        return returnList;
+        return intersectionPoints;
     }
 }
