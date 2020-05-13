@@ -16,7 +16,7 @@ public class SpotLight extends PointLight {
      *
      * @param intensity Color intensity of the light
      * @param position  Point3D position of the light
-     * @param kC        todo: javaDoc
+     * @param kC        kC >= 1 for denominator > 1
      * @param kL
      * @param kQ
      * @param direction Vector direction of the light
