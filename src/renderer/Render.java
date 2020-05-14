@@ -65,8 +65,11 @@ public class Render {
         Ray ray;
         List<GeoPoint> intersectionPoints;
         GeoPoint closestPoint;
-        for (int i = 0; i < nY; ++i) {
+        for (int i = 0;
+             i < nY; ++i) {
             for (int j = 0; j < nX; ++j) {
+                if (i == 240 && j == 300)
+                    ray = null;
                 ray = camera.constructRayThroughPixel(nX, nY, j, i, distance, width, height);
                 intersectionPoints = geometries.findIntersections(ray);
                 if (intersectionPoints == null)
@@ -117,7 +120,8 @@ public class Render {
             Vector l = lightSource.getL(intersection._point);
             if ((n.dotProduct(l) > 0 && n.dotProduct(v) > 0) || (n.dotProduct(l) < 0 && n.dotProduct(v) < 0)) {
                 Color lightIntensity = lightSource.getIntensity(intersection._point);
-                color = color.add(calcDiffusive(kD, l, n, lightIntensity),
+                color = color.add(
+                        calcDiffusive(kD, l, n, lightIntensity),
                         calcSpecular(kS, l, n, v, nShininess, lightIntensity));
             }
         }
