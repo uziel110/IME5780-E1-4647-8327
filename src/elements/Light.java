@@ -23,6 +23,6 @@ class Light {
      * @return new Color intensity of the light
      */
     public Color getIntensity() {
-        return new Color(_intensity);
+        return _intensity;
     }
 }

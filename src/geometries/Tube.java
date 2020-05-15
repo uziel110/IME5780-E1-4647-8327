@@ -134,9 +134,9 @@ public class Tube extends RadialGeometry {
         Vector v = new Vector(_axisRay.getVector());
         Vector qp = point.subtract(_axisRay.getPoint());
 
-        double t = v.dotProduct(qp);
+        double t = alignZero(v.dotProduct(qp));
         // if t == 0 v is orthogonal to qp so return qp
-        if (isZero(t))
+        if (t == 0)
             return qp;
         Point3D o = _axisRay.getPoint().add(v.scale(t));
         return point.subtract(o).normalize();

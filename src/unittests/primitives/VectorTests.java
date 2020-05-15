@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import static java.lang.System.out;
 import static org.junit.Assert.*;
+import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
 public class VectorTests {
@@ -58,7 +59,7 @@ public class VectorTests {
         Vector v1 = new Vector(1, 2, 3);
         Vector v2 = new Vector(0, 3, -2);
 
-        assertEquals("ERROR: dotProduct() for orthogonal vectors is not zero", 0, v1.dotProduct(v2), 0.00000001);
+        assertEquals("ERROR: dotProduct() for orthogonal vectors is not zero", 0,v1.dotProduct(v2), 0.00000001);
     }
 
     /**

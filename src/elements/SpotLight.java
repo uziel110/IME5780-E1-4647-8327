@@ -41,7 +41,7 @@ public class SpotLight extends PointLight {
      * @param kC        kC >= 1
      * @param kL
      * @param kQ
-     * @param direction Vector direction of the light
+     * @param direction  Direction vector of the light
      */
     public SpotLight(Color intensity, Point3D position, Vector direction, double kC, double kL, double kQ) {
         this(intensity, position, direction, 1, kC, kL, kQ);
@@ -49,10 +49,10 @@ public class SpotLight extends PointLight {
 
     @Override
     public Color getIntensity(Point3D p) {
-        Vector getL = getL(p);
-        if (getL == null) return Color.BLACK;
+        Vector lightVector = getL(p);
+        if (lightVector == null) return Color.BLACK;
 
-        double projection = alignZero(_direction.dotProduct(getL));
+        double projection = alignZero(_direction.dotProduct(lightVector));
         if (projection <= 0) return Color.BLACK;
         projection = Math.pow(projection, _thickness);
 

@@ -4,6 +4,7 @@ import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
 
+import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
 /**
@@ -23,7 +24,7 @@ public class Camera {
      */
     public Camera(Point3D location, Vector vTo, Vector vUp) {
 
-        if (vTo.dotProduct(vUp) != 0)
+        if (alignZero(vTo.dotProduct(vUp)) != 0)
             throw new IllegalArgumentException();
 
         _location = new Point3D(location);

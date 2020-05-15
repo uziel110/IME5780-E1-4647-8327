@@ -4,6 +4,8 @@ import primitives.*;
 
 import java.util.List;
 
+import static primitives.Util.alignZero;
+
 /**
  * class that implements cylinder
  */
@@ -104,10 +106,10 @@ public class Cylinder extends Tube {
         Vector v = new Vector(getAxisRay().getVector());
         Vector qp = point.subtract(getAxisRay().getPoint());
 
-        double t = v.dotProduct(qp);
+        double t = alignZero(v.dotProduct(qp));
 
         // if t == 0 v is orthogonal to qp so return qp
-        if (Util.isZero(t) || Util.isZero(t - _height))
+        if (t == 0 || Util.isZero(t - _height))
             return getAxisRay().getVector();
 
         Point3D o = this.getAxisRay().getPoint().add(v.scale(t));

@@ -9,6 +9,8 @@ import scene.Scene;
 
 import java.util.List;
 
+import static primitives.Util.alignZero;
+
 /**
  * class that create image from the scene
  */
@@ -116,7 +118,9 @@ public class Render {
         double kS = material.getKS();
         for (LightSource lightSource : _scene.getLights()) {
             Vector l = lightSource.getL(intersection._point);
-            if ((n.dotProduct(l) > 0 && n.dotProduct(v) > 0) || (n.dotProduct(l) < 0 && n.dotProduct(v) < 0)) {
+            double nDotL = alignZero(n.dotProduct(l));
+            double nDotV = alignZero(n.dotProduct(v));
+            if ((nDotL > 0 && nDotV > 0) || (nDotL < 0 && nDotV < 0)) {
                 Color lightIntensity = lightSource.getIntensity(intersection._point);
                 color = color.add(
                         calcDiffusive(kD, l, n, lightIntensity),
@@ -136,10 +140,11 @@ public class Render {
      * @return the diffusive color
      */
     private Color calcDiffusive(double kD, Vector l, Vector n, Color lightIntensity) {
-        double x = l.dotProduct(n);
-        x = x > 0 ? x : -x;
+        double lDotN = alignZero(l.dotProduct(n));
+        if (lDotN < 0)
+            lDotN = -lDotN;
         // lightIntensity - iL
-        return lightIntensity.scale(x * kD);
+        return lightIntensity.scale(lDotN * kD);
     }
 
     /**
@@ -155,9 +160,10 @@ public class Render {
      */
     private Color calcSpecular(double kS, Vector l, Vector n, Vector v, int nShininess, Color lightIntensity) {
         Vector r = l.subtract(n.scale(l.dotProduct(n) * 2));
-        double x = r.dotProduct(v.scale(-1));
-        x = Math.pow(x > 0 ? x : 0, nShininess) * kS;
-        return lightIntensity.scale(x);
+        double minusVDotR = alignZero(r.dotProduct(v.scale(-1)));
+        if (minusVDotR <= 0)
+            return Color.BLACK;
+        return lightIntensity.scale(Math.pow(minusVDotR, nShininess) * kS);
     }
 
     /**

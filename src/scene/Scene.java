@@ -15,13 +15,13 @@ import java.util.List;
  * class that implements scene
  */
 public class Scene {
-    String _name;
-    Color _background;
-    AmbientLight _ambientLight;
-    Geometries _geometries;
-    Camera _camera;
-    double _distance;
-    List<LightSource> _lights;
+    private String _name;
+    private Color _background;
+    private AmbientLight _ambientLight;
+    private Geometries _geometries;
+    private Camera _camera;
+    private double _distance;
+    private List<LightSource> _lights;
 
     /**
      * Constructor of scene class, get parameter - name of the scene

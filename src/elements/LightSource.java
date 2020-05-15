@@ -19,8 +19,8 @@ public interface LightSource {
     /**
      * return direction vector of the light
      *
-     * @param p Point3D required point for his color
-     * @return Vector direction vector of the light
+     * @param p required point for his color
+     * @return direction vector of the light
      */
     Vector getL(Point3D p);
 }
