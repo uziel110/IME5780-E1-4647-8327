@@ -147,74 +147,72 @@ public class Tube extends RadialGeometry {
 
         double radius = this.getRadius();
 
-        double a, b, c;
-        a = ray.getPoint().getX().get();
-        b = ray.getPoint().getY().get();
-        c = ray.getPoint().getZ().get();
+        double rayPointX, rayPointY, rayPointZ;
+        rayPointX = ray.getPoint().getX().get();
+        rayPointY = ray.getPoint().getY().get();
+        rayPointZ = ray.getPoint().getZ().get();
 
-        double x, y, z;
-        x = ray.getVector().getEnd().getY().get();
+        double rayVectorX, rayVectorY, rayVectorZ;
+        rayVectorX = ray.getVector().getEnd().getX().get();
+        rayVectorY = ray.getVector().getEnd().getY().get();
+        rayVectorZ = ray.getVector().getEnd().getZ().get();
 
-        y = ray.getVector().getEnd().getY().get();
-        z = ray.getVector().getEnd().getZ().get();
+        double axisRayPointX, axisRayPointY, axisRayPointZ;
+        axisRayPointX = _axisRay.getPoint().getX().get();
+        axisRayPointY = _axisRay.getPoint().getY().get();
+        axisRayPointZ = _axisRay.getPoint().getZ().get();
 
-        double c1, c2, c3;
-        c1 = _axisRay.getPoint().getX().get();
-        c2 = _axisRay.getPoint().getY().get();
-        c3 = _axisRay.getPoint().getZ().get();
-        double v1, v2, v3;
-        v1 = _axisRay.getVector().getEnd().getX().get();
-        v2 = _axisRay.getVector().getEnd().getY().get();
-        v3 = _axisRay.getVector().getEnd().getZ().get();
+        double axisRayVectorX, axisRayVectorY, axisRayVectorZ;
+        axisRayVectorX = _axisRay.getVector().getEnd().getX().get();
+        axisRayVectorY = _axisRay.getVector().getEnd().getY().get();
+        axisRayVectorZ = _axisRay.getVector().getEnd().getZ().get();
 
-        // alfa = Ray's point(x, y, z) *  arrow's point(x, y, z)
-        double alfa = a * v1
-                + b * v2
-                + c * v3;
+        // alfa = Ray's point(x, y, z) * arrow's point(x, y, z)
+        double alfa = rayPointX * axisRayVectorX
+                + rayPointY * axisRayVectorY
+                + rayPointZ * axisRayVectorZ;
 
-        alfa = alfa - (c1 * v1
-                + c2 * v2
-                + c3 * v3);
+        alfa = alfa - (axisRayPointX * axisRayVectorX
+                + axisRayPointY * axisRayVectorY
+                + axisRayPointZ * axisRayVectorZ);
 
-        final double beta = x * v1
-                + y * v2
-                + z * v3;
-
+        final double beta = rayVectorX * axisRayVectorX
+                + rayVectorY * axisRayVectorY
+                + rayVectorZ * axisRayVectorZ;
 
         double a1, a2, a3;
 
-        a1 = a - c1 - (alfa * v1);
-        a2 = b - c2 - (alfa * v2);
-        a3 = c - c3 - (alfa * v3);
+        a1 = rayPointX - axisRayPointX - (alfa * axisRayVectorX);
+        a2 = rayPointY - axisRayPointY - (alfa * axisRayVectorY);
+        a3 = rayPointZ - axisRayPointZ - (alfa * axisRayVectorZ);
 
         double b1, b2, b3;
-        b1 = x - (beta * v1);
-        b2 = y - (beta * v2);
-        b3 = z - (beta * v3);
+        b1 = rayVectorX - (beta * axisRayVectorX);
+        b2 = rayVectorY - (beta * axisRayVectorY);
+        b3 = rayVectorZ - (beta * axisRayVectorZ);
 
         double w1, w2, w3;
 
         w1 = alignZero(b1 * b1 + b2 * b2 + b3 * b3);
         w2 = 2 * a1 * b1 + 2 * a2 * b2 + 2 * a3 * b3;
         w3 = a1 * a1 + a2 * a2 + a3 * a3 - radius * radius;
-        if ( w1==0) {
+
+        if (w1 == 0)
             return null;
-        }
+
         double sq = alignZero(w2 * w2 - 4 * w1 * w3);
 
-        if (sq<0) {
+        if (sq < 0)
             return null;
-        }
 
         double t1, t2;
-        sq=java.lang.Math.sqrt(sq);
+        sq = Math.sqrt(sq);
 
         t1 = alignZero((-w2 + sq) / (2 * w1));
-        t2 = alignZero((-w2 - sq) / ( 2 * w1));
+        t2 = alignZero((-w2 - sq) / (2 * w1));
 
-        if (isZero(t1 - t2) || (t1 <= 0 && t2 <= 0) ) {
+        if (isZero(t1 - t2) || (t1 <= 0 && t2 <= 0))
             return null;
-        }
 
         if (t1 > t2) {
             double temp = t1;
@@ -222,13 +220,14 @@ public class Tube extends RadialGeometry {
             t2 = temp;
         }
 
-        List<GeoPoint> points = new LinkedList<GeoPoint>();
-        if (t1 > 0) {
+        List<GeoPoint> points = new LinkedList<>();
+
+        if (t1 > 0)
             points.add(new GeoPoint(this, ray.getPoint(t1)));
-        }
-        if (t2 > 0) {
+
+        if (t2 > 0)
             points.add(new GeoPoint(this, ray.getPoint(t2)));
-        }
+
         return points;
     }
 }

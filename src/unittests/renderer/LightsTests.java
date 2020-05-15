@@ -3,12 +3,15 @@ package renderer;
 import elements.*;
 import geometries.Sphere;
 import geometries.Triangle;
+import geometries.Tube;
 import org.junit.Test;
 import primitives.Color;
 import primitives.Material;
 import primitives.Point3D;
 import primitives.Vector;
 import scene.Scene;
+
+import static java.lang.Math.random;
 
 /**
  * Test rendering a basic image
@@ -238,16 +241,14 @@ public class LightsTests {
                         new Point3D(-150, 150, 150), new Point3D(-70, -70, 50), new Point3D(75, -75, 150)));
 
         scene.addLights(new SpotLight(new Color(500, 250, 250),
-                new Point3D(10, 10, 130), new Vector(-2, 2, 1),0.6,
+                new Point3D(10, 10, 130), new Vector(-2, 2, 1), 70,
                 1, 0.0001, 0.000005));
-
-        ImageWriter imageWriter = new ImageWriter("trianglesSpot1", 200, 200, 500, 500);
+        ImageWriter imageWriter = new ImageWriter("trianglesNarrowSpot", 200, 200, 500, 500);
         Render render = new Render(imageWriter, scene);
 
         render.renderImage();
         render.getImageWriter().writeToImage();
     }
-
 
     /**
      * Produce a picture of a two triangles lighted multi light
@@ -279,6 +280,66 @@ public class LightsTests {
                 1, 0.0001, 0.000005));
 
         ImageWriter imageWriter = new ImageWriter("trianglesMultiLight", 200, 200, 500, 500);
+        Render render = new Render(imageWriter, scene);
+
+        render.renderImage();
+        render.getImageWriter().writeToImage();
+    }
+
+    /**
+     * Produce a picture of a two triangles lighted multi light
+     */
+    @Test
+    public void tubeMultiLight() {
+        Scene scene = new Scene("Test scene");
+        scene.setCamera(new Camera(new Point3D(0, 0, -1000), new Vector(0, 0, 1), new Vector(0, -1, 0)));
+        scene.setDistance(1000);
+        scene.setBackground(Color.BLACK);
+        scene.setAmbientLight(new AmbientLight(new Color(java.awt.Color.WHITE), 0.15));
+
+        scene.addGeometries(
+                new Tube(Color.BLACK, new Material(0.5, 0.5, 300),
+                        new Point3D(0.1, 0, 0), new Vector(0, 0, -1), 50));
+
+        //scene.addLights(new DirectionalLight(new Color(300, 150, 150), new Vector(-1, 3, 1)));
+        //scene.addLights(new PointLight(new Color(200, 500, 500), new Point3D(0, 0, 0),
+        //        1, 0.0005, 0.0005));
+        for (int i = 0; i < 15; ++i) {
+            double j = 1 - i / 5.0;
+            scene.addLights(new PointLight(new Color(300 * random(), 300 * random(), 300 * random()),
+                    new Point3D(0 , 0 , 0 - (-1000 * j)), 1, 0.0005, 0.0005));
+        }
+
+        ImageWriter imageWriter = new ImageWriter("tubeMultiLight", 200, 200, 500, 500);
+        Render render = new Render(imageWriter, scene);
+
+        render.renderImage();
+        render.getImageWriter().writeToImage();
+    }
+
+    /**
+     * Produce a picture of a two triangles lighted multi light
+     */
+    @Test
+    public void tubeMultiLight1() {
+        Scene scene = new Scene("Test scene");
+        scene.setCamera(new Camera(new Point3D(0, 0, -1000), new Vector(0, 0, 1), new Vector(0, -1, 0)));
+        scene.setDistance(1000);
+        scene.setBackground(Color.BLACK);
+        scene.setAmbientLight(new AmbientLight(new Color(java.awt.Color.WHITE), 0.15));
+
+        scene.addGeometries(
+                new Tube(Color.BLACK, new Material(0.5, 0.5, 300),
+                        new Point3D(-50, 0, 200), new Vector(200, -75, 900), 20));
+
+        scene.addLights(new DirectionalLight(new Color(300, 150, 150), new Vector(-1, 3, 1)));
+        for (int i = 0; i < 15; ++i) {
+            double j = 1 - i / 5.0;
+            scene.addLights(new PointLight(new Color(500 * random(), 500 * random(), 500 * random()),
+                    new Point3D(180 - (200 * j), -105 - (-75 * j), 1100 - (900 * j)), 1, 0.0005, 0.0005));
+        }
+
+        ImageWriter imageWriter = new ImageWriter("tubeMultiLight1", 200, 200, 500, 500);
         Render render = new Render(imageWriter, scene);
 
         render.renderImage();

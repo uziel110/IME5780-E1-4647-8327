@@ -68,8 +68,6 @@ public class Render {
         for (int i = 0;
              i < nY; ++i) {
             for (int j = 0; j < nX; ++j) {
-                if (i == 240 && j == 300)
-                    ray = null;
                 ray = camera.constructRayThroughPixel(nX, nY, j, i, distance, width, height);
                 intersectionPoints = geometries.findIntersections(ray);
                 if (intersectionPoints == null)

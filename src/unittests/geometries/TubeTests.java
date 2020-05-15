@@ -44,7 +44,7 @@ public class TubeTests {
         Vector vAxis = new Vector(0, 0, 1);
         Tube tube2 = new Tube(new Ray(new Point3D(1, 1, 1), vAxis), 1d);
         Ray ray;
-
+        List<GeoPoint> result;
         // ============ Equivalence Partitions Tests ==============
         // TC01: Ray's line is outside the tube (0 points)
         ray = new Ray(new Point3D(1, 1, 2), new Vector(1, 1, 0));
@@ -52,7 +52,7 @@ public class TubeTests {
 
         // TC02: Ray's crosses the tube (2 points)
         ray = new Ray(new Point3D(0, 0, 0), new Vector(2, 1, 1));
-        List<GeoPoint> result = tube2.findIntersections(ray);
+        result = tube2.findIntersections(ray);
         assertNotNull("must be intersections", result);
             assertEquals("must be 2 intersections", 2, result.size());
         if (result.get(0)._point.getY().get() > result.get(1)._point.getY().get())

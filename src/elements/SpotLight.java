@@ -2,7 +2,6 @@ package elements;
 
 import primitives.Color;
 import primitives.Point3D;
-import primitives.Util;
 import primitives.Vector;
 
 import static primitives.Util.alignZero;
@@ -11,7 +10,7 @@ import static primitives.Util.alignZero;
  * class that implements the spot light
  */
 public class SpotLight extends PointLight {
-    private double _angle;
+    private double _thickness;
     private Vector _direction;
 
     /**
@@ -20,15 +19,15 @@ public class SpotLight extends PointLight {
      *
      * @param intensity Color intensity of the light
      * @param position  Point3D position of the light
-     * @param angle     the angle of the spot <= 90
+     * @param thickness the thickness of the spot > 1
      * @param kC        kC >= 1
      * @param kL
      * @param kQ
      * @param direction Vector direction of the light
      */
-    public SpotLight(Color intensity, Point3D position, Vector direction, double angle, double kC, double kL, double kQ) {
+    public SpotLight(Color intensity, Point3D position, Vector direction, double thickness, double kC, double kL, double kQ) {
         super(intensity, position, kC, kL, kQ);
-        _angle = angle % 90;
+        _thickness = thickness < 1 ? 1 : thickness;
         _direction = direction.normalized();
     }
 
@@ -45,9 +44,8 @@ public class SpotLight extends PointLight {
      * @param direction Vector direction of the light
      */
     public SpotLight(Color intensity, Point3D position, Vector direction, double kC, double kL, double kQ) {
-        this(intensity, position, direction, 90, kC, kL, kQ);
+        this(intensity, position, direction, 1, kC, kL, kQ);
     }
-
 
     @Override
     public Color getIntensity(Point3D p) {
@@ -56,12 +54,11 @@ public class SpotLight extends PointLight {
 
         double projection = alignZero(_direction.dotProduct(getL));
         if (projection <= 0) return Color.BLACK;
-        projection = Math.pow(projection, thickness);
+        projection = Math.pow(projection, _thickness);
 
-        Color pointlightIntensity = super.getIntensity(p);
+        Color pointLightIntensity = super.getIntensity(p);
 
-        return pointlightIntensity.scale(projection);
-
+        return pointLightIntensity.scale(projection);
     }
 }
 
