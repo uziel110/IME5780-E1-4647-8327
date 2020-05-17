@@ -2,10 +2,8 @@ package geometries;
 
 import primitives.*;
 
-import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Function;
 
 import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
@@ -149,7 +147,17 @@ public class Tube extends RadialGeometry {
 
         double radius = this.getRadius();
 
-        double rayPointX, rayPointY, rayPointZ;
+        Point3D rayPoint = new Point3D(ray.getPoint());
+        Vector rayVector = new Vector(ray.getVector());
+        Point3D axisRayPoint = new Point3D(_axisRay.getPoint());
+        Vector axisRayVector = new Vector(_axisRay.getVector());
+
+        double alfa = PointNultPoint(axisRayVector.getEnd(), rayPoint);
+        alfa -= PointNultPoint(axisRayVector.getEnd(), axisRayPoint);
+        double beta = rayVector.dotProduct(axisRayVector);
+
+
+        /*double rayPointX, rayPointY, rayPointZ;
         rayPointX = ray.getPoint().getX().get();
         rayPointY = ray.getPoint().getY().get();
         rayPointZ = ray.getPoint().getZ().get();
@@ -180,9 +188,12 @@ public class Tube extends RadialGeometry {
 
         final double beta = rayVectorX * axisRayVectorX
                 + rayVectorY * axisRayVectorY
-                + rayVectorZ * axisRayVectorZ;
+                + rayVectorZ * axisRayVectorZ;*/
 
-        double a1, a2, a3;
+        Point3D a = subtract(subtract(ray.getPoint(),_axisRay.getPoint()),(Point3DScale(axisRayVector.getEnd(),alfa)));
+        Point3D b = subtract(rayVector.getEnd(),(Point3DScale(axisRayVector.getEnd(),beta)));
+
+       /* double a1, a2, a3;
 
         a1 = rayPointX - axisRayPointX - (alfa * axisRayVectorX);
         a2 = rayPointY - axisRayPointY - (alfa * axisRayVectorY);
@@ -191,13 +202,17 @@ public class Tube extends RadialGeometry {
         double b1, b2, b3;
         b1 = rayVectorX - (beta * axisRayVectorX);
         b2 = rayVectorY - (beta * axisRayVectorY);
-        b3 = rayVectorZ - (beta * axisRayVectorZ);
+        b3 = rayVectorZ - (beta * axisRayVectorZ);*/
+
 
         double w1, w2, w3;
+        w1 = alignZero(PointNultPoint(b,b));
+        w2 = 2 * PointNultPoint(a,b);
+        w3 = PointNultPoint(a,a) - radius * radius;
 
-        w1 = alignZero(b1 * b1 + b2 * b2 + b3 * b3);
+        /*w1 = alignZero(b1 * b1 + b2 * b2 + b3 * b3);
         w2 = 2 * a1 * b1 + 2 * a2 * b2 + 2 * a3 * b3;
-        w3 = a1 * a1 + a2 * a2 + a3 * a3 - radius * radius;
+        w3 = a1 * a1 + a2 * a2 + a3 * a3 - radius * radius;*/
 
         if (w1 == 0)
             return null;
@@ -231,5 +246,44 @@ public class Tube extends RadialGeometry {
             points.add(new GeoPoint(this, ray.getPoint(t2)));
 
         return points;
+    }
+
+    /**
+     *  multiplying a point3D by other point3D
+     * @param point Point3D
+     * @param otherPoint other Point3D
+     * @return double value - the result of multiplying a point3D by other point3D
+     */
+    private double PointNultPoint(Point3D point, Point3D otherPoint)
+    {
+        return point.getX().get() * otherPoint.getX().get()
+                + point.getY().get() * otherPoint.getY().get()
+                + point.getZ().get() * otherPoint.getZ().get();
+    }
+
+
+    /**
+     * multiply point3D by scalar
+     * @param point Point3D
+     * @param scale double value to scale by
+     * @return new Point3D the result of the multiply
+     */
+    private Point3D Point3DScale(Point3D point, double scale)
+    {
+        return new Point3D(point.getX().get() * scale,
+               point.getY().get() * scale, point.getZ().get() * scale);
+    }
+
+    /**
+     * Subtraction between two points
+     * @param point Point3D
+     * @param otherPoint other Point3D
+     * @return new Point3D the result of the subtract
+     */
+    private Point3D subtract(Point3D point, Point3D otherPoint )
+    {
+        return new Point3D(point.getX().get() - otherPoint.getX().get(),
+                point.getY().get() - otherPoint.getY().get(),
+                point.getZ().get() - otherPoint.getZ().get());
     }
 }
