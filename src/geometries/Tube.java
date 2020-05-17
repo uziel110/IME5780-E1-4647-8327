@@ -2,8 +2,10 @@ package geometries;
 
 import primitives.*;
 
+import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Function;
 
 import static primitives.Util.alignZero;
 import static primitives.Util.isZero;

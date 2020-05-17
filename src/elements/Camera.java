@@ -5,7 +5,6 @@ import primitives.Ray;
 import primitives.Vector;
 
 import static primitives.Util.alignZero;
-import static primitives.Util.isZero;
 
 /**
  * class that implements Camera
@@ -48,18 +47,22 @@ public class Camera {
     public Ray constructRayThroughPixel(int nX, int nY,
                                         int j, int i, double screenDistance,
                                         double screenWidth, double screenHeight) {
-        Point3D pc = new Point3D(_location);
-        if (!isZero(screenDistance))
-            pc = _location.add(_vTo.scale(screenDistance));
+        Point3D pc = _location.add(_vTo.scale(screenDistance));
 
-        // to avoid zero view plane
-        if (nY == 0 || nX == 0)
-            return null;
         double ry = screenHeight / nY;
         double rx = screenWidth / nX;
 
-        Point3D pij;
-        boolean y = isZero(j - (nX - 1) / 2.0);
+        double xj = (j - nX / 2.0) * rx + rx / 2.0;
+        double yi = (i - nY / 2.0) * ry + ry / 2.0;
+
+        Point3D pij = pc;
+        if (xj != 0)
+            pij = pij.add(_vRight.scale(xj));
+        if (yi != 0)
+            pij = pij.add(_vUp.scale(-yi));
+
+
+        /*boolean y = isZero(j - (nX - 1) / 2.0);
         boolean x = isZero(i - (nY - 1) / 2.0);
         if (y && x)
             pij = new Point3D(pc);
@@ -68,7 +71,7 @@ public class Camera {
         else if (x)
             pij = pc.add(_vRight.scale((j - ((nX - 1) / 2.0)) * rx));
         else
-            pij = pc.add(_vRight.scale((j - ((nX - 1) / 2.0)) * rx).subtract(_vUp.scale((i - ((nY - 1) / 2.0)) * ry)));
+            pij = pc.add(_vRight.scale((j - ((nX - 1) / 2.0)) * rx).subtract(_vUp.scale((i - ((nY - 1) / 2.0)) * ry)));*/
 
         // pij is always not equal to _location
         Vector vij = pij.subtract(_location);
