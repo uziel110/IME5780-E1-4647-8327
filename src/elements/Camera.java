@@ -47,36 +47,21 @@ public class Camera {
     public Ray constructRayThroughPixel(int nX, int nY,
                                         int j, int i, double screenDistance,
                                         double screenWidth, double screenHeight) {
-        Point3D pc = _location.add(_vTo.scale(screenDistance));
-
         double ry = screenHeight / nY;
         double rx = screenWidth / nX;
 
         double xj = (j - nX / 2.0) * rx + rx / 2.0;
         double yi = (i - nY / 2.0) * ry + ry / 2.0;
 
-        Point3D pij = pc;
+        // pij = pc - center of the view plane
+        Point3D pij = _location.add(_vTo.scale(screenDistance));
         if (xj != 0)
             pij = pij.add(_vRight.scale(xj));
         if (yi != 0)
             pij = pij.add(_vUp.scale(-yi));
 
-
-        /*boolean y = isZero(j - (nX - 1) / 2.0);
-        boolean x = isZero(i - (nY - 1) / 2.0);
-        if (y && x)
-            pij = new Point3D(pc);
-        else if (y)
-            pij = pc.add((Point3D.ZERO).subtract((_vUp.scale((i - ((nY - 1) / 2.0)) * ry)).getEnd()));
-        else if (x)
-            pij = pc.add(_vRight.scale((j - ((nX - 1) / 2.0)) * rx));
-        else
-            pij = pc.add(_vRight.scale((j - ((nX - 1) / 2.0)) * rx).subtract(_vUp.scale((i - ((nY - 1) / 2.0)) * ry)));*/
-
         // pij is always not equal to _location
-        Vector vij = pij.subtract(_location);
-
-        return new Ray(_location, vij.normalized());
+        return new Ray(_location, pij.subtract(_location).normalized());
     }
 
     /**

@@ -49,10 +49,10 @@ public class SpotLight extends PointLight {
 
     @Override
     public Color getIntensity(Point3D p) {
-        Vector lightVector = getL(p);
-        if (lightVector == null) return Color.BLACK;
+        Vector vectorFromLight = getL(p);
+        if (vectorFromLight == null) return Color.BLACK;
 
-        double projection = alignZero(_direction.dotProduct(lightVector));
+        double projection = alignZero(_direction.dotProduct(vectorFromLight));
         if (projection <= 0) return Color.BLACK;
         projection = Math.pow(projection, _thickness);
 
