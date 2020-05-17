@@ -15,7 +15,11 @@ import static primitives.Util.alignZero;
  * class that create image from the scene
  */
 public class Render {
-
+    /**
+     * Fixed size for moving the beginning of the beam
+     * at shading rays transparency and reflection
+     */
+    private static final double DELTA = 0.1;
     private ImageWriter _imageWriter;
     private Scene _scene;
 
@@ -28,6 +32,27 @@ public class Render {
     public Render(ImageWriter writer, Scene scene) {
         _imageWriter = writer;
         _scene = scene;
+    }
+
+    /**
+     * Check if the pixel is shaded or not
+     * by checking if a light source is blocked by other objects
+     *
+     * @param l  vector from the light to that point
+     * @param n  vector normal to the geometry in that point
+     * @param gp the point that we want to check
+     * @return return true if the pixel is unShaded
+     */
+    // todo it not work
+    private boolean unshaded(LightSource light, Vector l, Vector n, GeoPoint gp) {
+        Vector lightDirection = l.scale(-1); // change direction, from point to lightSource
+        Vector delta = n.scale(n.dotProduct(lightDirection) > 0 ? DELTA : -DELTA);
+        Point3D point = gp._point.add(delta);
+        Ray lightRay = new Ray(point, lightDirection); // reversed lightRay
+
+        List<GeoPoint> intersections =
+                _scene.getGeometries().findIntersections(lightRay, light.getDistance(point));
+        return intersections == null;
     }
 
     /**
@@ -67,9 +92,10 @@ public class Render {
         Ray ray;
         List<GeoPoint> intersectionPoints;
         GeoPoint closestPoint;
-        for (int i = 0;
-             i < nY; ++i) {
+        for (int i = 0; i < nY; ++i) {
             for (int j = 0; j < nX; ++j) {
+                if (i == 180 && j == 200)
+                    ray = null;
                 ray = camera.constructRayThroughPixel(nX, nY, j, i, distance, width, height);
                 intersectionPoints = geometries.findIntersections(ray);
                 if (intersectionPoints == null)
@@ -103,29 +129,28 @@ public class Render {
     /**
      * return color color of this point
      *
-     * @param intersection Point3D
+     * @param geoPoint Point3D
      * @return Color of this point
      */
-    private Color calcColor(GeoPoint intersection) {
+    private Color calcColor(GeoPoint geoPoint) {
         Color color = _scene.getAmbientLight().getIntensity(); // ip = ia.dotProduct(ka)
-        color = color.add(intersection._geometry.getEmission()); // ie
+        color = color.add(geoPoint._geometry.getEmission()); // ie
 
-        Vector v = intersection._point.subtract(_scene.getCamera().getLocation()).normalize();
-        Vector n = intersection._geometry.getNormal(intersection._point);
-        Material material = intersection._geometry.getMaterial();
+        Vector v = geoPoint._point.subtract(_scene.getCamera().getLocation()).normalize();
+        Vector n = geoPoint._geometry.getNormal(geoPoint._point);
+        Material material = geoPoint._geometry.getMaterial();
         int nShininess = material.getNShininess();
         double kD = material.getKD();
         double kS = material.getKS();
         for (LightSource lightSource : _scene.getLights()) {
-            Vector l = lightSource.getL(intersection._point);
-            double nDotL = alignZero(n.dotProduct(l));
-            double nDotV = alignZero(n.dotProduct(v));
-            if ((nDotL > 0 && nDotV > 0) || (nDotL < 0 && nDotV < 0)) {
-                Color lightIntensity = lightSource.getIntensity(intersection._point);
-                color = color.add(
-                        calcDiffusive(kD, l, n, lightIntensity),
-                        calcSpecular(kS, l, n, v, nShininess, lightIntensity));
-            }
+            Vector l = lightSource.getL(geoPoint._point);
+            // both ( n.dotProduct(l)) and (n.dotProduct(v)) with same sign
+            if (n.dotProduct(l) * n.dotProduct(v) > 0)
+                if (unshaded(lightSource, l, n, geoPoint)) { // todo check for tubeMultiLight
+                    Color lightIntensity = lightSource.getIntensity(geoPoint._point);
+                    color = color.add(calcDiffusive(kD, l, n, lightIntensity),
+                            calcSpecular(kS, l, n, v, nShininess, lightIntensity));
+                }
         }
         return color;
     }
@@ -156,7 +181,7 @@ public class Render {
      * @param v              vector direction from the camera
      * @param nShininess     the shininess of the surface
      * @param lightIntensity intensity of the light
-     * @return
+     * @return the color with specular effect
      */
     private Color calcSpecular(double kS, Vector l, Vector n, Vector v, int nShininess, Color lightIntensity) {
         Vector r = l.subtract(n.scale(l.dotProduct(n) * 2));

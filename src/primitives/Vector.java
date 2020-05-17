@@ -109,9 +109,9 @@ public class Vector {
     }
 
     /**
-     * return the length squared
+     * return the length squared of this vector
      *
-     * @return double value of the length squared
+     * @return double value the length squared of this vector
      */
     public double lengthSquared() {
         return this._end.distanceSquared(Point3D.ZERO);

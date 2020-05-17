@@ -73,33 +73,37 @@ public class Sphere extends RadialGeometry {
 
     @Override
     public List<GeoPoint> findIntersections(Ray ray) {
+        return findIntersections(ray, Double.MAX_VALUE);
+    }
+
+    @Override
+    public List<GeoPoint> findIntersections(Ray ray, double distance) {
         Point3D p0 = ray.getPoint();
         Vector v = ray.getVector();
 
-        double radius = this.getRadius();
+        double radius = getRadius();
 
         if (_center.equals(p0))
             return List.of(new GeoPoint(this, _center.add(v.scale(radius))));
 
         Vector u = _center.subtract(p0);
         double tm = alignZero(v.dotProduct(u));
-        double d = alignZero(Math.sqrt(u.lengthSquared() - tm * tm));
-        if (alignZero(d - radius) >= 0)
-            return null;
+        double d = Math.sqrt(u.lengthSquared() - tm * tm);
+        if (alignZero(d - radius) >= 0) return null;
 
-        double th = alignZero(Math.sqrt(radius * radius - d * d));
+        double th = Math.sqrt(radius * radius - d * d); // is always positive
         double t1 = alignZero(tm - th);
         double t2 = alignZero(tm + th);
 
-        if (t1 <= 0 && t2 <= 0)
-            return null;
+        if (t1 > distance) return null; // always t1 < t2
 
-        if (t1 <= 0)
+        if (t2 <= 0) return null;
+
+        if (t1 <= 0 && t2 < distance) // only t2 > 0
             return List.of(new GeoPoint(this, ray.getPoint(t2)));
 
-        if (t2 <= 0)
-            return List.of(new GeoPoint(this, ray.getPoint(t1)));
-
-        return List.of(new GeoPoint(this, ray.getPoint(t1)), new GeoPoint(this, ray.getPoint(t2)));
+        if (t2 < distance)
+            return List.of(new GeoPoint(this, ray.getPoint(t1)), new GeoPoint(this, ray.getPoint(t2)));
+        return null;
     }
 }

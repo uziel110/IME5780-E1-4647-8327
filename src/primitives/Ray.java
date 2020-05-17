@@ -43,10 +43,11 @@ public class Ray {
      * v - vector of the ray
      *
      * @param t double value to scale vector of the ray
-     * @return new Point3D
+     * @return new Point3D at the end of the ray scaled by t
      */
     public Point3D getPoint(double t) {
         Vector scaledVector;
+        // for the situation of after scale the vector Passes the value of isZero
         try {
             scaledVector = _vector.scale(t);
         } catch (Exception e) {
