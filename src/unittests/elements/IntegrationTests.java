@@ -89,6 +89,7 @@ public class IntegrationTests {
         assertEquals("Wrong number of intersections", 0, result.size());
     }
 
+
     /**
      * Test method for integration of triangle with the camera
      */
