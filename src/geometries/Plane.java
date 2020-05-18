@@ -11,6 +11,9 @@ import static primitives.Util.isZero;
  * class that implement a plane
  */
 public class Plane extends Geometry {
+    /**
+     * point on the plane
+     */
     private Point3D _p;
     private Vector _normal;
 
@@ -104,17 +107,22 @@ public class Plane extends Geometry {
 
     @Override
     public List<GeoPoint> findIntersections(Ray ray) {
+        return findIntersections(ray, Double.MAX_VALUE);
+    }
+
+    @Override
+    public List<GeoPoint> findIntersections(Ray ray, double distance) {
         Point3D p0 = ray.getPoint();
         Vector v = ray.getVector();
         if (_p.equals(p0))
             return null;
 
-        double t1 = alignZero(_normal.dotProduct(_p.subtract(p0)));
-        double t2 = alignZero(_normal.dotProduct(v));
-        if (isZero(t2) || isZero(t1))
+        double t1 = _normal.dotProduct(_p.subtract(p0));
+        double t2 = _normal.dotProduct(v);
+        if (isZero(t1) || isZero(t2))
             return null;
         double t = alignZero(t1 / t2);
-        if (t <= 0)
+        if (t <= 0 || t > distance)
             return null;
 
         return List.of(new GeoPoint(this, ray.getPoint(t)));

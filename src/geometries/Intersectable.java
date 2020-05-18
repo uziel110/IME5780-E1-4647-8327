@@ -43,10 +43,21 @@ public interface Intersectable {
     /**
      * find all the Intersections between the geometry shape and a ray that receive as parameter
      *
-     * @param ray
+     * @param ray the ray that we check for intersection
      * @return list of intersections points if no such points return null
      */
     List<GeoPoint> findIntersections(Ray ray);
+
+    /**
+     * find all the Intersections between the geometry shape and a ray that receive as a parameter
+     * Within the range up to distance
+     * @param ray the ray that we check for intersection
+     * @param distance upper bound of distance from the ray head to the intersection point
+     * @return list of intersections points if no such points return null
+     */
+    List<GeoPoint> findIntersections(Ray ray, double distance);
+
+
 }
 
 

@@ -102,23 +102,24 @@ public class Polygon extends Geometry {
 
     @Override
     public List<GeoPoint> findIntersections(Ray ray) {
+        return findIntersections(ray, Double.MAX_VALUE);
+    }
 
-        List<GeoPoint> list = _plane.findIntersections(ray);
+    @Override
+    public List<GeoPoint> findIntersections(Ray ray, double distance) {
 
-        if (list == null)
-            return null;
+        List<GeoPoint> list = _plane.findIntersections(ray, distance);
+
+        if (list == null) return null;
 
         List<GeoPoint> polyList = new LinkedList<>();
-        for (int i = 0; i < list.size(); ++i) {
-            polyList.add(new GeoPoint(this, list.get(i)._point));
+        for (GeoPoint geoPoint : list) {
+            polyList.add(new GeoPoint(this, geoPoint._point));
         }
-
-        Point3D p0 = ray.getPoint();
-        Vector v = ray.getVector();
 
         List<Vector> pList = new LinkedList<>();
         for (Point3D vertex : _vertices) {
-            pList.add(vertex.subtract(p0));
+            pList.add(vertex.subtract(ray.getPoint())); //p0 = ray.getPoint()
         }
 
         List<Vector> nList = new LinkedList<>();
@@ -127,13 +128,15 @@ public class Polygon extends Geometry {
         }
         nList.add((pList.get(pList.size() - 1).crossProduct(pList.get(0))).normalize());
 
+        Vector v = ray.getVector();
+
         double d = alignZero(v.dotProduct(nList.get(0)));
         boolean positive = d > 0;
-        if (isZero(d))
-            return null;
+        if (d == 0) return null;
+
         for (int i = 1; i < nList.size(); ++i) {
             d = alignZero(v.dotProduct(nList.get(i)));
-            if (positive != (d > 0) || isZero(d))
+            if (positive != (d > 0) || d == 0)
                 return null;
         }
         return polyList;

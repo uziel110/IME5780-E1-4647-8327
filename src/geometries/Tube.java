@@ -144,6 +144,11 @@ public class Tube extends RadialGeometry {
 
     @Override
     public List<GeoPoint> findIntersections(Ray ray) {
+        return findIntersections(ray, Double.MAX_VALUE);
+    }
+
+    @Override
+    public List<GeoPoint> findIntersections(Ray ray, double distance) {
 
         double radius = this.getRadius();
 
@@ -152,75 +157,23 @@ public class Tube extends RadialGeometry {
         Point3D axisRayPoint = new Point3D(_axisRay.getPoint());
         Vector axisRayVector = new Vector(_axisRay.getVector());
 
-        double alfa = PointNultPoint(axisRayVector.getEnd(), rayPoint);
-        alfa -= PointNultPoint(axisRayVector.getEnd(), axisRayPoint);
+        double alfa = PointMultPoint(axisRayVector.getEnd(), rayPoint);
+        alfa -= PointMultPoint(axisRayVector.getEnd(), axisRayPoint);
         double beta = rayVector.dotProduct(axisRayVector);
 
-
-        /*double rayPointX, rayPointY, rayPointZ;
-        rayPointX = ray.getPoint().getX().get();
-        rayPointY = ray.getPoint().getY().get();
-        rayPointZ = ray.getPoint().getZ().get();
-
-        double rayVectorX, rayVectorY, rayVectorZ;
-        rayVectorX = ray.getVector().getEnd().getX().get();
-        rayVectorY = ray.getVector().getEnd().getY().get();
-        rayVectorZ = ray.getVector().getEnd().getZ().get();
-
-        double axisRayPointX, axisRayPointY, axisRayPointZ;
-        axisRayPointX = _axisRay.getPoint().getX().get();
-        axisRayPointY = _axisRay.getPoint().getY().get();
-        axisRayPointZ = _axisRay.getPoint().getZ().get();
-
-        double axisRayVectorX, axisRayVectorY, axisRayVectorZ;
-        axisRayVectorX = _axisRay.getVector().getEnd().getX().get();
-        axisRayVectorY = _axisRay.getVector().getEnd().getY().get();
-        axisRayVectorZ = _axisRay.getVector().getEnd().getZ().get();
-
-        // alfa = Ray's point(x, y, z) * arrow's point(x, y, z)
-        double alfa = rayPointX * axisRayVectorX
-                + rayPointY * axisRayVectorY
-                + rayPointZ * axisRayVectorZ;
-
-        alfa = alfa - (axisRayPointX * axisRayVectorX
-                + axisRayPointY * axisRayVectorY
-                + axisRayPointZ * axisRayVectorZ);
-
-        final double beta = rayVectorX * axisRayVectorX
-                + rayVectorY * axisRayVectorY
-                + rayVectorZ * axisRayVectorZ;*/
-
-        Point3D a = subtract(subtract(ray.getPoint(),_axisRay.getPoint()),(Point3DScale(axisRayVector.getEnd(),alfa)));
-        Point3D b = subtract(rayVector.getEnd(),(Point3DScale(axisRayVector.getEnd(),beta)));
-
-       /* double a1, a2, a3;
-
-        a1 = rayPointX - axisRayPointX - (alfa * axisRayVectorX);
-        a2 = rayPointY - axisRayPointY - (alfa * axisRayVectorY);
-        a3 = rayPointZ - axisRayPointZ - (alfa * axisRayVectorZ);
-
-        double b1, b2, b3;
-        b1 = rayVectorX - (beta * axisRayVectorX);
-        b2 = rayVectorY - (beta * axisRayVectorY);
-        b3 = rayVectorZ - (beta * axisRayVectorZ);*/
-
+        Point3D a = subtract(subtract(ray.getPoint(), _axisRay.getPoint()), (Point3DScale(axisRayVector.getEnd(), alfa)));
+        Point3D b = subtract(rayVector.getEnd(), (Point3DScale(axisRayVector.getEnd(), beta)));
 
         double w1, w2, w3;
-        w1 = alignZero(PointNultPoint(b,b));
-        w2 = 2 * PointNultPoint(a,b);
-        w3 = PointNultPoint(a,a) - radius * radius;
+        w1 = alignZero(PointMultPoint(b, b));
+        w2 = 2 * PointMultPoint(a, b);
+        w3 = PointMultPoint(a, a) - radius * radius;
 
-        /*w1 = alignZero(b1 * b1 + b2 * b2 + b3 * b3);
-        w2 = 2 * a1 * b1 + 2 * a2 * b2 + 2 * a3 * b3;
-        w3 = a1 * a1 + a2 * a2 + a3 * a3 - radius * radius;*/
-
-        if (w1 == 0)
-            return null;
+        if (w1 == 0) return null;
 
         double sq = alignZero(w2 * w2 - 4 * w1 * w3);
 
-        if (sq < 0)
-            return null;
+        if (sq < 0) return null;
 
         double t1, t2;
         sq = Math.sqrt(sq);
@@ -228,9 +181,9 @@ public class Tube extends RadialGeometry {
         t1 = alignZero((-w2 + sq) / (2 * w1));
         t2 = alignZero((-w2 - sq) / (2 * w1));
 
-        if (isZero(t1 - t2) || (t1 <= 0 && t2 <= 0))
-            return null;
+        if (isZero(t1 - t2) || (t1 <= 0 && t2 <= 0)) return null;
 
+        // swap (t1, t2)
         if (t1 > t2) {
             double temp = t1;
             t1 = t2;
@@ -239,23 +192,24 @@ public class Tube extends RadialGeometry {
 
         List<GeoPoint> points = new LinkedList<>();
 
-        if (t1 > 0)
-            points.add(new GeoPoint(this, ray.getPoint(t1)));
-
-        if (t2 > 0)
+        // t2 > t1
+        if (t2 > 0 && t2 < distance)
             points.add(new GeoPoint(this, ray.getPoint(t2)));
+
+        if (t1 > 0 && t1 < distance)
+            points.add(new GeoPoint(this, ray.getPoint(t1)));
 
         return points;
     }
 
     /**
-     *  multiplying a point3D by other point3D
-     * @param point Point3D
+     * multiplying a point3D by other point3D
+     *
+     * @param point      Point3D
      * @param otherPoint other Point3D
      * @return double value - the result of multiplying a point3D by other point3D
      */
-    private double PointNultPoint(Point3D point, Point3D otherPoint)
-    {
+    private double PointMultPoint(Point3D point, Point3D otherPoint) {
         return point.getX().get() * otherPoint.getX().get()
                 + point.getY().get() * otherPoint.getY().get()
                 + point.getZ().get() * otherPoint.getZ().get();
@@ -264,24 +218,24 @@ public class Tube extends RadialGeometry {
 
     /**
      * multiply point3D by scalar
+     *
      * @param point Point3D
      * @param scale double value to scale by
      * @return new Point3D the result of the multiply
      */
-    private Point3D Point3DScale(Point3D point, double scale)
-    {
+    private Point3D Point3DScale(Point3D point, double scale) {
         return new Point3D(point.getX().get() * scale,
-               point.getY().get() * scale, point.getZ().get() * scale);
+                point.getY().get() * scale, point.getZ().get() * scale);
     }
 
     /**
      * Subtraction between two points
-     * @param point Point3D
+     *
+     * @param point      Point3D
      * @param otherPoint other Point3D
      * @return new Point3D the result of the subtract
      */
-    private Point3D subtract(Point3D point, Point3D otherPoint )
-    {
+    private Point3D subtract(Point3D point, Point3D otherPoint) {
         return new Point3D(point.getX().get() - otherPoint.getX().get(),
                 point.getY().get() - otherPoint.getY().get(),
                 point.getZ().get() - otherPoint.getZ().get());
