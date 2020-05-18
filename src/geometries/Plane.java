@@ -106,24 +106,16 @@ public class Plane extends Geometry {
     }
 
     @Override
-    public List<GeoPoint> findIntersections(Ray ray) {
-        return findIntersections(ray, Double.MAX_VALUE);
-    }
-
-    @Override
-    public List<GeoPoint> findIntersections(Ray ray, double distance) {
+    public List<GeoPoint> findIntersections(Ray ray, double max) {
         Point3D p0 = ray.getPoint();
         Vector v = ray.getVector();
-        if (_p.equals(p0))
-            return null;
+        if (_p.equals(p0)) return null;
 
         double t1 = _normal.dotProduct(_p.subtract(p0));
         double t2 = _normal.dotProduct(v);
-        if (isZero(t1) || isZero(t2))
-            return null;
+        if (isZero(t1) || isZero(t2)) return null;
         double t = alignZero(t1 / t2);
-        if (t <= 0 || t > distance)
-            return null;
+        if (t <= 0 || alignZero(t - max) > 0) return null;
 
         return List.of(new GeoPoint(this, ray.getPoint(t)));
     }

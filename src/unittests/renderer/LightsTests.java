@@ -40,7 +40,7 @@ public class LightsTests {
         Render render = new Render(imageWriter, scene);
 
         render.renderImage();
-        render.getImageWriter().writeToImage();
+        render.writeToImage();
     }
 
     /**
@@ -63,7 +63,7 @@ public class LightsTests {
         Render render = new Render(imageWriter, scene);
 
         render.renderImage();
-        render.getImageWriter().writeToImage();
+        render.writeToImage();
     }
 
     /**
@@ -87,7 +87,7 @@ public class LightsTests {
         Render render = new Render(imageWriter, scene);
 
         render.renderImage();
-        render.getImageWriter().writeToImage();
+        render.writeToImage();
     }
 
     /**
@@ -113,7 +113,7 @@ public class LightsTests {
         Render render = new Render(imageWriter, scene);
 
         render.renderImage();
-        render.getImageWriter().writeToImage();
+        render.writeToImage();
     }
 
     /**
@@ -138,7 +138,7 @@ public class LightsTests {
         Render render = new Render(imageWriter, scene);
 
         render.renderImage();
-        render.getImageWriter().writeToImage();
+        render.writeToImage();
     }
 
     /**
@@ -164,7 +164,7 @@ public class LightsTests {
         Render render = new Render(imageWriter, scene);
 
         render.renderImage();
-        render.getImageWriter().writeToImage();
+        render.writeToImage();
     }
 
     /**
@@ -192,7 +192,7 @@ public class LightsTests {
         Render render = new Render(imageWriter, scene);
 
         render.renderImage();
-        render.getImageWriter().writeToImage();
+        render.writeToImage();
     }
 
     /**
@@ -220,7 +220,7 @@ public class LightsTests {
         Render render = new Render(imageWriter, scene);
 
         render.renderImage();
-        render.getImageWriter().writeToImage();
+        render.writeToImage();
     }
 
     /**
@@ -247,7 +247,7 @@ public class LightsTests {
         Render render = new Render(imageWriter, scene);
 
         render.renderImage();
-        render.getImageWriter().writeToImage();
+        render.writeToImage();
     }
 
     /**
@@ -283,7 +283,7 @@ public class LightsTests {
         Render render = new Render(imageWriter, scene);
 
         render.renderImage();
-        render.getImageWriter().writeToImage();
+        render.writeToImage();
     }
 
     /**
@@ -301,9 +301,6 @@ public class LightsTests {
                 new Tube(Color.BLACK, new Material(0.5, 0.5, 300),
                         new Point3D(0.1, 0, 0), new Vector(0, 0, -1), 50));
 
-        //scene.addLights(new DirectionalLight(new Color(300, 150, 150), new Vector(-1, 3, 1)));
-        //scene.addLights(new PointLight(new Color(200, 500, 500), new Point3D(0, 0, 0),
-        //        1, 0.0005, 0.0005));
         for (int i = 0; i < 15; ++i) {
             double j = 1 - i / 5.0;
             scene.addLights(new PointLight(new Color(300 * random(), 300 * random(), 300 * random()),
@@ -314,7 +311,7 @@ public class LightsTests {
         Render render = new Render(imageWriter, scene);
 
         render.renderImage();
-        render.getImageWriter().writeToImage();
+        render.writeToImage();
     }
 
     /**
@@ -343,6 +340,6 @@ public class LightsTests {
         Render render = new Render(imageWriter, scene);
 
         render.renderImage();
-        render.getImageWriter().writeToImage();
+        render.writeToImage();
     }
 }

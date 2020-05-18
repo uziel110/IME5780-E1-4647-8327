@@ -41,7 +41,7 @@ public class RenderTests {
 
         render.renderImage();
         render.printGrid(50, java.awt.Color.YELLOW);
-        render.getImageWriter().writeToImage();
+        render.writeToImage();
     }
     
     @Test
@@ -69,6 +69,6 @@ public class RenderTests {
 
         render.renderImage();
         render.printGrid(50, java.awt.Color.WHITE);
-        render.getImageWriter().writeToImage();
+        render.writeToImage();
     }
 }

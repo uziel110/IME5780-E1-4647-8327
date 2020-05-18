@@ -38,7 +38,7 @@ public class ShadowTests {
 		Render render = new Render(imageWriter, scene);
 
 		render.renderImage();
-		render.getImageWriter().writeToImage();
+		render.writeToImage();
 	}
 
 	/**
@@ -64,7 +64,7 @@ public class ShadowTests {
 		Render render = new Render(imageWriter, scene);
 
 		render.renderImage();
-		render.getImageWriter().writeToImage();
+		render.writeToImage();
 	}
 	
 	/**
@@ -90,7 +90,7 @@ public class ShadowTests {
 		Render render = new Render(imageWriter, scene);
 
 		render.renderImage();
-		render.getImageWriter().writeToImage();
+		render.writeToImage();
 	}
 
 	/**
@@ -116,7 +116,7 @@ public class ShadowTests {
 		Render render = new Render(imageWriter, scene);
 
 		render.renderImage();
-		render.getImageWriter().writeToImage();
+		render.writeToImage();
 	}	
 	
 	/**
@@ -142,7 +142,7 @@ public class ShadowTests {
 		Render render = new Render(imageWriter, scene);
 
 		render.renderImage();
-		render.getImageWriter().writeToImage();
+		render.writeToImage();
 	}	
 	
 	/**
@@ -171,7 +171,7 @@ public class ShadowTests {
 		Render render = new Render(imageWriter, scene);
 
 		render.renderImage();
-		render.getImageWriter().writeToImage();
+		render.writeToImage();
 	}
 
 }

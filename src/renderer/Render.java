@@ -43,7 +43,6 @@ public class Render {
      * @param gp the point that we want to check
      * @return return true if the pixel is unShaded
      */
-    // todo it not work
     private boolean unshaded(LightSource light, Vector l, Vector n, GeoPoint gp) {
         Vector lightDirection = l.scale(-1); // change direction, from point to lightSource
         Vector delta = n.scale(n.dotProduct(lightDirection) > 0 ? DELTA : -DELTA);
@@ -52,6 +51,8 @@ public class Render {
 
         List<GeoPoint> intersections =
                 _scene.getGeometries().findIntersections(lightRay, light.getDistance(point));
+        if (intersections != null)
+            System.out.println(intersections.get(0));
         return intersections == null;
     }
 
@@ -72,6 +73,7 @@ public class Render {
     public Scene getScene() {
         return _scene;
     }
+
 
     /**
      * create image from the scene
@@ -94,8 +96,6 @@ public class Render {
         GeoPoint closestPoint;
         for (int i = 0; i < nY; ++i) {
             for (int j = 0; j < nX; ++j) {
-                if (i == 180 && j == 200)
-                    ray = null;
                 ray = camera.constructRayThroughPixel(nX, nY, j, i, distance, width, height);
                 intersectionPoints = geometries.findIntersections(ray);
                 if (intersectionPoints == null)
@@ -146,7 +146,7 @@ public class Render {
             Vector l = lightSource.getL(geoPoint._point);
             // both ( n.dotProduct(l)) and (n.dotProduct(v)) with same sign
             if (n.dotProduct(l) * n.dotProduct(v) > 0)
-                if (unshaded(lightSource, l, n, geoPoint)) { // todo check for tubeMultiLight
+                if (unshaded(lightSource, l, n, geoPoint)) {
                     Color lightIntensity = lightSource.getIntensity(geoPoint._point);
                     color = color.add(calcDiffusive(kD, l, n, lightIntensity),
                             calcSpecular(kS, l, n, v, nShininess, lightIntensity));
@@ -211,5 +211,12 @@ public class Render {
             }
         }
         return closestPoint;
+    }
+
+    /**
+     * call to writeToImage in imageWriter class
+     */
+    public void writeToImage() {
+        _imageWriter.writeToImage();
     }
 }

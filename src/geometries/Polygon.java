@@ -100,15 +100,11 @@ public class Polygon extends Geometry {
         return _plane.getNormal();
     }
 
-    @Override
-    public List<GeoPoint> findIntersections(Ray ray) {
-        return findIntersections(ray, Double.MAX_VALUE);
-    }
 
     @Override
-    public List<GeoPoint> findIntersections(Ray ray, double distance) {
+    public List<GeoPoint> findIntersections(Ray ray, double max) {
 
-        List<GeoPoint> list = _plane.findIntersections(ray, distance);
+        List<GeoPoint> list = _plane.findIntersections(ray, max);
 
         if (list == null) return null;
 

@@ -143,12 +143,7 @@ public class Tube extends RadialGeometry {
     }
 
     @Override
-    public List<GeoPoint> findIntersections(Ray ray) {
-        return findIntersections(ray, Double.MAX_VALUE);
-    }
-
-    @Override
-    public List<GeoPoint> findIntersections(Ray ray, double distance) {
+    public List<GeoPoint> findIntersections(Ray ray, double max) {
 
         double radius = this.getRadius();
 
@@ -157,17 +152,17 @@ public class Tube extends RadialGeometry {
         Point3D axisRayPoint = new Point3D(_axisRay.getPoint());
         Vector axisRayVector = new Vector(_axisRay.getVector());
 
-        double alfa = PointMultPoint(axisRayVector.getEnd(), rayPoint);
-        alfa -= PointMultPoint(axisRayVector.getEnd(), axisRayPoint);
+        double alfa = pointMultPoint(axisRayVector.getEnd(), rayPoint);
+        alfa -= pointMultPoint(axisRayVector.getEnd(), axisRayPoint);
         double beta = rayVector.dotProduct(axisRayVector);
 
-        Point3D a = subtract(subtract(ray.getPoint(), _axisRay.getPoint()), (Point3DScale(axisRayVector.getEnd(), alfa)));
-        Point3D b = subtract(rayVector.getEnd(), (Point3DScale(axisRayVector.getEnd(), beta)));
+        Point3D a = subtract(subtract(ray.getPoint(), _axisRay.getPoint()), (point3DScale(axisRayVector.getEnd(), alfa)));
+        Point3D b = subtract(rayVector.getEnd(), (point3DScale(axisRayVector.getEnd(), beta)));
 
         double w1, w2, w3;
-        w1 = alignZero(PointMultPoint(b, b));
-        w2 = 2 * PointMultPoint(a, b);
-        w3 = PointMultPoint(a, a) - radius * radius;
+        w1 = alignZero(pointMultPoint(b, b));
+        w2 = 2 * pointMultPoint(a, b);
+        w3 = pointMultPoint(a, a) - radius * radius;
 
         if (w1 == 0) return null;
 
@@ -183,21 +178,16 @@ public class Tube extends RadialGeometry {
 
         if (isZero(t1 - t2) || (t1 <= 0 && t2 <= 0)) return null;
 
-        // swap (t1, t2)
-        if (t1 > t2) {
-            double temp = t1;
-            t1 = t2;
-            t2 = temp;
-        }
-
-        List<GeoPoint> points = new LinkedList<>();
-
-        // t2 > t1
-        if (t2 > 0 && t2 < distance)
-            points.add(new GeoPoint(this, ray.getPoint(t2)));
-
-        if (t1 > 0 && t1 < distance)
+        List<GeoPoint> points = null;
+        if (t1 > 0 && t1 < max) {
+            points = new LinkedList<>();
             points.add(new GeoPoint(this, ray.getPoint(t1)));
+        }
+        if (t2 > 0 && t2 < max) {
+            if (points == null)
+                points = new LinkedList<>();
+            points.add(new GeoPoint(this, ray.getPoint(t2)));
+        }
 
         return points;
     }
@@ -209,7 +199,7 @@ public class Tube extends RadialGeometry {
      * @param otherPoint other Point3D
      * @return double value - the result of multiplying a point3D by other point3D
      */
-    private double PointMultPoint(Point3D point, Point3D otherPoint) {
+    private double pointMultPoint(Point3D point, Point3D otherPoint) {
         return point.getX().get() * otherPoint.getX().get()
                 + point.getY().get() * otherPoint.getY().get()
                 + point.getZ().get() * otherPoint.getZ().get();
@@ -223,7 +213,7 @@ public class Tube extends RadialGeometry {
      * @param scale double value to scale by
      * @return new Point3D the result of the multiply
      */
-    private Point3D Point3DScale(Point3D point, double scale) {
+    private Point3D point3DScale(Point3D point, double scale) {
         return new Point3D(point.getX().get() * scale,
                 point.getY().get() * scale, point.getZ().get() * scale);
     }

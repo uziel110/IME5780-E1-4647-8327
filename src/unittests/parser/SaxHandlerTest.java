@@ -17,7 +17,7 @@ public class SaxHandlerTest {
         if (render != null) {
             render.renderImage();
             render.printGrid(50, java.awt.Color.MAGENTA);
-            render.getImageWriter().writeToImage();
+            render.writeToImage();
         }
     }
 }
