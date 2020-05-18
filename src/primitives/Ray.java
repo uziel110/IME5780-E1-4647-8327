@@ -4,8 +4,26 @@ package primitives;
  * class that implements ray
  */
 public class Ray {
+    /**
+     * Fixed size for moving the beginning of the beam
+     * at shading rays transparency and reflection
+     */
+    private static final double DELTA = 0.1;
     private Point3D _point;
     private Vector _vector;
+
+    /**
+     * constructor of Ray that his head moved DELTA from the surface in vector direction
+     *
+     * @param head      on the surface of the geometry
+     * @param direction the vector that we move his head by DELTA
+     * @param normal    vector normal to the reflected geometry
+     */
+    public Ray(Point3D head, Vector direction, Vector normal) {
+        // if normal.dotProduct(direction) == 0 so the angle is 90 degree and the ray continue straight
+        _point = head.add(normal.scale(normal.dotProduct(direction) > 0 ? DELTA : -DELTA));
+        _vector = direction.normalized();
+    }
 
     /**
      * constructor of Ray

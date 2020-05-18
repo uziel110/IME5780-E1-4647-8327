@@ -17,11 +17,6 @@ import static primitives.Util.alignZero;
 public class Render {
     private static final int MAX_CALC_COLOR_LEVEL = 10;
     private static final double MIN_CALC_COLOR_K = 0.001;
-    /**
-     * Fixed size for moving the beginning of the beam
-     * at shading rays transparency and reflection
-     */
-    private static final double DELTA = 0.1;
     private ImageWriter _imageWriter;
     private Scene _scene;
 
@@ -47,15 +42,15 @@ public class Render {
      */
     private boolean unshaded(LightSource light, Vector l, Vector n, GeoPoint gp) {
         Vector lightDirection = l.scale(-1); // change direction, from point to lightSource
-        Vector delta = n.scale(n.dotProduct(lightDirection) > 0 ? DELTA : -DELTA);
-        Point3D point = gp._point.add(delta);
-        Ray lightRay = new Ray(point, lightDirection); // reversed lightRay
-
-        List<GeoPoint> intersections =
-                _scene.getGeometries().findIntersections(lightRay, light.getDistance(point));
-        if (intersections != null)
-            System.out.println(intersections.get(0));
-        return intersections == null;
+        Ray lightRay = new Ray(gp._point, lightDirection, n);
+        List<GeoPoint> intersections = //todo check light.getDistance(gp._point) if need -DELTA
+                _scene.getGeometries().findIntersections(lightRay, light.getDistance(gp._point));
+        if (intersections == null)
+            return true;
+        for (GeoPoint geoPoint : intersections)
+            if (geoPoint._geometry.getMaterial().getKT() == 0)
+                return false;
+        return true;
     }
 
     /**
@@ -94,7 +89,6 @@ public class Render {
         double height = _imageWriter.getHeight();
 
         Ray ray;
-        List<GeoPoint> intersectionPoints;
         GeoPoint closestPoint;
         for (int i = 0; i < nY; ++i) {
             for (int j = 0; j < nX; ++j) {
@@ -125,15 +119,28 @@ public class Render {
         }
     }
 
+    /**
+     * return color of this point
+     * calculate all the reflection and refraction rays
+     * start recursive call with MAX_CALC_COLOR_LEVEL and k = 0
+     *
+     * @param geoPoint the point we check for color
+     * @param inRay    the ray the intersect with the geoPoint
+     * @return color of this point
+     */
     private Color calcColor(GeoPoint geoPoint, Ray inRay) {
         return calcColor(geoPoint, inRay, MAX_CALC_COLOR_LEVEL, 1.0)
                 .add(_scene.getAmbientLight().getIntensity());
     }
 
     /**
-     * return color color of this point
+     * return color of this point
+     * calculate all the reflection and refraction rays
      *
-     * @param geoPoint Point3D
+     * @param geoPoint the point we check for color
+     * @param inRay    ray that intersect with the geometry
+     * @param level    the number of recursive ray
+     * @param k        factor of light intensity
      * @return Color of this point
      */
     private Color calcColor(GeoPoint geoPoint, Ray inRay, int level, double k) {
@@ -159,14 +166,14 @@ public class Render {
         if (level == 1) return Color.BLACK;
         double kR = geoPoint._geometry.getMaterial().getKR(), kkr = k * kR;
         if (kkr > MIN_CALC_COLOR_K) {
-            Ray reflectedRay = constructReflectedRay(n, geoPoint._point, inRay);
+            Ray reflectedRay = constructReflectedRay(n, geoPoint, inRay);
             GeoPoint reflectedPoint = findClosestIntersection(reflectedRay);
             if (reflectedPoint != null)
                 color = color.add(calcColor(reflectedPoint, reflectedRay, level - 1, kkr).scale(kR));
         }
         double kT = geoPoint._geometry.getMaterial().getKT(), kkt = k * kT;
         if (kkt > MIN_CALC_COLOR_K) {
-            Ray refractedRay = constructRefractedRay(geoPoint._point, inRay);
+            Ray refractedRay = constructRefractedRay(geoPoint, inRay);
             GeoPoint refractedPoint = findClosestIntersection(refractedRay);
             if (refractedPoint != null)
                 color = color.add(calcColor(refractedPoint, refractedRay, level - 1, kkt).scale(kT));
@@ -175,40 +182,29 @@ public class Render {
     }
 
     /**
-     * return new ray refracted from the surface at the point
-     *
-     * @param point point on the surface of the geometry
-     * @param inRay ray that intersect with the geometry
-     * @return return new ray refracted from the surface at the point
-     */
-    private Ray constructRefractedRay(Point3D point, Ray inRay) {
-        return new Ray(point, inRay.getVector()); // refracted lightRay
-    }
-
-    /**
-     * return the closest point to the head of the reflected ray
-     *
-     * @param reflectedRay the ray that we find closest point on it
-     * @return return the closest point to the head of the reflected ray
-     */
-    private GeoPoint findClosestIntersection(Ray reflectedRay) {
-        List<GeoPoint> intersectionPoints = _scene.getGeometries().findIntersections(reflectedRay);
-        return getClosestPoint(reflectedRay.getPoint(), intersectionPoints);
-    }
-
-    /**
      * return new ray reflected from the surface at the point
      *
-     * @param n     vector normal to the reflected geometry
-     * @param point point on the surface of the geometry
-     * @param inRay ray that intersect with the geometry
+     * @param n        vector normal to the reflected geometry
+     * @param geoPoint point on the surface of the geometry
+     * @param inRay    ray that intersect with the geometry
      * @return return new ray reflected from the surface at the point
      */
-    private Ray constructReflectedRay(Vector n, Point3D point, Ray inRay) {
+    private Ray constructReflectedRay(Vector n, GeoPoint geoPoint, Ray inRay) {
         Vector reflectedVector = inRay.getVector().subtract(n.scale(inRay.getVector().dotProduct(n) * 2)); //r
-        Vector delta = n.scale(n.dotProduct(reflectedVector) > 0 ? DELTA : -DELTA);
-        Point3D movedPoint = point.add(delta);
-        return new Ray(movedPoint, reflectedVector); // reflected lightRay
+        return new Ray(geoPoint._point, reflectedVector, n);
+    }
+
+    /**
+     * return new ray refracted from the surface at the point
+     *
+     * @param geoPoint point on the surface of the geometry
+     * @param inRay    ray that intersect with the geometry
+     * @return return new ray refracted from the surface at the point
+     */
+    private Ray constructRefractedRay(GeoPoint geoPoint, Ray inRay) {
+        // todo check if need DELTA
+        return new Ray(geoPoint._point, inRay.getVector(),
+                geoPoint._geometry.getNormal(geoPoint._point));// refracted lightRay
     }
 
     /**
@@ -242,9 +238,21 @@ public class Render {
     private Color calcSpecular(double kS, Vector l, Vector n, Vector v, int nShininess, Color lightIntensity) {
         Vector r = l.subtract(n.scale(l.dotProduct(n) * 2));
         double minusVDotR = alignZero(r.dotProduct(v.scale(-1)));
-        if (minusVDotR <= 0)
-            return Color.BLACK;
+        if (minusVDotR <= 0) return Color.BLACK;
         return lightIntensity.scale(Math.pow(minusVDotR, nShininess) * kS);
+    }
+
+    /**
+     * return the closest point to the head of the reflected ray
+     *
+     * @param ray the ray that we find closest point on it
+     * @return return the closest point to the head of the reflected ray
+     */
+    private GeoPoint findClosestIntersection(Ray ray) {
+        List<GeoPoint> intersectionPoints = _scene.getGeometries().findIntersections(ray);
+        if (intersectionPoints == null)
+            return null;
+        return getClosestPoint(ray.getPoint(), intersectionPoints);
     }
 
     /**
