@@ -119,7 +119,7 @@ public class Scene {
      * @param camera
      */
     public void setCamera(Camera camera) {
-        _camera = new Camera(camera.getLocation(), camera.getvTo(), camera.getvUp());
+        _camera = new Camera(camera.getLocation(), camera.getVTo(), camera.getVUp());
     }
 
     /**

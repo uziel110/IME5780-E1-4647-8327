@@ -2,7 +2,6 @@ package renderer;
 
 import elements.Camera;
 import elements.LightSource;
-import geometries.Intersectable;
 import geometries.Intersectable.GeoPoint;
 import primitives.*;
 import scene.Scene;
@@ -78,7 +77,6 @@ public class Render {
     public void renderImage() {
         // scene parameters
         Camera camera = _scene.getCamera();
-        Intersectable geometries = _scene.getGeometries();
         java.awt.Color background = _scene.getBackground().getColor();
         double distance = _scene.getDistance();
 
@@ -95,7 +93,7 @@ public class Render {
                 ray = camera.constructRayThroughPixel(nX, nY, j, i, distance, width, height);
                 closestPoint = findClosestIntersection(ray);
                 _imageWriter.writePixel(j, i, closestPoint == null ?
-                        _scene.getBackground().getColor() :
+                        background :
                         calcColor(closestPoint, ray).getColor());
             }
         }
