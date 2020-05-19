@@ -31,6 +31,31 @@ public class Render {
     }
 
     /**
+     * return the factor of light shaded by transparency object
+     *
+     * @param ls light source
+     * @param l  vector from the light to that point
+     * @param n  vector normal to the geometry in that point
+     * @param gp the point that we want to check
+     * @return the factor of light shaded by transparency object
+     */
+    private double transparency(LightSource ls, Vector l, Vector n, GeoPoint gp) {
+            Vector lightDirection = l.scale(-1); // change direction, from point to lightSource
+            Ray lightRay = new Ray(gp._point, lightDirection, n);
+            List<GeoPoint> intersections =
+                    _scene.getGeometries().findIntersections(lightRay);
+            if (intersections == null) return 1.0;
+
+            double ktr = 1.0;
+        for (GeoPoint geoPoint : intersections)
+            if (alignZero(geoPoint._point.distance(gp._point) - ls.getDistance(gp._point)) <= 0) {
+                ktr *= geoPoint._geometry.getMaterial().getKT();
+                if (ktr < MIN_CALC_COLOR_K) return 0.0;
+            }
+        return ktr;
+    }
+
+    /**
      * Check if the pixel is shaded or not
      * by checking if a light source is blocked by other objects
      *
@@ -42,34 +67,16 @@ public class Render {
     private boolean unshaded(LightSource light, Vector l, Vector n, GeoPoint gp) {
         Vector lightDirection = l.scale(-1); // change direction, from point to lightSource
         Ray lightRay = new Ray(gp._point, lightDirection, n);
-        List<GeoPoint> intersections = //todo check light.getDistance(gp._point) if need -DELTA
-                _scene.getGeometries().findIntersections(lightRay, light.getDistance(gp._point));
+        List<GeoPoint> intersections =
+                _scene.getGeometries().findIntersections(lightRay);
         if (intersections == null)
             return true;
         for (GeoPoint geoPoint : intersections)
-            if (geoPoint._geometry.getMaterial().getKT() == 0)
+            if (alignZero(geoPoint._point.distance(gp._point) - light.getDistance(gp._point)) <= 0
+                    && geoPoint._geometry.getMaterial().getKT() == 0)
                 return false;
         return true;
     }
-
-    /**
-     * return imageWriter
-     *
-     * @return imageWriter
-     */
-    public ImageWriter getImageWriter() {
-        return _imageWriter;
-    }
-
-    /**
-     * return scene
-     *
-     * @return scene
-     */
-    public Scene getScene() {
-        return _scene;
-    }
-
 
     /**
      * create image from the scene
@@ -142,9 +149,7 @@ public class Render {
      * @return Color of this point
      */
     private Color calcColor(GeoPoint geoPoint, Ray inRay, int level, double k) {
-        if (level == 0 || k < MIN_CALC_COLOR_K) return Color.BLACK;
         Color color = geoPoint._geometry.getEmission(); // ie
-
         Vector v = geoPoint._point.subtract(_scene.getCamera().getLocation()).normalize();
         Vector n = geoPoint._geometry.getNormal(geoPoint._point);
         Material material = geoPoint._geometry.getMaterial();
@@ -154,12 +159,14 @@ public class Render {
         for (LightSource lightSource : _scene.getLights()) {
             Vector l = lightSource.getL(geoPoint._point);
             // both ( n.dotProduct(l)) and (n.dotProduct(v)) with same sign
-            if (n.dotProduct(l) * n.dotProduct(v) > 0)
-                if (unshaded(lightSource, l, n, geoPoint)) {
-                    Color lightIntensity = lightSource.getIntensity(geoPoint._point);
+            if (n.dotProduct(l) * n.dotProduct(v) > 0) {
+                double ktr = transparency(lightSource, l, n, geoPoint);
+                if (ktr * k > MIN_CALC_COLOR_K) {
+                    Color lightIntensity = lightSource.getIntensity(geoPoint._point).scale(ktr);
                     color = color.add(calcDiffusive(kD, l, n, lightIntensity),
                             calcSpecular(kS, l, n, v, nShininess, lightIntensity));
                 }
+            }
         }
         if (level == 1) return Color.BLACK;
         double kR = geoPoint._geometry.getMaterial().getKR(), kkr = k * kR;
@@ -283,6 +290,24 @@ public class Render {
             }
         }
         return closestPoint;
+    }
+
+    /**
+     * return imageWriter
+     *
+     * @return imageWriter
+     */
+    public ImageWriter getImageWriter() {
+        return _imageWriter;
+    }
+
+    /**
+     * return scene
+     *
+     * @return scene
+     */
+    public Scene getScene() {
+        return _scene;
     }
 
     /**
