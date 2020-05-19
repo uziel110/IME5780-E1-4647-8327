@@ -137,7 +137,7 @@ public class Render {
      * @return Color of this point
      */
     private Color calcColor(GeoPoint geoPoint, Ray inRay, int level, double k) {
-        if (level == 0 || k < MIN_CALC_COLOR_K) return Color.BLACK;
+        //if (level == 0 || k < MIN_CALC_COLOR_K) return Color.BLACK;
         Color color = geoPoint._geometry.getEmission(); // ie
 
         Vector v = geoPoint._point.subtract(_scene.getCamera().getLocation()).normalize();
@@ -193,6 +193,8 @@ public class Render {
      */
     private GeoPoint findClosestIntersection(Ray reflectedRay) {
         List<GeoPoint> intersectionPoints = _scene.getGeometries().findIntersections(reflectedRay);
+        if(intersectionPoints == null)
+            return null;
         return getClosestPoint(reflectedRay.getPoint(), intersectionPoints);
     }
 
