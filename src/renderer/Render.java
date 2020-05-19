@@ -43,15 +43,15 @@ public class Render {
         Vector lightDirection = l.scale(-1); // change direction, from point to lightSource
         Ray lightRay = new Ray(gp._point, lightDirection, n);
         List<GeoPoint> intersections =
-                _scene.getGeometries().findIntersections(lightRay);
+                _scene.getGeometries().findIntersections(lightRay, ls.getDistance(gp._point));
         if (intersections == null) return 1.0;
 
         double ktr = 1.0;
-        for (GeoPoint geoPoint : intersections)
-            if (alignZero(geoPoint._point.distance(gp._point) - ls.getDistance(gp._point)) <= 0) {
-                ktr *= geoPoint._geometry.getMaterial().getKT();
-                if (ktr < MIN_CALC_COLOR_K) return 0.0;
-            }
+        for (GeoPoint geoPoint : intersections) {
+            ktr *= geoPoint._geometry.getMaterial().getKT();
+            if (ktr < MIN_CALC_COLOR_K)
+                return 0.0;
+        }
         return ktr;
     }
 
@@ -68,11 +68,10 @@ public class Render {
         Vector lightDirection = l.scale(-1); // change direction, from point to lightSource
         Ray lightRay = new Ray(gp._point, lightDirection, n);
         List<GeoPoint> intersections =
-                _scene.getGeometries().findIntersections(lightRay);
+                _scene.getGeometries().findIntersections(lightRay, light.getDistance(gp._point));
         if (intersections == null) return true;
         for (GeoPoint geoPoint : intersections)
-            if (alignZero(geoPoint._point.distance(gp._point) - light.getDistance(gp._point)) <= 0
-                    && geoPoint._geometry.getMaterial().getKT() == 0)
+            if (geoPoint._geometry.getMaterial().getKT() == 0)
                 return false;
         return true;
     }
@@ -169,7 +168,7 @@ public class Render {
         double kR = geoPoint._geometry.getMaterial().getKR(), kkr = k * kR;
         if (kkr > MIN_CALC_COLOR_K)
             color = color.add(calcKK(level, kR, kkr, constructReflectedRay(n, geoPoint, inRay)));
-        double kT = geoPoint._geometry.getMaterial().getKR(), kkt = k * kT;
+        double kT = geoPoint._geometry.getMaterial().getKT(), kkt = k * kT;
         if (kkt > MIN_CALC_COLOR_K)
             color = color.add(calcKK(level, kT, kkt, constructRefractedRay(n, geoPoint, inRay)));
         return color;
