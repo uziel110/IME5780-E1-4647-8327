@@ -1,9 +1,7 @@
 package renderer;
 
-import elements.AmbientLight;
-import elements.Camera;
-import elements.PointLight;
-import elements.SpotLight;
+import elements.*;
+import geometries.Plane;
 import geometries.Sphere;
 import geometries.Triangle;
 import geometries.Tube;
@@ -108,14 +106,15 @@ public class ReflectionRefractionTests {
     }
 
     /**
-     * Produce a picture of a two triangles lighted by a spot light with a partially transparent Sphere
-     * producing partial shadow
+     * our image
+     * Produce a picture of a reflection triangles
+     * and a partially transparent Sphere and tube lighted by point lights
+     * producing partial shadow and reflection
      */
     @Test
     public void ourTest() {
         Scene scene = new Scene("Test scene");
-        int distance =1000;
-        //scene.setCamera(new Camera(new Point3D(200, 500, 1000), new Vector(-40, -100, -200), new Vector(-100, -100, 70)));
+        int distance = 1000;
         scene.setCamera(new Camera(new Point3D(0, 0, 50), distance, 0.5, 1, Math.PI));
         scene.setDistance(distance);
         scene.setBackground(Color.BLACK);
@@ -143,6 +142,56 @@ public class ReflectionRefractionTests {
                 new Point3D(0, 0, 100), 1, 4E-5, 2E-7));
 
         ImageWriter imageWriter = new ImageWriter("ourTest", 200, 200, 600, 600);
+        Render render = new Render(imageWriter, scene);
+
+        render.renderImage();
+        render.writeToImage();
+    }
+
+    /**
+     * bonus image
+     * Produce a picture of a reflection triangles
+     * and a partially transparent Sphere and tube lighted by point lights
+     * producing partial shadow and reflection
+     */
+    @Test
+    public void bonusTest() {
+        Scene scene = new Scene("Test scene");
+        final int DISTANCE = 2500;
+        scene.setCamera(new Camera(new Point3D(0, 0, 500), DISTANCE, 0.3, 1.5, Math.PI));
+        scene.setDistance(400);
+        scene.setBackground(Color.BLACK);
+        scene.setAmbientLight(new AmbientLight(new Color(java.awt.Color.WHITE), 0.15));
+        final double SCALED = 10, WIDTH = 100 * SCALED, CENTER_Z = 0 * SCALED;
+        final double KD = 0.3, KS = 1 - KD, KT = 0, KR = 1;
+        Color triangleColor = new Color(java.awt.Color.black);
+        scene.addGeometries(
+                new Triangle(triangleColor, new Material(KD, KS, 30, KT, KR),
+                        new Point3D(0, -WIDTH, 0), new Point3D(-WIDTH, 0, 0), new Point3D(0, 0, CENTER_Z)),
+                new Triangle(triangleColor, new Material(KD, KS, 30, KT, KR),
+                        new Point3D(-WIDTH, 0, 0), new Point3D(0, WIDTH, 0), new Point3D(0, 0, CENTER_Z)),
+                new Triangle(triangleColor, new Material(KD, KS, 30, KT, KR),
+                        new Point3D(0, WIDTH, 0), new Point3D(WIDTH, 0, 0), new Point3D(0, 0, CENTER_Z)),
+                new Triangle(triangleColor, new Material(KD, KS, 30, KT, KR),
+                        new Point3D(WIDTH, 0, 0), new Point3D(0, -WIDTH, 0), new Point3D(0, 0, CENTER_Z)),
+                new Plane(new Color(java.awt.Color.black), new Material(0.5, 0.5, 30, 0, 0),
+                        new Point3D(0, 0, 0), new Vector(0, 0, 1)),
+                new Sphere(new Color(java.awt.Color.blue), new Material(0.2, 0.2, 30, 0.6, 0.4),
+                        300, new Point3D(0, 0, 300)));
+        double r = 1000;
+        final int NUM_OF_TUBES = 10;
+        for (int i = 0; i < NUM_OF_TUBES; ++i) {
+            double theta = Math.PI * 2 * (i * 1.0 / NUM_OF_TUBES);
+            scene.addGeometries(
+                    new Tube(new Color(109, 82, 16), new Material(0.3, 0.7, 50, 0, 0),
+                            new Point3D(r * Math.cos(theta), r * Math.sin(theta), 10), new Vector(0, 0, 1), 100));
+        }
+        scene.addLights(new PointLight(new Color(654, 495, 96),
+                new Point3D(0, 0, 1500), 1, 4E-5, 2E-7));
+
+        scene.addLights(new DirectionalLight(new Color(200, 200, 200), new Vector(-1, 1, -1)));
+
+        ImageWriter imageWriter = new ImageWriter("bonusTest", 1200, 600, 3600, 1800);
         Render render = new Render(imageWriter, scene);
 
         render.renderImage();

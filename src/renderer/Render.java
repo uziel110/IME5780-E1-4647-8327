@@ -267,17 +267,6 @@ public class Render {
     /**
      * return GeoPoint the point with minimal distance from the ray begin point
      *
-     * @param geoPoints list of Point3D
-     * @return GeoPoint the closest point to the ray begin point
-     */
-    //for the test the access permission needs to be changed to public
-    private GeoPoint getClosestPoint(List<GeoPoint> geoPoints) {
-        return getClosestPoint(_scene.getCamera().getLocation(), geoPoints);
-    }
-
-    /**
-     * return GeoPoint the point with minimal distance from the ray begin point
-     *
      * @param point     point to measure distance from
      * @param geoPoints list of Point3D
      * @return GeoPoint the closest point to the ray begin point
