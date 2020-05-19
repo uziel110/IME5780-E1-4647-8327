@@ -4,9 +4,9 @@ import elements.AmbientLight;
 import elements.Camera;
 import elements.PointLight;
 import elements.SpotLight;
-import geometries.Plane;
 import geometries.Sphere;
 import geometries.Triangle;
+import geometries.Tube;
 import org.junit.Test;
 import primitives.Color;
 import primitives.Material;
@@ -114,29 +114,33 @@ public class ReflectionRefractionTests {
     @Test
     public void ourTest() {
         Scene scene = new Scene("Test scene");
-        scene.setCamera(new Camera(new Point3D(500, 150, 1500), new Vector(-50, -50, -100), new Vector(50, -50, 0)));
-        scene.setDistance(200);
+        int distance =1000;
+        //scene.setCamera(new Camera(new Point3D(200, 500, 1000), new Vector(-40, -100, -200), new Vector(-100, -100, 70)));
+        scene.setCamera(new Camera(new Point3D(0, 0, 50), distance, 0.5, 1, Math.PI));
+        scene.setDistance(distance);
         scene.setBackground(Color.BLACK);
         scene.setAmbientLight(new AmbientLight(new Color(java.awt.Color.WHITE), 0.15));
-
+        final double SCALE_TRIANGLE = 200, CENTER_Z = 50;
+        final double KR = 1.0, KT = 0.0, KS = 0.8, KD = 1 - KS;
+        Color triangleColor = new Color(java.awt.Color.black);
         scene.addGeometries(
-                new Plane(new Color(java.awt.Color.blue),
-                        new Material(0.2, 0.2, 30, 0, 0.7),
-                        new Point3D(0, -4, 0), new Point3D(-4, 0, 0), new Point3D(0, 0, -1)),
-                new Plane(new Color(java.awt.Color.blue),
-                        new Material(0.2, 0.2, 30, 0, 0.7),
-                        new Point3D(-4, 0, 0), new Point3D(0, 4, 0), new Point3D(0, 0, -1)),
-                new Plane(new Color(java.awt.Color.blue),
-                        new Material(0.2, 0.2, 30, 0, 0.7),
-                        new Point3D(0, 4, 0), new Point3D(4, 0, 0), new Point3D(0, 0, -1)),
-                new Plane(new Color(java.awt.Color.blue),
-                        new Material(0.2, 0.2, 30, 0, 0.7),
-                        new Point3D(4, 0, 0), new Point3D(0, -4, 0), new Point3D(0, 0, -1)),
-                new Sphere(new Color(java.awt.Color.green), new Material(0.2, 0.2, 30, 0.6, 0.4), // )
-                        30, new Point3D(0, 0, 80)));
+                new Triangle(triangleColor, new Material(KD, KS, 30, KT, KR),
+                        new Point3D(0, -SCALE_TRIANGLE, 0), new Point3D(-SCALE_TRIANGLE, 0, 0), new Point3D(0, 0, CENTER_Z)),
+                new Triangle(triangleColor, new Material(KD, KS, 30, KT, KR),
+                        new Point3D(-SCALE_TRIANGLE, 0, 0), new Point3D(0, SCALE_TRIANGLE, 0), new Point3D(0, 0, CENTER_Z)),
+                new Triangle(triangleColor, new Material(KD, KS, 30, KT, KR),
+                        new Point3D(0, SCALE_TRIANGLE, 0), new Point3D(SCALE_TRIANGLE, 0, 0), new Point3D(0, 0, CENTER_Z)),
+                new Triangle(triangleColor, new Material(KD, KS, 30, KT, KR),
+                        new Point3D(SCALE_TRIANGLE, 0, 0), new Point3D(0, -SCALE_TRIANGLE, 0), new Point3D(0, 0, CENTER_Z)),
+                new Sphere(new Color(java.awt.Color.blue), new Material(0.2, 0.2, 30, 0.6, 0.4), // )
+                        30, new Point3D(0, 0, 80)),
+                new Tube(new Color(java.awt.Color.red), new Material(0.5, 0.2, 30, 0, 0.2),
+                        new Point3D(0, 0, 80), new Vector(0, 1, 0), 10));
 
-        scene.addLights(new PointLight(new Color(700, 400, 400), //
+        scene.addLights(new PointLight(new Color(700, 400, 400),
                 new Point3D(60, -50, 100), 1, 4E-5, 2E-7));
+        scene.addLights(new PointLight(new Color(0, 500, 400),
+                new Point3D(0, 0, 100), 1, 4E-5, 2E-7));
 
         ImageWriter imageWriter = new ImageWriter("ourTest", 200, 200, 600, 600);
         Render render = new Render(imageWriter, scene);
