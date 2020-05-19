@@ -38,7 +38,7 @@ public interface Intersectable {
         public Point3D _point;
 
         /**
-         * constructor for GeoPoint calss that receive two parameters
+         * constructor for GeoPoint class that receive two parameters
          *
          * @param geometry Geometry shape
          * @param point    Point3D of intersection that lie on the geometry
