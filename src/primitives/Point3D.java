@@ -4,7 +4,9 @@ package primitives;
  * class that implements 3d point
  */
 public class Point3D {
-    //static point ZERO
+    /**
+     * static point ZERO
+     */
     public final static Point3D ZERO = new Point3D(0, 0, 0);
     Coordinate _x;
     Coordinate _y;

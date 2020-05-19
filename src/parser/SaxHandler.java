@@ -43,6 +43,7 @@ public class SaxHandler extends DefaultHandler {
 
     /**
      * create render object from xml file
+     *
      * @return render object
      */
     public Render parseDocument() {
@@ -128,7 +129,6 @@ public class SaxHandler extends DefaultHandler {
                         screenWidth, screenHeight, nX, nY);
             }
         } catch (Exception e) {
-            return;
         }
     }
 

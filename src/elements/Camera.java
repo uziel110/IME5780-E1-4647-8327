@@ -78,7 +78,7 @@ public class Camera {
      *
      * @return vector direction forward
      */
-    public Vector getvTo() {
+    public Vector getVTo() {
         return _vTo;
     }
 
@@ -87,7 +87,7 @@ public class Camera {
      *
      * @return vector direction up
      */
-    public Vector getvUp() {
+    public Vector getVUp() {
         return _vUp;
     }
 
@@ -96,7 +96,7 @@ public class Camera {
      *
      * @return vector direction right
      */
-    public Vector getvRight() {
+    public Vector getVRight() {
         return _vRight;
     }
 }
