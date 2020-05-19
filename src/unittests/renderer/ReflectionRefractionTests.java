@@ -1,10 +1,7 @@
 package renderer;
 
 import elements.*;
-import geometries.Plane;
-import geometries.Sphere;
-import geometries.Triangle;
-import geometries.Tube;
+import geometries.*;
 import org.junit.Test;
 import primitives.Color;
 import primitives.Material;
@@ -165,7 +162,7 @@ public class ReflectionRefractionTests {
         final double SCALED = 10, WIDTH = 100 * SCALED, CENTER_Z = 0 * SCALED;
         final double KD = 0.3, KS = 1 - KD, KT = 0, KR = 1;
         Color triangleColor = new Color(java.awt.Color.black);
-        scene.addGeometries(
+        scene.addGeometries(/*
                 new Triangle(triangleColor, new Material(KD, KS, 30, KT, KR),
                         new Point3D(0, -WIDTH, 0), new Point3D(-WIDTH, 0, 0), new Point3D(0, 0, CENTER_Z)),
                 new Triangle(triangleColor, new Material(KD, KS, 30, KT, KR),
@@ -173,7 +170,7 @@ public class ReflectionRefractionTests {
                 new Triangle(triangleColor, new Material(KD, KS, 30, KT, KR),
                         new Point3D(0, WIDTH, 0), new Point3D(WIDTH, 0, 0), new Point3D(0, 0, CENTER_Z)),
                 new Triangle(triangleColor, new Material(KD, KS, 30, KT, KR),
-                        new Point3D(WIDTH, 0, 0), new Point3D(0, -WIDTH, 0), new Point3D(0, 0, CENTER_Z)),
+                        new Point3D(WIDTH, 0, 0), new Point3D(0, -WIDTH, 0), new Point3D(0, 0, CENTER_Z)),*/
                 new Plane(new Color(java.awt.Color.black), new Material(0.5, 0.5, 30, 0, 0),
                         new Point3D(0, 0, 0), new Vector(0, 0, 1)),
                 new Sphere(new Color(java.awt.Color.blue), new Material(0.2, 0.2, 30, 0.6, 0.4),
@@ -186,6 +183,13 @@ public class ReflectionRefractionTests {
                     new Tube(new Color(109, 82, 16), new Material(0.3, 0.7, 50, 0, 0),
                             new Point3D(r * Math.cos(theta), r * Math.sin(theta), 10), new Vector(0, 0, 1), 100));
         }
+        Point3D[] polygonPoints = new Point3D[NUM_OF_TUBES];
+        for (int i = 0; i < NUM_OF_TUBES; ++i) {
+            double theta = Math.PI * 2 * (i * 1.0 / NUM_OF_TUBES);
+            polygonPoints[i] = new Point3D(r * Math.cos(theta), r * Math.sin(theta), 10);
+        }
+        scene.addGeometries(new Polygon(triangleColor, new Material(KD, KS, 30, KT, KR), polygonPoints));
+
         scene.addLights(new PointLight(new Color(654, 495, 96),
                 new Point3D(0, 0, 1500), 1, 4E-5, 2E-7));
 
