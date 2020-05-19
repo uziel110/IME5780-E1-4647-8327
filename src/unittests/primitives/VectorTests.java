@@ -7,6 +7,9 @@ import static org.junit.Assert.*;
 import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
+/**
+ * Testing Vector class
+ */
 public class VectorTests {
 
     /**
@@ -115,7 +118,7 @@ public class VectorTests {
         Vector v = new Vector(1, 2, 3);
         Vector vCopy = new Vector(v);
         Vector vCopyNormalize = vCopy.normalize();
-        assertTrue("ERROR: normalize() function creates a new vector", vCopy == vCopyNormalize);
+        assertSame("ERROR: normalize() function creates a new vector", vCopy, vCopyNormalize);
         assertEquals("ERROR: normalize() result is not a unit vector", 1, vCopyNormalize.length(), 0.00000001);
     }
 
@@ -127,6 +130,6 @@ public class VectorTests {
         // test vector normalization vs vector length and cross-product
         Vector v = new Vector(1, 2, 3);
         Vector u = v.normalized();
-        assertFalse("ERROR: normalized() function does not create a new vector", u == v);
+        assertNotSame("ERROR: normalized() function does not create a new vector", u, v);
     }
 }

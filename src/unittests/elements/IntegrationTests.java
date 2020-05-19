@@ -1,8 +1,10 @@
 package elements;
 
-import geometries.*;
+import geometries.Geometry;
 import geometries.Intersectable.GeoPoint;
-
+import geometries.Plane;
+import geometries.Sphere;
+import geometries.Triangle;
 import org.junit.Test;
 import primitives.Point3D;
 import primitives.Vector;
@@ -12,6 +14,10 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
+
+/**
+ * Testing integration of geometry objects
+ */
 public class IntegrationTests {
 
     List<GeoPoint> tests;
@@ -109,12 +115,13 @@ public class IntegrationTests {
 
     /**
      * find integration of the geometry object with the camera
+     *
      * @param object geometry object
      * @param camera camera
      * @return list of integrations of the geometry object with ray from the camera
      */
     private List<GeoPoint> tests(Geometry object, Camera camera) {
-        List<GeoPoint> result = new LinkedList<>();;
+        List<GeoPoint> result = new LinkedList<>();
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
                 tests = object.findIntersections(camera.constructRayThroughPixel(3, 3, j, i, 1, 3, 3));

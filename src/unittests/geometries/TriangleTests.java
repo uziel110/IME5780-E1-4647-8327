@@ -11,6 +11,9 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+/**
+ * Testing Triangles
+ */
 public class TriangleTests {
     /**
      * Test method for {@link Triangle#findIntersections(Ray)} (geometries.Triangle)}.
