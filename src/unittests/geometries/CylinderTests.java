@@ -6,6 +6,9 @@ import primitives.Vector;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ *   Testing Cylinders
+ */
 public class CylinderTests {
 
     /**

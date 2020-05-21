@@ -47,16 +47,6 @@ public abstract class RadialGeometry extends Geometry {
     }
 
     /**
-     * copy constructor of RadialGeometry
-     *
-     * @param other other RadialGeometry to copy
-     */
-    public RadialGeometry(RadialGeometry other) {
-        _radius = other._radius;
-        _emission = new Color(other._emission);
-    }
-
-    /**
      * return the radius of the shape
      *
      * @return the radius of the shape

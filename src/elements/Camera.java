@@ -5,6 +5,7 @@ import primitives.Ray;
 import primitives.Vector;
 
 import static primitives.Util.alignZero;
+import static primitives.Util.isZero;
 
 /**
  * class that implements Camera
@@ -12,6 +13,34 @@ import static primitives.Util.alignZero;
 public class Camera {
     private Point3D _location;
     private Vector _vTo, _vUp, _vRight;
+
+    /**
+     * create a camera by spheroid parametrization
+     * @param sceneCenter the center off the scene to direct to it
+     * @param r the distance fro the center of the center
+     * @param theta rotation angle around z axis 0 to 2*pi
+     * @param phi rotation angle around z axis 0 to 2*pi
+     * @param roll
+     */
+    public Camera(Point3D sceneCenter, double r, double theta, double phi, double roll) {
+        Vector direction = new Vector(r * Math.sin(phi) * Math.cos(theta),
+                r * Math.sin(phi) * Math.sin(theta),
+                r * Math.cos(phi));
+        _location = sceneCenter.add(direction);
+        _vTo = direction.scale(-1).normalize();
+        _vUp = direction.crossProduct(new Vector(direction.getEnd().getY().get(),
+                -direction.getEnd().getX().get(), 0).normalize());
+        _vRight = _vTo.crossProduct(_vUp).normalize();
+        Vector b = _vTo;
+        double x1 = Math.cos(roll) / _vUp.length();
+        double x2 = Math.sin(roll) / _vRight.length();
+        if (!isZero(x1))
+            _vUp = _vUp.scale(x1);
+        if (!isZero(x2))
+            _vUp = _vUp.add(_vRight.scale(x2));
+        _vUp = _vUp.scale(_vUp.length());
+        _vRight = _vTo.crossProduct(_vUp).normalize();
+    }
 
     /**
      * constructor of Camera

@@ -14,7 +14,6 @@ public class AmbientLight extends Light {
      * @param ka intensity of the light
      */
     public AmbientLight(Color ia, double ka) {
-        //ip = ia.dotProduct(ka)
         super(ia.scale(ka));
     }
 }
