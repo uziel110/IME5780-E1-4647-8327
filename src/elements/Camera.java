@@ -31,7 +31,6 @@ public class Camera {
         _vUp = direction.crossProduct(new Vector(direction.getEnd().getY().get(),
                 -direction.getEnd().getX().get(), 0).normalize());
         _vRight = _vTo.crossProduct(_vUp).normalize();
-        Vector b = _vTo;
         double x1 = Math.cos(roll) / _vUp.length();
         double x2 = Math.sin(roll) / _vRight.length();
         if (!isZero(x1))
@@ -51,7 +50,6 @@ public class Camera {
      * @throws IllegalArgumentException if vTo and vUp aren't orthogonal
      */
     public Camera(Point3D location, Vector vTo, Vector vUp) {
-
         if (alignZero(vTo.dotProduct(vUp)) != 0)
             throw new IllegalArgumentException();
 

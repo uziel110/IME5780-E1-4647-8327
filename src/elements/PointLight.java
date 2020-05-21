@@ -33,6 +33,7 @@ public class PointLight extends Light implements LightSource {
     public Color getIntensity(Point3D p) {
         double distanceSquared = _position.distanceSquared(p);
         double distance = Math.sqrt(distanceSquared);
+        // We strive to reach (_kL * distance == 1/10 * _kQ * distanceSquared)
         return _intensity.scale(1 / (_kC + _kL * distance + _kQ * distanceSquared));
     }
 
