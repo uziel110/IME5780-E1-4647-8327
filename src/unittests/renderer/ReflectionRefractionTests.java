@@ -162,15 +162,7 @@ public class ReflectionRefractionTests {
         final double SCALED = 10, WIDTH = 100 * SCALED, CENTER_Z = 0 * SCALED;
         final double KD = 0.3, KS = 1 - KD, KT = 0, KR = 1;
         Color triangleColor = new Color(java.awt.Color.black);
-        scene.addGeometries(/*
-                new Triangle(triangleColor, new Material(KD, KS, 30, KT, KR),
-                        new Point3D(0, -WIDTH, 0), new Point3D(-WIDTH, 0, 0), new Point3D(0, 0, CENTER_Z)),
-                new Triangle(triangleColor, new Material(KD, KS, 30, KT, KR),
-                        new Point3D(-WIDTH, 0, 0), new Point3D(0, WIDTH, 0), new Point3D(0, 0, CENTER_Z)),
-                new Triangle(triangleColor, new Material(KD, KS, 30, KT, KR),
-                        new Point3D(0, WIDTH, 0), new Point3D(WIDTH, 0, 0), new Point3D(0, 0, CENTER_Z)),
-                new Triangle(triangleColor, new Material(KD, KS, 30, KT, KR),
-                        new Point3D(WIDTH, 0, 0), new Point3D(0, -WIDTH, 0), new Point3D(0, 0, CENTER_Z)),*/
+        scene.addGeometries(
                 new Plane(new Color(java.awt.Color.black), new Material(0.5, 0.5, 30, 0, 0),
                         new Point3D(0, 0, 0), new Vector(0, 0, 1)),
                 new Sphere(new Color(java.awt.Color.blue), new Material(0.2, 0.2, 30, 0.6, 0.4),
@@ -195,7 +187,7 @@ public class ReflectionRefractionTests {
 
         scene.addLights(new DirectionalLight(new Color(200, 200, 200), new Vector(-1, 1, -1)));
 
-        ImageWriter imageWriter = new ImageWriter("bonusTest", 1200, 600, 3600, 1800);
+        ImageWriter imageWriter = new ImageWriter("bonusTest1", 1200, 600, 3600, 1800);
         Render render = new Render(imageWriter, scene);
 
         render.renderImage();

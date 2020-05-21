@@ -11,7 +11,7 @@ public class AmbientLight extends Light {
      * Constructor of AmbientLight class, get two parameters - color and intensity
      *
      * @param ia color
-     * @param ka intensity of the light
+     * @param ka intensity of the AmbientLight
      */
     public AmbientLight(Color ia, double ka) {
         super(ia.scale(ka));
