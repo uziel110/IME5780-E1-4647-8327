@@ -15,7 +15,7 @@ import static primitives.Util.isZero;
  * class that implements Camera
  */
 public class Camera {
-    Boolean _depthOfFieldEnabled;
+    Boolean _depthOfFieldEnabled = false;
     private Point3D _location;
     private Vector _vTo, _vUp, _vRight;
     private double _focalLenDistance;
