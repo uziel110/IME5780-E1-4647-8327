@@ -80,6 +80,7 @@ public class Camera {
         double xj = (j - nX / 2.0) * rx + rx / 2.0;
         double yi = (i - nY / 2.0) * ry + ry / 2.0;
 
+
         // pij = pc - center of the view plane
         Point3D pij = _location.add(_vTo.scale(screenDistance));
         if (xj != 0)
