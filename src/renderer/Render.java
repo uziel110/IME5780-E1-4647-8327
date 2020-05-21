@@ -90,6 +90,8 @@ public class Render {
         int nY = _imageWriter.getNy();
         double width = _imageWriter.getWidth();
         double height = _imageWriter.getHeight();
+
+        // if 'focus' option is on
         if (camera.getDepthOfFieldState())
             for (int i = 0; i < nY; ++i) {
                 for (int j = 0; j < nX; ++j) {
@@ -106,6 +108,7 @@ public class Render {
                     _imageWriter.writePixel(j, i, averageColor.getColor());
                 }
             }
+        // if 'focus' option is off
         else
             for (int i = 0; i < nY; ++i) {
                 for (int j = 0; j < nX; ++j) {

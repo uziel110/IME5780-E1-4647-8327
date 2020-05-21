@@ -15,12 +15,13 @@ import static primitives.Util.isZero;
  * class that implements Camera
  */
 public class Camera {
-    Boolean _depthOfFieldEnabled;
+    Boolean _depthOfFieldEnabled = false;
     private Point3D _location;
     private Vector _vTo, _vUp, _vRight;
     private double _focalLenDistance;
     private int _apertureSize;
     private int _rayAmount;
+
     /**
      * create a camera by spheroid parametrization
      *
@@ -67,26 +68,44 @@ public class Camera {
         _vRight = vTo.crossProduct(vUp).normalize();
     }
 
+    /**
+     * set to the camera the parameters of DepthOfField
+     *
+     * @param focalLenDistance distance between view plane and focal plane
+     * @param apertureSize     size of the aperture
+     * @param rayAmount        amount of rays
+     */
     public void setDepthOfField(double focalLenDistance, int apertureSize, int rayAmount) {
-        _apertureSize = apertureSize;
         _focalLenDistance = focalLenDistance;
+        _apertureSize = apertureSize;
         _rayAmount = rayAmount;
     }
 
+    /**
+     * return if depth of field option is enabled
+     *
+     * @return if depth of field option is enabled
+     */
     public Boolean getDepthOfFieldState() {
         return _depthOfFieldEnabled;
     }
 
+    /**
+     * set depth of field option to enabled
+     */
     public void setDepthOfFieldEnabled() {
         _depthOfFieldEnabled = true;
     }
 
+    /**
+     * set depth of field option to disabled
+     */
     public void setDepthOfFieldDisabled() {
         _depthOfFieldEnabled = false;
     }
 
     /**
-     * return ray from point location on the camera and goes through a certain pixel on the screen
+     * return ray from point location on the camera and goes through a certain pixel on the view plane
      *
      * @param nX             number of pixels in a row
      * @param nY             number of pixels in the column
@@ -105,22 +124,18 @@ public class Camera {
         return new Ray(_location, pij.subtract(_location).normalized());
     }
 
-    private Point3D getPoint3DPij(int nX, int nY, int j, int i, double screenDistance, double screenWidth, double screenHeight) {
-        double ry = screenHeight / nY;
-        double rx = screenWidth / nX;
-
-        double xj = (j - nX / 2.0) * rx + rx / 2.0;
-        double yi = (i - nY / 2.0) * ry + ry / 2.0;
-
-        // pij = pc - center of the view plane
-        Point3D pij = _location.add(_vTo.scale(screenDistance));
-        if (xj != 0)
-            pij = pij.add(_vRight.scale(xj));
-        if (yi != 0)
-            pij = pij.add(_vUp.scale(-yi));
-        return pij;
-    }
-
+    /**
+     * return list of rays from point pij on view plane and goes through focal point
+     *
+     * @param nX             number of pixels in a row
+     * @param nY             number of pixels in the column
+     * @param j              pixel row index
+     * @param i              pixel column index
+     * @param screenDistance distance between location point and the screen
+     * @param screenWidth    width of the screen
+     * @param screenHeight   height of the screen
+     * @return list of rays from point pij on view plane and goes through focal point
+     */
     public List<Ray> constructDepthOfFieldRays(int nX, int nY,
                                                int j, int i, double screenDistance,
                                                double screenWidth, double screenHeight) {
@@ -138,6 +153,42 @@ public class Camera {
         return focalRays;
     }
 
+    /**
+     * return point3D a certain pixel on the view plane
+     *
+     * @param nX             number of pixels in a row
+     * @param nY             number of pixels in the column
+     * @param j              pixel row index
+     * @param i              pixel column index
+     * @param screenDistance distance between location point and the screen
+     * @param screenWidth    width of the screen
+     * @param screenHeight   height of the screen
+     * @return
+     */
+    private Point3D getPoint3DPij(int nX, int nY, int j, int i, double screenDistance, double screenWidth, double screenHeight) {
+        double ry = screenHeight / nY;
+        double rx = screenWidth / nX;
+
+        double xj = (j - nX / 2.0) * rx + rx / 2.0;
+        double yi = (i - nY / 2.0) * ry + ry / 2.0;
+
+        // pij = pc - center of the view plane
+        Point3D pij = _location.add(_vTo.scale(screenDistance));
+        if (xj != 0)
+            pij = pij.add(_vRight.scale(xj));
+        if (yi != 0)
+            pij = pij.add(_vUp.scale(-yi));
+        return pij;
+    }
+
+    /**
+     * return point3D - the starting point of tay from the view plane that goes through focal point
+     *
+     * @param pij pixel on view plane
+     * @param j   pixel row index
+     * @param i   pixel column index
+     * @return the starting point of tay from the view plane that goes through focal point
+     */
     private Point3D getHeadFocalRay(Point3D pij, int j, int i) {
         int numRaysInWidth = (int) Math.sqrt(_rayAmount);
         int focalLenSize = (int) Math.sqrt(_apertureSize);
@@ -191,14 +242,27 @@ public class Camera {
         return _vRight;
     }
 
+    /**
+     * return distance between view plane and focal plane
+     * @return distance between view plane and focal plane
+     */
     public double getFocalLenDistance() {
         return _focalLenDistance;
     }
 
+    /**
+     * return size of the aperture
+     *
+     * @return size of the aperture
+     */
     public int getApertureSize() {
         return _apertureSize;
     }
 
+    /**
+     * return amount of rays
+     * @return amount of rays
+     */
     public int getRayAmount() {
         return _rayAmount;
     }

@@ -12,6 +12,9 @@ import scene.Scene;
 
 import java.awt.*;
 
+/**
+ * test for depthOfField operation
+ */
 public class DepthOfFieldTest {
 
     @Test
