@@ -193,7 +193,7 @@ public class ReflectionRefractionTests {
             double theta = Math.PI * 2 * (i * 1.0 / NUM_OF_POINT_LIGHT);
             scene.addLights(
                     new SpotLight(new Color(190, 30, 30),
-                            new Point3D(LIGHT_RADIUS * Math.cos(theta), LIGHT_RADIUS * Math.sin(theta), 10), new Vector(0, 0, 1),70,
+                            new Point3D(LIGHT_RADIUS * Math.cos(theta), LIGHT_RADIUS * Math.sin(theta), 10), new Vector(0, 0, 1), 70,
                             1, 0.0001, 0.000005));
         }
 
@@ -321,9 +321,9 @@ public class ReflectionRefractionTests {
         Color triangleColor = new Color(java.awt.Color.black);
         scene.addGeometries(
                 new Plane(new Color(java.awt.Color.black), new Material(0.5, 0.5, 30, 0, 0),
-                        new Point3D(0, 0, 0), new Vector(0, 0, 1)),
+                        new Point3D(0, 0, 0), new Vector(0, 0, 1))/*,
                 new Sphere(new Color(java.awt.Color.blue), new Material(0.2, 0.2, 30, 0.6, 0.4),
-                        300, new Point3D(0, 0, 300)));
+                        300, new Point3D(0, 0, 300))*/);
         final double TUBE_RADIUS = 1000;
         final int NUM_OF_TUBES = 10;
         for (int i = 0; i < NUM_OF_TUBES; ++i) {
@@ -332,7 +332,7 @@ public class ReflectionRefractionTests {
                     new Tube(new Color(109, 82, 16), new Material(0.3, 0.7, 50, 0, 0),
                             new Point3D(TUBE_RADIUS * Math.cos(theta), TUBE_RADIUS * Math.sin(theta), 10), new Vector(0, 0, 1), 100));
         }
-        Point3D[] polygonPoints = new Point3D[NUM_OF_TUBES];
+        /*Point3D[] polygonPoints = new Point3D[NUM_OF_TUBES];
         for (int i = 0; i < NUM_OF_TUBES; ++i) {
             double theta = Math.PI * 2 * (i * 1.0 / NUM_OF_TUBES);
             polygonPoints[i] = new Point3D(TUBE_RADIUS * Math.cos(theta), TUBE_RADIUS * Math.sin(theta), 10);
@@ -341,17 +341,18 @@ public class ReflectionRefractionTests {
 
         scene.addLights(new PointLight(new Color(654, 495, 96),
                 new Point3D(0, 0, 1500), 1, 4E-5, 2E-7));
-
+*/
         scene.addLights(new DirectionalLight(new Color(200, 200, 200), new Vector(-1, 1, -1)));
         final int NUM_OF_POINT_LIGHT = NUM_OF_TUBES;
-        final double LIGHT_RADIUS = TUBE_RADIUS + 110;
+        final double LIGHT_RADIUS = TUBE_RADIUS + 130;
 
         for (int i = 0; i < NUM_OF_POINT_LIGHT; ++i) {
             double theta = Math.PI * 2 * (i * 1.0 / NUM_OF_POINT_LIGHT);
-            scene.addLights(
-                    new SpotLight(new Color(190, 30, 30),
-                            new Point3D(LIGHT_RADIUS * Math.cos(theta), LIGHT_RADIUS * Math.sin(theta), 10), new Vector(0, 0, 1),10,
-                            1, 0.0001, 0.000005));
+            Point3D downPoint = new Point3D(LIGHT_RADIUS * Math.cos(theta), LIGHT_RADIUS * Math.sin(theta), 5);
+            Point3D upPoint = new Point3D(TUBE_RADIUS * Math.cos(theta), TUBE_RADIUS * Math.sin(theta), 250);
+            scene.addLights(new SpotLight(new Color(95000, 15000, 15000), downPoint,
+                    upPoint.subtract(downPoint), 10,
+                    1, 0.0001, 0.000005));
         }
         ImageWriter imageWriter = new ImageWriter("bonusTestWithSpot", 1200, 600, 3600, 1800);
         Render render = new Render(imageWriter, scene);

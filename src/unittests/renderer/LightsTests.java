@@ -242,7 +242,7 @@ public class LightsTests {
                         new Point3D(-150, 150, 150), new Point3D(-70, -70, 50), new Point3D(75, -75, 150)));
 
         scene.addLights(new SpotLight(new Color(500, 250, 250),
-                new Point3D(10, 10, 130), new Vector(-2, 2, 1), 70,
+                new Point3D(10, 10, 130), new Vector(-2, 2, 1), 10,
                 1, 0.0001, 0.000005));
         ImageWriter imageWriter = new ImageWriter("trianglesNarrowSpot", 200, 200, 500, 500);
         Render render = new Render(imageWriter, scene);
