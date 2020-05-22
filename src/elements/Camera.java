@@ -18,12 +18,17 @@ public class Camera {
     Boolean _depthOfFieldEnabled = false;
     private Point3D _location;
     private Vector _vTo, _vUp, _vRight;
-    private double _focalLenDistance;
-    private int _apertureSize;
-    private int _rayAmount;
+    // parameters for depth of field effect
+    private double _focalLenDistance = 500;
+    private int _apertureSize = 250;
+    private int _rayAmount = 50;
 
     /**
      * create a camera by spheroid parametrization
+     * set default parameters for depth of field effect
+     * focalLenDistance = 500
+     * apertureSize = 250
+     * rayAmount = 50
      *
      * @param sceneCenter the center off the scene to direct to it
      * @param r           the distance fro the center of the center
@@ -32,13 +37,24 @@ public class Camera {
      * @param roll
      */
     public Camera(Point3D sceneCenter, double r, double theta, double phi, double roll) {
+        if (isZero(r)) // to avoid vector 0
+            throw new IllegalArgumentException();
         Vector direction = new Vector(r * Math.sin(phi) * Math.cos(theta),
                 r * Math.sin(phi) * Math.sin(theta),
                 r * Math.cos(phi));
         _location = sceneCenter.add(direction);
         _vTo = direction.scale(-1).normalize();
-        Vector tempUp = direction.crossProduct(new Vector(direction.getEnd().getY().get(),
-                -direction.getEnd().getX().get(), 0).normalize());
+        Vector tempUp = null;
+        if (isZero(direction.getEnd().getX().get()))
+            tempUp = direction.crossProduct(new Vector(0, direction.getEnd().getZ().get(), // todo make error when direction is (0,0,x)
+                    -direction.getEnd().getY().get()).normalize());
+        else if (isZero(direction.getEnd().getY().get()))
+            tempUp = direction.crossProduct(new Vector(direction.getEnd().getZ().get(), // todo make error when direction is (0,0,x)
+                    0, -direction.getEnd().getX().get()).normalize());
+        else if (isZero(direction.getEnd().getZ().get()))
+            tempUp = direction.crossProduct(new Vector(direction.getEnd().getY().get(), // todo make error when direction is (0,0,x)
+                    -direction.getEnd().getX().get(), 0)).normalize();
+
         Vector tempRight = _vTo.crossProduct(tempUp).normalize();
         double x1 = Math.cos(roll) / tempUp.length();
         double x2 = Math.sin(roll) / tempRight.length();
@@ -52,6 +68,10 @@ public class Camera {
 
     /**
      * constructor of Camera
+     * set default parameters for depth of field effect
+     * focalLenDistance = 500
+     * apertureSize = 250
+     * rayAmount = 50
      *
      * @param location Point3D on the camera
      * @param vTo      vector direction forward
@@ -182,7 +202,7 @@ public class Camera {
     }
 
     /**
-     * return point3D - the starting point of tay from the view plane that goes through focal point
+     * return point3D - the starting point of ray from the view plane that goes through focal point
      *
      * @param pij pixel on view plane
      * @param j   pixel row index
@@ -190,8 +210,8 @@ public class Camera {
      * @return the starting point of tay from the view plane that goes through focal point
      */
     private Point3D getHeadFocalRay(Point3D pij, int j, int i) {
-        int numRaysInWidth = (int) Math.sqrt(_rayAmount);
-        int focalLenSize = (int) Math.sqrt(_apertureSize);
+        double numRaysInWidth = Math.sqrt(_rayAmount);
+        double focalLenSize = _apertureSize;
         double ry = focalLenSize / numRaysInWidth;
         double rx = focalLenSize / numRaysInWidth;
 
@@ -244,6 +264,7 @@ public class Camera {
 
     /**
      * return distance between view plane and focal plane
+     *
      * @return distance between view plane and focal plane
      */
     public double getFocalLenDistance() {
@@ -261,6 +282,7 @@ public class Camera {
 
     /**
      * return amount of rays
+     *
      * @return amount of rays
      */
     public int getRayAmount() {
