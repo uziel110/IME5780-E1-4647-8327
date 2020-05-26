@@ -24,7 +24,7 @@ public class DepthOfFieldTest {
     @Test
     public void fourBallsDepthOfFieldTest_one() {
         Scene scene = new Scene("Test scene");
-        scene.setCamera(new Camera(new Point3D(0, 0, 0), 600, 0.5, 1, Math.PI));
+        scene.setCamera(new Camera(new Point3D(0, 0, 0), 800, 0.5, 1, Math.PI));
         scene.getCamera().setDepthOfField(400, 32, 100);
         scene.getCamera().setDepthOfFieldEnabled();
         scene.setDistance(400);
