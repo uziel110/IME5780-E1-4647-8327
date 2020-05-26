@@ -133,8 +133,7 @@ public class LightsTests {
                 new Sphere(new Color(java.awt.Color.black), new Material(1, 0, 100), 50, new Point3D(500, 500, 5000)));
 
         scene.addLights(new DirectionalLight(new Color(300, 300, 300), new Vector(1, 1, -1)));
-        /*scene.addLights(new PointLight(new Color(20000000, 20000000, 20000000),
-                new Point3D(10, 10, -130), 1, 0.0005, 0.0005));*/
+
         ImageWriter imageWriter = new ImageWriter("moon", 150, 150, 500, 500);
         Render render = new Render(imageWriter, scene);
 

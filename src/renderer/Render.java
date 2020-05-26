@@ -78,6 +78,7 @@ public class Render {
 
     /**
      * create image from the scene
+     * with focus option on or off
      */
     public void renderImage() {
         // scene parameters

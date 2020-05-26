@@ -51,7 +51,7 @@ public class Camera {
         else if (isZero(direction.getEnd().getY().get()))
             tempUp = direction.crossProduct(new Vector(direction.getEnd().getZ().get(), // todo make error when direction is (0,0,x)
                     0, -direction.getEnd().getX().get()).normalize());
-        else if (isZero(direction.getEnd().getZ().get()))
+        else
             tempUp = direction.crossProduct(new Vector(direction.getEnd().getY().get(), // todo make error when direction is (0,0,x)
                     -direction.getEnd().getX().get(), 0)).normalize();
 
@@ -86,42 +86,6 @@ public class Camera {
         _vTo = vTo.normalized();
         _vUp = vUp.normalized();
         _vRight = vTo.crossProduct(vUp).normalize();
-    }
-
-    /**
-     * set to the camera the parameters of DepthOfField
-     *
-     * @param focalLenDistance distance between view plane and focal plane
-     * @param apertureSize     size of the aperture
-     * @param rayAmount        amount of rays
-     */
-    public void setDepthOfField(double focalLenDistance, int apertureSize, int rayAmount) {
-        _focalLenDistance = focalLenDistance;
-        _apertureSize = apertureSize;
-        _rayAmount = rayAmount;
-    }
-
-    /**
-     * return if depth of field option is enabled
-     *
-     * @return if depth of field option is enabled
-     */
-    public Boolean getDepthOfFieldState() {
-        return _depthOfFieldEnabled;
-    }
-
-    /**
-     * set depth of field option to enabled
-     */
-    public void setDepthOfFieldEnabled() {
-        _depthOfFieldEnabled = true;
-    }
-
-    /**
-     * set depth of field option to disabled
-     */
-    public void setDepthOfFieldDisabled() {
-        _depthOfFieldEnabled = false;
     }
 
     /**
@@ -183,7 +147,7 @@ public class Camera {
      * @param screenDistance distance between location point and the screen
      * @param screenWidth    width of the screen
      * @param screenHeight   height of the screen
-     * @return
+     * @return point3D a certain pixel on the view plane
      */
     private Point3D getPoint3DPij(int nX, int nY, int j, int i, double screenDistance, double screenWidth, double screenHeight) {
         double ry = screenHeight / nY;
@@ -224,6 +188,42 @@ public class Camera {
         if (yi != 0)
             pijMoved = pijMoved.add(_vUp.scale(-yi));
         return pijMoved;
+    }
+
+    /**
+     * set to the camera the parameters of DepthOfField
+     *
+     * @param focalLenDistance distance between view plane and focal plane
+     * @param apertureSize     size of the aperture
+     * @param rayAmount        amount of rays
+     */
+    public void setDepthOfField(double focalLenDistance, int apertureSize, int rayAmount) {
+        _focalLenDistance = focalLenDistance;
+        _apertureSize = apertureSize;
+        _rayAmount = rayAmount;
+    }
+
+    /**
+     * return if depth of field option is enabled
+     *
+     * @return if depth of field option is enabled
+     */
+    public Boolean getDepthOfFieldState() {
+        return _depthOfFieldEnabled;
+    }
+
+    /**
+     * set depth of field option to enabled
+     */
+    public void setDepthOfFieldEnabled() {
+        _depthOfFieldEnabled = true;
+    }
+
+    /**
+     * set depth of field option to disabled
+     */
+    public void setDepthOfFieldDisabled() {
+        _depthOfFieldEnabled = false;
     }
 
     /**
@@ -281,11 +281,12 @@ public class Camera {
     }
 
     /**
-     * return amount of rays
+     * return the number of rays exiting the aperture
      *
-     * @return amount of rays
+     * @return number of rays exiting the aperture
      */
     public int getRayAmount() {
         return _rayAmount;
     }
+
 }

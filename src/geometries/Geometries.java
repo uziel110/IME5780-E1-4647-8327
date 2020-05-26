@@ -23,7 +23,7 @@ public class Geometries implements Intersectable {
     /**
      * constructor of Geometries that receive list of Intersctable
      *
-     * @param geometries list of Intersctable
+     * @param geometries list of Intersectable
      */
     public Geometries(Intersectable... geometries) {
         _geometries = new LinkedList<>();

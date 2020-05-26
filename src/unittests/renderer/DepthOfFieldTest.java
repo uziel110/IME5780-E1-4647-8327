@@ -21,11 +21,15 @@ import java.awt.*;
  */
 public class DepthOfFieldTest {
 
+    /**
+     * test fourBallsDepthOfFieldTest
+     * Produce a picture of 4 Balls with depthOfFieldTest option on
+     */
     @Test
     public void fourBallsDepthOfFieldTest_one() {
         Scene scene = new Scene("Test scene");
         scene.setCamera(new Camera(new Point3D(0, 0, 0), 800, 0, 0, Math.PI));
-        scene.getCamera().setDepthOfField(400, 32, 100);
+        scene.getCamera().setDepthOfField(400, 6, 100);
         scene.getCamera().setDepthOfFieldEnabled();
         scene.setDistance(400);
         scene.setBackground(primitives.Color.BLACK);
@@ -52,6 +56,10 @@ public class DepthOfFieldTest {
             render.writeToImage();
     }
 
+    /**
+     * test fourBallsDepthOfFieldTest
+     * Produce number of pictures of 4 Balls from multiple angles with depthOfFieldTest option on
+     */
     @Test
     public void fourBallsDepthOfFieldTest() {
         Scene scene = new Scene("Test scene");
@@ -76,7 +84,7 @@ public class DepthOfFieldTest {
         for (int i = 0; i < NUM_PICTURES; ++i) {
             double theta = Math.PI * 2 * (i * 1.0 / NUM_PICTURES);
             scene.setCamera(new Camera(new Point3D(0, 0, 0), 800, theta, Math.PI / 3, Math.PI));
-            scene.getCamera().setDepthOfField(400, 1000, 100);
+            scene.getCamera().setDepthOfField(400, 32, 100);
             scene.getCamera().setDepthOfFieldEnabled();
             ImageWriter imageWriter = new ImageWriter("fourBallsDepthOfFieldTestEnabled" + i, 600, 600, 1200, 1200);
             Render render = new Render(imageWriter, scene);
@@ -96,7 +104,7 @@ public class DepthOfFieldTest {
         Scene scene = new Scene("Test scene");
         scene.setCamera(new Camera(new Point3D(0, 0, 500), 2500, 0.3, 1.5, Math.PI));
         scene.getCamera().setDepthOfFieldEnabled();
-        scene.getCamera().setDepthOfField(2100, 2000, 100);
+        scene.getCamera().setDepthOfField(2100, 45, 100);
         scene.setDistance(400);
         scene.setBackground(primitives.Color.BLACK);
         scene.setAmbientLight(new AmbientLight(new primitives.Color(java.awt.Color.WHITE), 0.15));
@@ -146,7 +154,7 @@ public class DepthOfFieldTest {
         Scene scene = new Scene("Test scene");
         scene.setCamera(new Camera(new Point3D(0, 0, 500), 2500, 0.3, 1.5, Math.PI));
         scene.getCamera().setDepthOfFieldEnabled();
-        scene.getCamera().setDepthOfField(2100, 4000, 100);
+        scene.getCamera().setDepthOfField(2100, 64, 100);
         scene.setDistance(400);
         scene.setBackground(primitives.Color.BLACK);
         scene.setAmbientLight(new AmbientLight(new primitives.Color(java.awt.Color.WHITE), 0.15));
@@ -195,7 +203,7 @@ public class DepthOfFieldTest {
         Scene scene = new Scene("Test scene");
         scene.setCamera(new Camera(new Point3D(0, 0, 500), 2500, 0.3, 1.5, Math.PI));
         scene.getCamera().setDepthOfFieldEnabled();
-        scene.getCamera().setDepthOfField(2100, 4000, 100);
+        scene.getCamera().setDepthOfField(2100, 64, 100);
         scene.setDistance(400);
         scene.setBackground(new primitives.Color(53, 81, 92));//sky color
         scene.setAmbientLight(new AmbientLight(new primitives.Color(java.awt.Color.WHITE), 0.15));
