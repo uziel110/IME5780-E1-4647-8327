@@ -96,38 +96,30 @@ public class Render {
         if (camera.getDOFState())
             for (int i = 0; i < nY; ++i) {
                 for (int j = 0; j < nX; ++j) {
-                    Color averageColor = getDOFColor(camera, background, distance, nX, nY, width, height, i, j);
+                    List<Ray> rays = camera.constructDOFRays(nX, nY, j, i, distance, width, height);
+                    Color averageColor = Color.BLACK;
+                    for (Ray ray : rays) {
+                        GeoPoint closestPoint = findClosestIntersection(ray);
+                        Color closestPointColor = (closestPoint == null) ?
+                                background :
+                                calcColor(closestPoint, ray);
+                        averageColor = averageColor.add(closestPointColor);
+                    }
+                    averageColor = averageColor.scale(1.0 / camera.getRayAmount());
                     _imageWriter.writePixel(j, i, averageColor.getColor());
                 }
             }
-            // if 'focus' option is off
+        // if 'focus' option is off
         else
             for (int i = 0; i < nY; ++i) {
                 for (int j = 0; j < nX; ++j) {
                     Ray ray = camera.constructRayThroughPixel(nX, nY, j, i, distance, width, height);
                     GeoPoint closestPoint = findClosestIntersection(ray);
-                    Color DOFColor = Color.BLACK;
-                    if (camera.getDOFState())
-                        DOFColor = getDOFColor(camera, background, distance, nX, nY, width, height, i, j);
                     _imageWriter.writePixel(j, i, closestPoint == null ?
                             background.getColor() :
-                            calcColor(closestPoint, ray).add(DOFColor).getColor());
+                            calcColor(closestPoint, ray).getColor());
                 }
             }
-    }
-
-    private Color getDOFColor(Camera camera, Color background, double distance, int nX, int nY, double width, double height, int i, int j) {
-        List<Ray> rays = camera.constructDOFRays(nX, nY, j, i, distance, width, height);
-        Color averageColor = Color.BLACK;
-        for (Ray ray : rays) {
-            GeoPoint closestPoint = findClosestIntersection(ray);
-            Color closestPointColor = (closestPoint == null) ?
-                    background :
-                    calcColor(closestPoint, ray);
-            averageColor = averageColor.add(closestPointColor);
-        }
-        averageColor = averageColor.scale(1.0 / camera.getRayAmount());
-        return averageColor;
     }
 
     /**

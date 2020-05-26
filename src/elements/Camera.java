@@ -124,25 +124,23 @@ public class Camera {
     public List<Ray> constructDOFRays(int nX, int nY,
                                       int j, int i, double screenDistance,
                                       double screenWidth, double screenHeight) {
+        List<Ray> focalRays = new LinkedList<>();
         // find point on the VP
         Point3D pijVP = getPoint3DPij(nX, nY, j, i, screenDistance, screenWidth, screenHeight);
         // vector from camera to point on the VP
         Vector pijVPVector = pijVP.subtract(_location).normalized();
+        // add the main ray start from the VP to the list
+        focalRays.add(new Ray(pijVP, pijVPVector));
         // find point on the Focal plane
         Point3D focalPoint = pijVP.add(pijVPVector.scale(_focalLenDistance));
         // create _rayAmount vectors from VP to Focal Plane in uniform distribution
-        List<Ray> focalRays = new LinkedList<>();
+
         Random random = new Random();
         int numRaysInWidth = (int) Math.sqrt(_rayAmount);
         double ry = alignZero((double) _apertureSize / numRaysInWidth);
         double rx = alignZero((double) _apertureSize / numRaysInWidth);
         for (int k = 0; k < _rayAmount; k++) {
             Point3D pijDOF = getHeadFocalRay(numRaysInWidth, random.nextInt(numRaysInWidth), random.nextInt(numRaysInWidth), rx, ry, pijVP);
-            if (pijDOF.equals(pijVP)) {
-                k--;
-                continue;
-            }
-
             focalRays.add(new Ray(pijDOF, focalPoint.subtract(pijDOF)));
         }
         return focalRays;

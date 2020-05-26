@@ -46,7 +46,7 @@ public class DepthOfFieldTest {
 
         scene.addLights(new DirectionalLight(new primitives.Color(200, 200, 200), new Vector(-1, 1, -1)));
 
-            ImageWriter imageWriter = new ImageWriter("fourBallsDepthOfFieldTest_one1", 600, 600, 1200, 1200);
+            ImageWriter imageWriter = new ImageWriter("fourBallsDepthOfFieldTest_one2", 600, 600, 1200, 1200);
             Render render = new Render(imageWriter, scene);
             render.renderImage();
             render.writeToImage();
