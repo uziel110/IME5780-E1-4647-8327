@@ -96,7 +96,7 @@ public class Render {
         if (camera.getDepthOfFieldState())
             for (int i = 0; i < nY; ++i) {
                 for (int j = 0; j < nX; ++j) {
-                    List<Ray> rays = camera.constructDepthOfFieldRays(nX, nY, j, i, distance, width, height);
+                    List<Ray> rays = camera.constructDOFRays(nX, nY, j, i, distance, width, height);
                     Color averageColor = Color.BLACK;
                     for (Ray ray : rays) {
                         GeoPoint closestPoint = findClosestIntersection(ray);

@@ -121,9 +121,9 @@ public class Camera {
      * @param screenHeight   height of the screen
      * @return list of rays from point pij on view plane and goes through focal point
      */
-    public List<Ray> constructDepthOfFieldRays(int nX, int nY,
-                                               int j, int i, double screenDistance,
-                                               double screenWidth, double screenHeight) {
+    public List<Ray> constructDOFRays(int nX, int nY,
+                                      int j, int i, double screenDistance,
+                                      double screenWidth, double screenHeight) {
         // find point on the VP
         Point3D pijVP = getPoint3DPij(nX, nY, j, i, screenDistance, screenWidth, screenHeight);
         // vector from camera to point on the VP
@@ -134,11 +134,12 @@ public class Camera {
         List<Ray> focalRays = new LinkedList<>();
         Random random = new Random();
         int numRaysInWidth = (int) Math.sqrt(_rayAmount);
+        double ry = _apertureSize / numRaysInWidth;
+        double rx = _apertureSize / numRaysInWidth;
         for (int k = 0; k < _rayAmount; k++) {
-            Point3D pijDOF = getHeadFocalRay(pijVP, random.nextInt(numRaysInWidth), random.nextInt(numRaysInWidth));
+            Point3D pijDOF = getHeadFocalRay(numRaysInWidth, random.nextInt(numRaysInWidth), random.nextInt(numRaysInWidth),rx,ry,pijVP);
             focalRays.add(new Ray(pijDOF, focalPoint.subtract(pijDOF)));
         }
-        // pijVP is always not equal to _location
         return focalRays;
     }
 
@@ -163,36 +164,41 @@ public class Camera {
 
         // pij = pc - center of the view plane
         Point3D pij = _location.add(_vTo.scale(screenDistance));
+        return movePoint(xj, yi, pij);
+    }
+
+    /**
+     * return point3D - the starting point of ray from the view plane that goes through focal point
+`
+     * @param numRaysInWidth points number in the width / height
+     * @param j   pixel row index
+     * @param i   pixel column index
+     * @param rx the ratio between screen width and points number in the width
+     * @param ry the ratio between screen height and points number in the height
+     * @param pij pixel on view plane
+     * @return the starting point of tay from the view plane that goes through focal point
+     */
+    private Point3D getHeadFocalRay(int numRaysInWidth, int j, int i,double rx,double ry,Point3D pij) {
+        double xj = (j - numRaysInWidth / 2.0) * rx + rx / 2.0;
+        double yi = (i - numRaysInWidth / 2.0) * ry + ry / 2.0;
+
+        Point3D pijMoved = new Point3D(pij);
+        return movePoint(xj, yi, pijMoved);
+    }
+
+    /**
+     * move point xj and yi units
+     * @param xj how much to move to right
+     * @param yi how much to move to down
+     * @param pij the point to move it
+     * @return the point moved xj and yi units
+     */
+    private Point3D movePoint(double xj, double yi, Point3D pij) {
         if (xj != 0)
             pij = pij.add(_vRight.scale(xj));
         if (yi != 0)
             pij = pij.add(_vUp.scale(-yi));
         return pij;
-    }
-
-    /**
-     * return point3D - the starting point of ray from the view plane that goes through focal point
-     *
-     * @param pij pixel on view plane
-     * @param j   pixel row index
-     * @param i   pixel column index
-     * @return the starting point of tay from the view plane that goes through focal point
-     */
-    private Point3D getHeadFocalRay(Point3D pij, int j, int i) {
-        double numRaysInWidth = Math.sqrt(_rayAmount);
-        double focalLenSize = _apertureSize;
-        double ry = focalLenSize / numRaysInWidth;
-        double rx = focalLenSize / numRaysInWidth;
-
-        double xj = (j - numRaysInWidth / 2.0) * rx + rx / 2.0;
-        double yi = (i - numRaysInWidth / 2.0) * ry + ry / 2.0;
-
-        Point3D pijMoved = new Point3D(pij);
-        if (xj != 0)
-            pijMoved = pijMoved.add(_vRight.scale(xj));
-        if (yi != 0)
-            pijMoved = pijMoved.add(_vUp.scale(-yi));
-        return pijMoved;
     }
 
     /**
