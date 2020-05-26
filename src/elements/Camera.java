@@ -44,15 +44,16 @@ public class Camera {
                 r * Math.cos(phi));
         _location = sceneCenter.add(direction);
         _vTo = direction.scale(-1).normalize();
-        Vector tempUp = null;
+        // calculation for roll the camera
+        Vector tempUp;
         if (isZero(direction.getEnd().getX().get()))
-            tempUp = direction.crossProduct(new Vector(0, direction.getEnd().getZ().get(), // todo make error when direction is (0,0,x)
+            tempUp = direction.crossProduct(new Vector(0, direction.getEnd().getZ().get(),
                     -direction.getEnd().getY().get()).normalize());
         else if (isZero(direction.getEnd().getY().get()))
-            tempUp = direction.crossProduct(new Vector(direction.getEnd().getZ().get(), // todo make error when direction is (0,0,x)
+            tempUp = direction.crossProduct(new Vector(direction.getEnd().getZ().get(),
                     0, -direction.getEnd().getX().get()).normalize());
         else
-            tempUp = direction.crossProduct(new Vector(direction.getEnd().getY().get(), // todo make error when direction is (0,0,x)
+            tempUp = direction.crossProduct(new Vector(direction.getEnd().getY().get(),
                     -direction.getEnd().getX().get(), 0)).normalize();
 
         Vector tempRight = _vTo.crossProduct(tempUp).normalize();
@@ -123,17 +124,21 @@ public class Camera {
     public List<Ray> constructDepthOfFieldRays(int nX, int nY,
                                                int j, int i, double screenDistance,
                                                double screenWidth, double screenHeight) {
-        Point3D pij = getPoint3DPij(nX, nY, j, i, screenDistance, screenWidth, screenHeight);
-        Vector pijVector = pij.subtract(_location).normalized();
-        Point3D focalPoint = pij.add(pijVector.scale(_focalLenDistance));
+        // find point on the VP
+        Point3D pijVP = getPoint3DPij(nX, nY, j, i, screenDistance, screenWidth, screenHeight);
+        // vector from camera to point on the VP
+        Vector pijVPVector = pijVP.subtract(_location).normalized();
+        // find point on the Focal plane
+        Point3D focalPoint = pijVP.add(pijVPVector.scale(_focalLenDistance));
+        // create _rayAmount vectors from VP to Focal Plane in uniform distribution
         List<Ray> focalRays = new LinkedList<>();
         Random random = new Random();
         int numRaysInWidth = (int) Math.sqrt(_rayAmount);
         for (int k = 0; k < _rayAmount; k++) {
-            Point3D pijMoved = getHeadFocalRay(pij, random.nextInt(numRaysInWidth), random.nextInt(numRaysInWidth));
-            focalRays.add(new Ray(pijMoved, focalPoint.subtract(pijMoved)));
+            Point3D pijDOF = getHeadFocalRay(pijVP, random.nextInt(numRaysInWidth), random.nextInt(numRaysInWidth));
+            focalRays.add(new Ray(pijDOF, focalPoint.subtract(pijDOF)));
         }
-        // pij is always not equal to _location
+        // pijVP is always not equal to _location
         return focalRays;
     }
 

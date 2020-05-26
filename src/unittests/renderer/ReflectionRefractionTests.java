@@ -151,8 +151,9 @@ public class ReflectionRefractionTests {
      * and a partially transparent Sphere and tube lighted by point lights
      * producing partial shadow and reflection
      */
+    /*
     @Test
-    public void bonusTestBestCameraLocation() {
+    public void bonusTestBestCameraLocationWithSpot() {
         Scene scene = new Scene("Test scene");
         final int DISTANCE = 2500;
         scene.setCamera(new Camera(new Point3D(0, 0, 500), DISTANCE, 0.3, 1.5, Math.PI));
@@ -197,21 +198,20 @@ public class ReflectionRefractionTests {
                             1, 0.0001, 0.000005));
         }
 
-        ImageWriter imageWriter = new ImageWriter("bonusTestWithSpot", 1200, 600, 3600, 1800);
+        ImageWriter imageWriter = new ImageWriter("bonusTestWithSpot1", 1200, 600, 3600, 1800);
         Render render = new Render(imageWriter, scene);
 
         render.renderImage();
         render.writeToImage();
     }
-
+*/
     /**
-     * bonus image
-     * Produce a picture of a reflection triangles
-     * and a partially transparent Sphere and tube lighted by point lights
-     * producing partial shadow and reflection
+     * Produce a picture with 10 tubes mirror and sphere
+     * with reflection retraction and DOF
+     * lighted by point lights directional light
      */
     @Test
-    public void bonusTest1() {
+    public void bonusTestBestCameraLocation() {
         Scene scene = new Scene("Test scene");
         final int DISTANCE = 2500;
         scene.setCamera(new Camera(new Point3D(0, 0, 500), DISTANCE, 0.3, 1.5, Math.PI));
@@ -254,10 +254,9 @@ public class ReflectionRefractionTests {
     }
 
     /**
-     * bonus image
-     * Produce a picture of a reflection triangles
-     * and a partially transparent Sphere and tube lighted by point lights
-     * producing partial shadow and reflection
+     * Produce a picture with 10 tubes mirror and sphere
+     * with reflection retraction and DOF
+     * lighted by point lights directional light
      */
     @Test
     public void bonusTestAnotherCameraLocation() {
@@ -269,7 +268,7 @@ public class ReflectionRefractionTests {
         scene.setAmbientLight(new AmbientLight(new Color(java.awt.Color.WHITE), 0.15));
         final double SCALED = 10, WIDTH = 100 * SCALED, CENTER_Z = 0 * SCALED;
         final double KD = 0.3, KS = 1 - KD, KT = 0, KR = 1;
-        Color triangleColor = new Color(java.awt.Color.black);
+        Color PolygonColor = new Color(java.awt.Color.black);
         scene.addGeometries(
                 new Plane(new Color(java.awt.Color.black), new Material(0.5, 0.5, 30, 0, 0),
                         new Point3D(0, 0, 0), new Vector(0, 0, 1)),
@@ -288,7 +287,7 @@ public class ReflectionRefractionTests {
             double theta = Math.PI * 2 * (i * 1.0 / NUM_OF_TUBES);
             polygonPoints[i] = new Point3D(r * Math.cos(theta), r * Math.sin(theta), 10);
         }
-        scene.addGeometries(new Polygon(triangleColor, new Material(KD, KS, 30, KT, KR), polygonPoints));
+        scene.addGeometries(new Polygon(PolygonColor, new Material(KD, KS, 30, KT, KR), polygonPoints));
 
         scene.addLights(new PointLight(new Color(654, 495, 96),
                 new Point3D(0, 0, 1500), 1, 4E-5, 2E-7));
@@ -303,13 +302,13 @@ public class ReflectionRefractionTests {
     }
 
     /**
-     * bonus image
-     * Produce a picture of a reflection triangles
-     * and a partially transparent Sphere and tube lighted by point lights
-     * producing partial shadow and reflection
+     * Produce a picture with 10 tubes mirror and sphere
+     * with reflection retraction and DOF
+     * lighted by point lights directional light and spot lights
      */
+
     @Test
-    public void spotLightOnTubeTest() {
+    public void tubesMirrorAndSphereWithSpotTest() {
         Scene scene = new Scene("Test scene");
         final int DISTANCE = 2500;
         scene.setCamera(new Camera(new Point3D(0, 0, 500), DISTANCE, 0.3, 1.5, Math.PI));
