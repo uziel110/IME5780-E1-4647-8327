@@ -93,7 +93,7 @@ public class Render {
         double height = _imageWriter.getHeight();
 
         // if 'focus' option is on
-        if (camera.getDepthOfFieldState())
+        if (camera.getDOFState())
             for (int i = 0; i < nY; ++i) {
                 for (int j = 0; j < nX; ++j) {
                     List<Ray> rays = camera.constructDOFRays(nX, nY, j, i, distance, width, height);
@@ -109,7 +109,7 @@ public class Render {
                     _imageWriter.writePixel(j, i, averageColor.getColor());
                 }
             }
-        // if 'focus' option is off
+            // if 'focus' option is off
         else
             for (int i = 0; i < nY; ++i) {
                 for (int j = 0; j < nX; ++j) {

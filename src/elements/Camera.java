@@ -34,7 +34,7 @@ public class Camera {
      * @param r           the distance fro the center of the center
      * @param theta       rotation angle around z axis 0 to 2*pi
      * @param phi         rotation angle around z axis 0 to 2*pi
-     * @param roll
+     * @param roll rotation angle around camera direction vector (0 to 2*pi)
      */
     public Camera(Point3D sceneCenter, double r, double theta, double phi, double roll) {
         if (isZero(r)) // to avoid vector 0
@@ -134,10 +134,10 @@ public class Camera {
         List<Ray> focalRays = new LinkedList<>();
         Random random = new Random();
         int numRaysInWidth = (int) Math.sqrt(_rayAmount);
-        double ry = _apertureSize / numRaysInWidth;
-        double rx = _apertureSize / numRaysInWidth;
+        double ry = (double) _apertureSize / numRaysInWidth;
+        double rx = (double)_apertureSize / numRaysInWidth;
         for (int k = 0; k < _rayAmount; k++) {
-            Point3D pijDOF = getHeadFocalRay(numRaysInWidth, random.nextInt(numRaysInWidth), random.nextInt(numRaysInWidth),rx,ry,pijVP);
+            Point3D pijDOF = getHeadFocalRay(numRaysInWidth, random.nextInt(numRaysInWidth), random.nextInt(numRaysInWidth), rx, ry, pijVP);
             focalRays.add(new Ray(pijDOF, focalPoint.subtract(pijDOF)));
         }
         return focalRays;
@@ -169,16 +169,17 @@ public class Camera {
 
     /**
      * return point3D - the starting point of ray from the view plane that goes through focal point
-`
+     * `
+     *
      * @param numRaysInWidth points number in the width / height
-     * @param j   pixel row index
-     * @param i   pixel column index
-     * @param rx the ratio between screen width and points number in the width
-     * @param ry the ratio between screen height and points number in the height
-     * @param pij pixel on view plane
+     * @param j              pixel row index
+     * @param i              pixel column index
+     * @param rx             the ratio between screen width and points number in the width
+     * @param ry             the ratio between screen height and points number in the height
+     * @param pij            pixel on view plane
      * @return the starting point of tay from the view plane that goes through focal point
      */
-    private Point3D getHeadFocalRay(int numRaysInWidth, int j, int i,double rx,double ry,Point3D pij) {
+    private Point3D getHeadFocalRay(int numRaysInWidth, int j, int i, double rx, double ry, Point3D pij) {
         double xj = (j - numRaysInWidth / 2.0) * rx + rx / 2.0;
         double yi = (i - numRaysInWidth / 2.0) * ry + ry / 2.0;
 
@@ -188,8 +189,9 @@ public class Camera {
 
     /**
      * move point xj and yi units
-     * @param xj how much to move to right
-     * @param yi how much to move to down
+     *
+     * @param xj  how much to move to right
+     * @param yi  how much to move to down
      * @param pij the point to move it
      * @return the point moved xj and yi units
      */
@@ -219,7 +221,7 @@ public class Camera {
      *
      * @return if depth of field option is enabled
      */
-    public Boolean getDepthOfFieldState() {
+    public Boolean getDOFState() {
         return _depthOfFieldEnabled;
     }
 
