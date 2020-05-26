@@ -34,7 +34,7 @@ public class Camera {
      * @param r           the distance fro the center of the center
      * @param theta       rotation angle around z axis 0 to 2*pi
      * @param phi         rotation angle around z axis 0 to 2*pi
-     * @param roll rotation angle around camera direction vector (0 to 2*pi)
+     * @param roll        rotation angle around camera direction vector (0 to 2*pi)
      */
     public Camera(Point3D sceneCenter, double r, double theta, double phi, double roll) {
         if (isZero(r)) // to avoid vector 0
@@ -134,10 +134,15 @@ public class Camera {
         List<Ray> focalRays = new LinkedList<>();
         Random random = new Random();
         int numRaysInWidth = (int) Math.sqrt(_rayAmount);
-        double ry = (double) _apertureSize / numRaysInWidth;
-        double rx = (double)_apertureSize / numRaysInWidth;
+        double ry = alignZero((double) _apertureSize / numRaysInWidth);
+        double rx = alignZero((double) _apertureSize / numRaysInWidth);
         for (int k = 0; k < _rayAmount; k++) {
             Point3D pijDOF = getHeadFocalRay(numRaysInWidth, random.nextInt(numRaysInWidth), random.nextInt(numRaysInWidth), rx, ry, pijVP);
+            if (pijDOF.equals(pijVP)) {
+                k--;
+                continue;
+            }
+
             focalRays.add(new Ray(pijDOF, focalPoint.subtract(pijDOF)));
         }
         return focalRays;
@@ -156,11 +161,11 @@ public class Camera {
      * @return point3D a certain pixel on the view plane
      */
     private Point3D getPoint3DPij(int nX, int nY, int j, int i, double screenDistance, double screenWidth, double screenHeight) {
-        double ry = screenHeight / nY;
-        double rx = screenWidth / nX;
+        double ry = alignZero(screenHeight / nY);
+        double rx = alignZero(screenWidth / nX);
 
-        double xj = (j - nX / 2.0) * rx + rx / 2.0;
-        double yi = (i - nY / 2.0) * ry + ry / 2.0;
+        double xj = alignZero((j - nX / 2.0) * rx + rx / 2.0);
+        double yi = alignZero((i - nY / 2.0) * ry + ry / 2.0);
 
         // pij = pc - center of the view plane
         Point3D pij = _location.add(_vTo.scale(screenDistance));
@@ -180,8 +185,8 @@ public class Camera {
      * @return the starting point of tay from the view plane that goes through focal point
      */
     private Point3D getHeadFocalRay(int numRaysInWidth, int j, int i, double rx, double ry, Point3D pij) {
-        double xj = (j - numRaysInWidth / 2.0) * rx + rx / 2.0;
-        double yi = (i - numRaysInWidth / 2.0) * ry + ry / 2.0;
+        double xj = alignZero((j - numRaysInWidth / 2.0) * rx + rx / 2.0);
+        double yi = alignZero((i - numRaysInWidth / 2.0) * ry + ry / 2.0);
 
         Point3D pijMoved = new Point3D(pij);
         return movePoint(xj, yi, pijMoved);
