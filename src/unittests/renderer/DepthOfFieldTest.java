@@ -104,7 +104,7 @@ public class DepthOfFieldTest {
         Scene scene = new Scene("Test scene");
         scene.setCamera(new Camera(new Point3D(0, 0, 500), 2500, 0.3, 1.5, Math.PI));
         scene.getCamera().setDepthOfFieldEnabled();
-        scene.getCamera().setDepthOfField(2100, 4000, 100);
+        scene.getCamera().setDepthOfField(2100, 60, 100);
         scene.setDistance(400);
         scene.setBackground(primitives.Color.BLACK);
         scene.setAmbientLight(new AmbientLight(new primitives.Color(java.awt.Color.WHITE), 0.15));

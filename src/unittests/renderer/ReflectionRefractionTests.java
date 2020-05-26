@@ -146,69 +146,9 @@ public class ReflectionRefractionTests {
     }
 
     /**
-     * bonus image
-     * Produce a picture of a reflection triangles
-     * and a partially transparent Sphere and tube lighted by point lights
-     * producing partial shadow and reflection
-     */
-    /*
-    @Test
-    public void bonusTestBestCameraLocationWithSpot() {
-        Scene scene = new Scene("Test scene");
-        final int DISTANCE = 2500;
-        scene.setCamera(new Camera(new Point3D(0, 0, 500), DISTANCE, 0.3, 1.5, Math.PI));
-        scene.setDistance(400);
-        scene.setBackground(Color.BLACK);
-        scene.setAmbientLight(new AmbientLight(new Color(java.awt.Color.WHITE), 0.15));
-        final double SCALED = 10, WIDTH = 100 * SCALED, CENTER_Z = 0 * SCALED;
-        final double KD = 0.3, KS = 1 - KD, KT = 0, KR = 1;
-        Color triangleColor = new Color(java.awt.Color.black);
-        scene.addGeometries(
-                new Plane(new Color(java.awt.Color.black), new Material(0.5, 0.5, 30, 0, 0),
-                        new Point3D(0, 0, 0), new Vector(0, 0, 1)),
-                new Sphere(new Color(java.awt.Color.blue), new Material(0.2, 0.2, 30, 0.6, 0.4),
-                        300, new Point3D(0, 0, 300)));
-        final double TUBE_RADIUS = 1000;
-        final int NUM_OF_TUBES = 10;
-        for (int i = 0; i < NUM_OF_TUBES; ++i) {
-            double theta = Math.PI * 2 * (i * 1.0 / NUM_OF_TUBES);
-            scene.addGeometries(
-                    new Tube(new Color(109, 82, 16), new Material(0.3, 0.7, 50, 0, 0),
-                            new Point3D(TUBE_RADIUS * Math.cos(theta), TUBE_RADIUS * Math.sin(theta), 10), new Vector(0, 0, 1), 100));
-        }
-        Point3D[] polygonPoints = new Point3D[NUM_OF_TUBES];
-        for (int i = 0; i < NUM_OF_TUBES; ++i) {
-            double theta = Math.PI * 2 * (i * 1.0 / NUM_OF_TUBES);
-            polygonPoints[i] = new Point3D(TUBE_RADIUS * Math.cos(theta), TUBE_RADIUS * Math.sin(theta), 10);
-        }
-        scene.addGeometries(new Polygon(triangleColor, new Material(KD, KS, 30, KT, KR), polygonPoints));
-
-        scene.addLights(new PointLight(new Color(654, 495, 96),
-                new Point3D(0, 0, 1500), 1, 4E-5, 2E-7));
-
-        scene.addLights(new DirectionalLight(new Color(200, 200, 200), new Vector(-1, 1, -1)));
-        final int NUM_OF_POINT_LIGHT = NUM_OF_TUBES;
-        final double LIGHT_RADIUS = TUBE_RADIUS + 110;
-
-        for (int i = 0; i < NUM_OF_POINT_LIGHT; ++i) {
-            double theta = Math.PI * 2 * (i * 1.0 / NUM_OF_POINT_LIGHT);
-            scene.addLights(
-                    new SpotLight(new Color(190, 30, 30),
-                            new Point3D(LIGHT_RADIUS * Math.cos(theta), LIGHT_RADIUS * Math.sin(theta), 10), new Vector(0, 0, 1), 70,
-                            1, 0.0001, 0.000005));
-        }
-
-        ImageWriter imageWriter = new ImageWriter("bonusTestWithSpot1", 1200, 600, 3600, 1800);
-        Render render = new Render(imageWriter, scene);
-
-        render.renderImage();
-        render.writeToImage();
-    }
-*/
-    /**
      * Produce a picture with 10 tubes mirror and sphere
-     * with reflection retraction and DOF
-     * lighted by point lights directional light
+     * with reflection retraction
+     * lighted by point lights and directional light
      */
     @Test
     public void bonusTestBestCameraLocation() {
@@ -255,8 +195,8 @@ public class ReflectionRefractionTests {
 
     /**
      * Produce a picture with 10 tubes mirror and sphere
-     * with reflection retraction and DOF
-     * lighted by point lights directional light
+     * with reflection retraction
+     * lighted by point lights and directional light
      */
     @Test
     public void bonusTestAnotherCameraLocation() {
@@ -303,7 +243,7 @@ public class ReflectionRefractionTests {
 
     /**
      * Produce a picture with 10 tubes mirror and sphere
-     * with reflection retraction and DOF
+     * with reflection retraction
      * lighted by point lights directional light and spot lights
      */
 
