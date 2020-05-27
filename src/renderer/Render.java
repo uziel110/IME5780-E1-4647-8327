@@ -92,34 +92,22 @@ public class Render {
         double width = _imageWriter.getWidth();
         double height = _imageWriter.getHeight();
 
-        // if 'focus' option is on
-        if (_scene.getDOFState())
-            for (int i = 0; i < nY; ++i) {
-                for (int j = 0; j < nX; ++j) {
-                    List<Ray> rays = camera.constructDOFRays(nX, nY, j, i, distance, width, height);
-                    Color averageColor = Color.BLACK;
-                    for (Ray ray : rays) {
-                        GeoPoint closestPoint = findClosestIntersection(ray);
-                        Color closestPointColor = (closestPoint == null) ?
-                                background :
-                                calcColor(closestPoint, ray);
-                        averageColor = averageColor.add(closestPointColor);
-                    }
-                    averageColor = averageColor.scale(1.0 / camera.getRayAmount());
-                    _imageWriter.writePixel(j, i, averageColor.getColor());
-                }
-            }
-            // if 'focus' option is off
-        else
-            for (int i = 0; i < nY; ++i) {
-                for (int j = 0; j < nX; ++j) {
-                    Ray ray = camera.constructRayThroughPixel(nX, nY, j, i, distance, width, height);
+        for (int i = 0; i < nY; ++i) {
+            for (int j = 0; j < nX; ++j) {
+                List<Ray> rays = camera.constructBeamOfRays(nX, nY, j, i, distance, width, height);
+                Color averageColor = Color.BLACK;
+                for (Ray ray : rays) {
                     GeoPoint closestPoint = findClosestIntersection(ray);
-                    _imageWriter.writePixel(j, i, closestPoint == null ?
-                            background.getColor() :
-                            calcColor(closestPoint, ray).getColor());
+                    Color closestPointColor = (closestPoint == null) ?
+                            background :
+                            calcColor(closestPoint, ray);
+                    averageColor = averageColor.add(closestPointColor);
                 }
+                if (rays.size() > 1)
+                    averageColor = averageColor.reduce(rays.size());
+                _imageWriter.writePixel(j, i, averageColor.getColor());
             }
+        }
     }
 
     /**

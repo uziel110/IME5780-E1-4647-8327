@@ -15,7 +15,6 @@ import java.util.List;
  * class that implements scene
  */
 public class Scene {
-    Boolean _depthOfFieldEnabled = false;
     private String _name;
     private Color _background;
     private AmbientLight _ambientLight;
@@ -121,29 +120,6 @@ public class Scene {
      */
     public void setCamera(Camera camera) {
         _camera = new Camera(camera.getLocation(), camera.getVTo(), camera.getVUp());
-    }
-
-    /**
-     * return if depth of field option is enabled
-     *
-     * @return if depth of field option is enabled
-     */
-    public Boolean getDOFState() {
-        return _depthOfFieldEnabled;
-    }
-
-    /**
-     * set depth of field option to enabled
-     */
-    public void setDepthOfFieldEnabled() {
-        _depthOfFieldEnabled = true;
-    }
-
-    /**
-     * set depth of field option to disabled
-     */
-    public void setDepthOfFieldDisabled() {
-        _depthOfFieldEnabled = false;
     }
 
     /**

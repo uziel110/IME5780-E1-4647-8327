@@ -15,12 +15,13 @@ import static primitives.Util.isZero;
  * class that implements Camera
  */
 public class Camera {
+    private static final Random RANDOM = new Random();
     private Point3D _location;
     private Vector _vTo, _vUp, _vRight;
     // parameters for depth of field effect
-    private double _focalLenDistance = 500;
-    private int _apertureSize = 250;
-    private int _rayAmount = 50;
+    private double _focalLenDistance = 0;
+    private double _apertureSize = 0;
+    private int _rayAmount = 1;
 
     /**
      * create a camera by spheroid parametrization
@@ -100,6 +101,7 @@ public class Camera {
      * @param screenHeight   height of the screen
      * @return ray from point location on the camera and goes through a certain pixel on the screen
      */
+    /*
     public Ray constructRayThroughPixel(int nX, int nY,
                                         int j, int i, double screenDistance,
                                         double screenWidth, double screenHeight) {
@@ -107,6 +109,7 @@ public class Camera {
         // pij is always not equal to _location
         return new Ray(_location, pij.subtract(_location).normalized());
     }
+*/
 
     /**
      * return list of rays from point pij on view plane and goes through focal point
@@ -120,9 +123,9 @@ public class Camera {
      * @param screenHeight   height of the screen
      * @return list of rays from point pij on view plane and goes through focal point
      */
-    public List<Ray> constructDOFRays(int nX, int nY,
-                                      int j, int i, double screenDistance,
-                                      double screenWidth, double screenHeight) {
+    public List<Ray> constructBeamOfRays(int nX, int nY,
+                                         int j, int i, double screenDistance,
+                                         double screenWidth, double screenHeight) {
         List<Ray> focalRays = new LinkedList<>();
         // find point on the VP
         Point3D pijVP = getPoint3DPij(nX, nY, j, i, screenDistance, screenWidth, screenHeight);
@@ -131,17 +134,13 @@ public class Camera {
         // add the main ray start from the VP to the list
         focalRays.add(new Ray(pijVP, pijVPVector));
         // find point on the Focal plane
-        Point3D focalPoint = pijVP.add(pijVPVector.scale(_focalLenDistance));
+        Point3D focalPoint = pijVP.add(pijVPVector.scale(_focalLenDistance / _vTo.dotProduct(pijVPVector)));
         // create _rayAmount vectors from VP to Focal Plane in uniform distribution
-
-        Random random = new Random();
-        int numRaysInWidth = (int) Math.sqrt(_rayAmount);
-        double ry = alignZero((double) _apertureSize / numRaysInWidth);
-        double rx = alignZero((double) _apertureSize / numRaysInWidth);
-        for (int k = 0; k < _rayAmount; k++) {
-            Point3D pijDOF = getHeadFocalRay(numRaysInWidth, random.nextInt(numRaysInWidth), random.nextInt(numRaysInWidth), rx, ry, pijVP);
-            focalRays.add(new Ray(pijDOF, focalPoint.subtract(pijDOF)));
-        }
+        if (_rayAmount > 1 && !isZero(_apertureSize))
+            for (int k = _rayAmount - 1; k > 0; k--) {
+                Point3D pijDOF = getHeadFocalRay(pijVP);
+                focalRays.add(new Ray(pijDOF, focalPoint.subtract(pijDOF)));
+            }
         return focalRays;
     }
 
@@ -171,22 +170,14 @@ public class Camera {
 
     /**
      * return point3D - the starting point of ray from the view plane that goes through focal point
-     * `
      *
-     * @param numRaysInWidth points number in the width / height
-     * @param j              pixel row index
-     * @param i              pixel column index
-     * @param rx             the ratio between screen width and points number in the width
-     * @param ry             the ratio between screen height and points number in the height
-     * @param pij            pixel on view plane
+     * @param pij pixel on view plane
      * @return the starting point of tay from the view plane that goes through focal point
      */
-    private Point3D getHeadFocalRay(int numRaysInWidth, int j, int i, double rx, double ry, Point3D pij) {
-        double xj = alignZero((j - numRaysInWidth / 2.0) * rx + rx / 2.0);
-        double yi = alignZero((i - numRaysInWidth / 2.0) * ry + ry / 2.0);
-
-        Point3D pijMoved = new Point3D(pij);
-        return movePoint(xj, yi, pijMoved);
+    private Point3D getHeadFocalRay(Point3D pij) {
+        double xj = _apertureSize * (RANDOM.nextDouble() - 0.5);
+        double yi = _apertureSize * (RANDOM.nextDouble() - 0.5);
+        return movePoint(xj, yi, pij);
     }
 
     /**
@@ -268,7 +259,7 @@ public class Camera {
      *
      * @return size of the aperture
      */
-    public int getApertureSize() {
+    public double getApertureSize() {
         return _apertureSize;
     }
 
