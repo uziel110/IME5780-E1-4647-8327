@@ -29,18 +29,18 @@ public class DepthOfFieldTest {
         scene.setDistance(400);
         scene.setBackground(primitives.Color.BLACK);
         scene.setAmbientLight(new AmbientLight(new primitives.Color(java.awt.Color.WHITE), 0.15));
-        final double KD = 0.3, KS = 1 - KD, KT = 0, KR = 1;
+        double kd = 0.3, ks = 1 - kd, kt = 0, kr = 1;
         primitives.Color sphereColor = new primitives.Color(Color.blue);
         scene.addGeometries(
-                new Sphere(sphereColor, new Material(KD, KS, 30, KT, KR),
+                new Sphere(sphereColor, new Material(kd, ks, 30, kt, kr),
                         100, new Point3D(300, 0, 0)),
-                new Sphere(sphereColor, new Material(KD, KS, 30, KT, KR),
+                new Sphere(sphereColor, new Material(kd, ks, 30, kt, kr),
                         100, new Point3D(0, 0, 0)),
-                new Sphere(sphereColor, new Material(KD, KS, 30, KT, KR),
+                new Sphere(sphereColor, new Material(kd, ks, 30, kt, kr),
                         100, new Point3D(-300, 0, 0)),
-                new Sphere(sphereColor, new Material(KD, KS, 30, KT, KR),
+                new Sphere(sphereColor, new Material(kd, ks, 30, kt, kr),
                         100, new Point3D(-600, 0, 0)),
-                new Sphere(sphereColor, new Material(KD, KS, 30, KT, KR),
+                new Sphere(sphereColor, new Material(kd, ks, 30, kt, kr),
                         100, new Point3D(-900, 0, 0)));
 
         scene.addLights(new DirectionalLight(new primitives.Color(200, 200, 200), new Vector(-1, 1, -1)));
@@ -62,7 +62,7 @@ public class DepthOfFieldTest {
         scene.setDistance(400);
         scene.setBackground(primitives.Color.BLACK);
         scene.setAmbientLight(new AmbientLight(new primitives.Color(java.awt.Color.WHITE), 0.15));
-        final double KD = 0.3, KS = 1 - KD, KT = 0, KR = 1;
+        double kd = 0.3, ks = 1 - kd, kt = 0, kr = 1;
         primitives.Color sphereColor = new primitives.Color(Color.blue);
         scene.addGeometries(
                 new Sphere(sphereColor, new Material(KD, KS, 30, KT, KR),
@@ -76,9 +76,9 @@ public class DepthOfFieldTest {
 
         scene.addLights(new DirectionalLight(new primitives.Color(200, 200, 200), new Vector(-1, 1, -1)));
 
-        final int NUM_PICTURES = 50;
-        for (int i = 0; i < NUM_PICTURES; ++i) {
-            double theta = Math.PI * 2 * (i * 1.0 / NUM_PICTURES);
+        int numPictures = 50;
+        for (int i = 0; i < numPictures; ++i) {
+            double theta = Math.PI * 2 * (i * 1.0 / numPictures);
             scene.setCamera(new Camera(new Point3D(0, 0, 0), 800, theta, Math.PI / 3, Math.PI));
             scene.getCamera().setDepthOfField(400, 1000, 100);
             scene.getCamera().setDepthOfFieldEnabled();
@@ -103,38 +103,36 @@ public class DepthOfFieldTest {
         scene.setDistance(400);
         scene.setBackground(primitives.Color.BLACK);
         scene.setAmbientLight(new AmbientLight(new primitives.Color(java.awt.Color.WHITE), 0.15));
-        final double SCALED = 10, WIDTH = 100 * SCALED, CENTER_Z = 0 * SCALED;
-        final double KD = 0.3, KS = 1 - KD, KT = 0, KR = 1;
+        double kd = 0.3, ks = 1 - kd, kt = 0, kr = 1;
         primitives.Color mirrorColor = new primitives.Color(java.awt.Color.black);
         scene.addGeometries(
                 new Plane(new primitives.Color(java.awt.Color.black), new Material(0.5, 0.5, 30, 0, 0),
                         new Point3D(0, 0, 0), new Vector(0, 0, 1)),
                 new Sphere(new primitives.Color(java.awt.Color.blue), new Material(0.2, 0.2, 30, 0.6, 0.4),
                         300, new Point3D(0, 0, 300)));
-        final double TUBE_RADIUS = 1000;
-        final int NUM_OF_TUBES = 10;
-        for (int i = 0; i < NUM_OF_TUBES; ++i) {
-            double theta = Math.PI * 2 * (i * 1.0 / NUM_OF_TUBES);
+        double tubeRadius = 1000;
+        int numOfTubes = 10;
+        for (int i = 0; i < numOfTubes; ++i) {
+            double theta = Math.PI * 2 * (i * 1.0 / numOfTubes);
             scene.addGeometries(
                     new Tube(new primitives.Color(109, 82, 16), new Material(0.3, 0.7, 50, 0, 0),
-                            new Point3D(TUBE_RADIUS * Math.cos(theta), TUBE_RADIUS * Math.sin(theta), 10), new Vector(0, 0, 1), 100));
+                            new Point3D(tubeRadius * Math.cos(theta), tubeRadius * Math.sin(theta), 10), new Vector(0, 0, 1), 100));
         }
-        Point3D[] polygonPoints = new Point3D[NUM_OF_TUBES];
-        for (int i = 0; i < NUM_OF_TUBES; ++i) {
-            double theta = Math.PI * 2 * (i * 1.0 / NUM_OF_TUBES);
-            polygonPoints[i] = new Point3D(TUBE_RADIUS * Math.cos(theta), TUBE_RADIUS * Math.sin(theta), 10);
+        Point3D[] polygonPoints = new Point3D[numOfTubes];
+        for (int i = 0; i < numOfTubes; ++i) {
+            double theta = Math.PI * 2 * (i * 1.0 / numOfTubes);
+            polygonPoints[i] = new Point3D(tubeRadius * Math.cos(theta), tubeRadius * Math.sin(theta), 10);
         }
-        scene.addGeometries(new Polygon(mirrorColor, new Material(KD, KS, 30, KT, KR), polygonPoints));
+        scene.addGeometries(new Polygon(mirrorColor, new Material(kd, ks, 30, kt, kr), polygonPoints));
 
         scene.addLights(new PointLight(new primitives.Color(654, 495, 96),
                 new Point3D(0, 0, 1500), 1, 4E-5, 2E-7));
         scene.addLights(new DirectionalLight(new primitives.Color(200, 200, 200), new Vector(-1, 1, -1)));
-        final int NUM_OF_POINT_LIGHT = NUM_OF_TUBES;
-        final double LIGHT_RADIUS = TUBE_RADIUS + 130;
-        for (int i = 0; i < NUM_OF_POINT_LIGHT; ++i) {
-            double theta = Math.PI * 2 * (i * 1.0 / NUM_OF_POINT_LIGHT);
-            Point3D downPoint = new Point3D(LIGHT_RADIUS * Math.cos(theta), LIGHT_RADIUS * Math.sin(theta), 5);
-            Point3D upPoint = new Point3D(TUBE_RADIUS * Math.cos(theta), TUBE_RADIUS * Math.sin(theta), 250);
+        double lightRadius = tubeRadius + 130;
+        for (int i = 0; i < numOfTubes; ++i) {
+            double theta = Math.PI * 2 * (i * 1.0 / numOfTubes);
+            Point3D downPoint = new Point3D(lightRadius * Math.cos(theta), lightRadius * Math.sin(theta), 5);
+            Point3D upPoint = new Point3D(tubeRadius * Math.cos(theta), tubeRadius * Math.sin(theta), 250);
             scene.addLights(new SpotLight(new primitives.Color(9500, 1500, 1500), downPoint,
                     upPoint.subtract(downPoint), 10,
                     1, 0.0001, 0.000005));

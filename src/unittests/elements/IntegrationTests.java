@@ -122,13 +122,12 @@ public class IntegrationTests {
      */
     private List<GeoPoint> tests(Geometry object, Camera camera) {
         List<GeoPoint> result = new LinkedList<>();
-        for (int i = 0; i < 3; ++i) {
+        for (int i = 0; i < 3; ++i)
             for (int j = 0; j < 3; ++j) {
-                tests = object.findIntersections(camera.constructRayThroughPixel(3, 3, j, i, 1, 3, 3));
+                tests = object.findIntersections(camera.constructBeamOfRays(3, 3, j, i, 1, 3, 3).get(0));
                 if (tests != null)
                     result.addAll(tests);
             }
-        }
         return result;
     }
 }

@@ -133,14 +133,16 @@ public class Camera {
         Vector pijVPVector = pijVP.subtract(_location).normalized();
         // add the main ray start from the VP to the list
         focalRays.add(new Ray(pijVP, pijVPVector));
-        // find point on the Focal plane
-        Point3D focalPoint = pijVP.add(pijVPVector.scale(_focalLenDistance / _vTo.dotProduct(pijVPVector)));
+
         // create _rayAmount vectors from VP to Focal Plane in uniform distribution
-        if (_rayAmount > 1 && !isZero(_apertureSize))
+        if (_rayAmount > 1 && !isZero(_apertureSize)) {
+            // main point on the Focal plane
+            Point3D focalPoint = pijVP.add(pijVPVector.scale(_focalLenDistance / _vTo.dotProduct(pijVPVector)));
             for (int k = _rayAmount - 1; k > 0; k--) {
                 Point3D pijDOF = getHeadFocalRay(pijVP);
                 focalRays.add(new Ray(pijDOF, focalPoint.subtract(pijDOF)));
             }
+        }
         return focalRays;
     }
 
@@ -271,5 +273,4 @@ public class Camera {
     public int getRayAmount() {
         return _rayAmount;
     }
-
 }
