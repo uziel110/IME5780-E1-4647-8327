@@ -9,13 +9,12 @@ package primitives;
  * @author Dan Zilberstein
  */
 public class Color {
+    public final static Color BLACK = new Color();
     /**
      * The internal fields tx`o maintain RGB components as double numbers from 0 to
      * whatever...
      */
     private double _r = 0.0, _g = 0.0, _b = 0.0;
-
-    public final static Color BLACK = new Color();
 
     /**
      * Default constructor - to generate Black Color (privately)
@@ -92,6 +91,17 @@ public class Color {
     }
 
     /**
+     * Color getter - returns the color after converting it into java.awt.Color
+     * object During the conversion any component bigger than 255 is set to 255
+     *
+     * @return java.awt.Color object based on this Color RGB components
+     */
+    public java.awt.Color getColor() {
+        int r = (int) _r, g = (int) _g, b = (int) _b;
+        return new java.awt.Color(r > 255 ? 255 : r, g > 255 ? 255 : g, b > 255 ? 255 : b);
+    }
+
+    /**
      * Color setter to copy RGB components from another color
      *
      * @param other source Color object
@@ -115,17 +125,6 @@ public class Color {
         _g = other.getGreen();
         _b = other.getBlue();
         return this;
-    }
-
-    /**
-     * Color getter - returns the color after converting it into java.awt.Color
-     * object During the conversion any component bigger than 255 is set to 255
-     *
-     * @return java.awt.Color object based on this Color RGB components
-     */
-    public java.awt.Color getColor() {
-        int r = (int) _r, g = (int) _g, b = (int) _b;
-        return new java.awt.Color(r > 255 ? 255 : r, g > 255 ? 255 : g, b > 255 ? 255 : b);
     }
 
     /**

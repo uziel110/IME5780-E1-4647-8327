@@ -15,7 +15,6 @@ import static primitives.Util.isZero;
  * class that implements Camera
  */
 public class Camera {
-    Boolean _depthOfFieldEnabled = false;
     private Point3D _location;
     private Vector _vTo, _vUp, _vRight;
     // parameters for depth of field effect
@@ -217,29 +216,6 @@ public class Camera {
         _focalLenDistance = focalLenDistance;
         _apertureSize = apertureSize;
         _rayAmount = rayAmount;
-    }
-
-    /**
-     * return if depth of field option is enabled
-     *
-     * @return if depth of field option is enabled
-     */
-    public Boolean getDOFState() {
-        return _depthOfFieldEnabled;
-    }
-
-    /**
-     * set depth of field option to enabled
-     */
-    public void setDepthOfFieldEnabled() {
-        _depthOfFieldEnabled = true;
-    }
-
-    /**
-     * set depth of field option to disabled
-     */
-    public void setDepthOfFieldDisabled() {
-        _depthOfFieldEnabled = false;
     }
 
     /**

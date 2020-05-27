@@ -18,8 +18,8 @@ public class PointLight extends Light implements LightSource {
      * @param intensity Color intensity of the light
      * @param position  Point3D position of the light
      * @param kC        kC >= 1
-     * @param kL        attenuation factor // todo check difference between kL and kQ
-     * @param kQ        attenuation factor
+     * @param kL        attenuation factor linear
+     * @param kQ        attenuation factor quadratic
      */
     public PointLight(Color intensity, Point3D position, double kC, double kL, double kQ) {
         super(intensity);

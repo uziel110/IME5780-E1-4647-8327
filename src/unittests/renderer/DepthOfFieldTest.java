@@ -26,7 +26,7 @@ public class DepthOfFieldTest {
         Scene scene = new Scene("Test scene");
         scene.setCamera(new Camera(new Point3D(0, 0, 0), 800, 0.5, 1, Math.PI));
         scene.getCamera().setDepthOfField(400, 32, 100);
-        scene.getCamera().setDepthOfFieldEnabled();
+        scene.setDepthOfFieldEnabled();
         scene.setDistance(400);
         scene.setBackground(primitives.Color.BLACK);
         scene.setAmbientLight(new AmbientLight(new primitives.Color(java.awt.Color.WHITE), 0.15));
@@ -46,10 +46,10 @@ public class DepthOfFieldTest {
 
         scene.addLights(new DirectionalLight(new primitives.Color(200, 200, 200), new Vector(-1, 1, -1)));
 
-            ImageWriter imageWriter = new ImageWriter("fourBallsDepthOfFieldTest_one2", 600, 600, 1200, 1200);
-            Render render = new Render(imageWriter, scene);
-            render.renderImage();
-            render.writeToImage();
+        ImageWriter imageWriter = new ImageWriter("fourBallsDepthOfFieldTest_one", 600, 600, 1200, 1200);
+        Render render = new Render(imageWriter, scene);
+        render.renderImage();
+        render.writeToImage();
     }
 
     /**
@@ -100,7 +100,7 @@ public class DepthOfFieldTest {
     public void tubesMirrorAndSphereDOFTest() {
         Scene scene = new Scene("Test scene");
         scene.setCamera(new Camera(new Point3D(0, 0, 500), 2500, 0.3, 1.5, Math.PI));
-        scene.getCamera().setDepthOfFieldEnabled();
+        scene.setDepthOfFieldEnabled();
         scene.getCamera().setDepthOfField(2100, 60, 100);
         scene.setDistance(400);
         scene.setBackground(primitives.Color.BLACK);
@@ -147,7 +147,7 @@ public class DepthOfFieldTest {
         render.renderImage();
         render.writeToImage();
 
-        scene.getCamera().setDepthOfFieldDisabled();
+        scene.setDepthOfFieldDisabled();
         imageWriter = new ImageWriter("tubes mirror and sphere without DOF", 500, 500, 1000, 1000);
         render = new Render(imageWriter, scene);
         render.renderImage();

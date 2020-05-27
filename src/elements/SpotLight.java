@@ -21,8 +21,8 @@ public class SpotLight extends PointLight {
      * @param position  Point3D position of the light
      * @param thickness the thickness of the spot > 1
      * @param kC        kC >= 1
-     * @param kL        attenuation factor // todo check difference between kL and kQ
-     * @param kQ        attenuation factor
+     * @param kL        attenuation factor linear
+     * @param kQ        attenuation factor quadratic
      * @param direction Vector direction of the light
      */
     public SpotLight(Color intensity, Point3D position, Vector direction, double thickness, double kC, double kL, double kQ) {
@@ -39,8 +39,8 @@ public class SpotLight extends PointLight {
      * @param intensity Color intensity of the light
      * @param position  Point3D position of the light
      * @param kC        kC >= 1
-     * @param kL        attenuation factor // todo check difference between kL and kQ
-     * @param kQ        attenuation factor
+     * @param kL        attenuation factor linear
+     * @param kQ        attenuation factor quadratic
      * @param direction Direction vector of the light
      */
     public SpotLight(Color intensity, Point3D position, Vector direction, double kC, double kL, double kQ) {
