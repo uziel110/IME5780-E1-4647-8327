@@ -13,6 +13,8 @@ public abstract class Geometry implements Intersectable {
     protected Color _emission;
     protected Material _material;
 
+    // 3DDDA algorithm to improve rendering performance
+    protected double _minX, _maxX, _minY, _maxY, _minZ, _maxZ;
     /**
      * constructor for Geometry class
      *

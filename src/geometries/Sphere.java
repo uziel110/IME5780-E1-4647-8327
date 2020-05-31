@@ -23,6 +23,13 @@ public class Sphere extends RadialGeometry {
     public Sphere(Color emission, Material material, double radius, Point3D point) {
         super(emission, material, radius);
         _center = new Point3D(point);
+        // 3DDDA algorithm to improve rendering performance
+        _minX = point.getX().get() - radius;
+        _maxX = point.getX().get() + radius;
+        _maxY = point.getY().get() - radius;
+        _minY = point.getY().get() + radius;
+        _minZ = point.getZ().get() - radius;
+        _maxZ = point.getZ().get() + radius;
     }
 
     /**

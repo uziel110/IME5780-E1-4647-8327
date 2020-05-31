@@ -293,7 +293,7 @@ public class LightsTests {
     public void tubeMultiLight() {
         Scene scene = new Scene("Test scene");
         scene.setCamera(new Camera(new Point3D(0, 0, -1000), new Vector(0, 0, 1), new Vector(0, -1, 0)));
-        scene.setDistance(1000);
+        scene.setDistance(500);
         scene.setBackground(Color.BLACK);
         scene.setAmbientLight(new AmbientLight(new Color(java.awt.Color.WHITE), 0.15));
 
@@ -307,7 +307,7 @@ public class LightsTests {
                     new Point3D(0 , 0 , 0 - (-1000 * j)), 1, 0.0005, 0.0005));
         }
 
-        ImageWriter imageWriter = new ImageWriter("tubeMultiLight", 200, 200, 500, 500);
+        ImageWriter imageWriter = new ImageWriter("tubeMultiLight", 100, 100, 500, 500);
         Render render = new Render(imageWriter, scene);
 
         render.renderImage();
@@ -321,7 +321,7 @@ public class LightsTests {
     public void tubeMultiLight1() {
         Scene scene = new Scene("Test scene");
         scene.setCamera(new Camera(new Point3D(0, 0, -1000), new Vector(0, 0, 1), new Vector(0, -1, 0)));
-        scene.setDistance(1000);
+        scene.setDistance(500);
         scene.setBackground(Color.BLACK);
         scene.setAmbientLight(new AmbientLight(new Color(java.awt.Color.WHITE), 0.15));
 
@@ -336,7 +336,7 @@ public class LightsTests {
                     new Point3D(180 - (200 * j), -105 - (-75 * j), 1100 - (900 * j)), 1, 0.0005, 0.0005));
         }
 
-        ImageWriter imageWriter = new ImageWriter("tubeMultiLight1", 200, 200, 500, 500);
+        ImageWriter imageWriter = new ImageWriter("tubeMultiLight1", 100, 100, 500, 500);
         Render render = new Render(imageWriter, scene);
 
         render.renderImage();

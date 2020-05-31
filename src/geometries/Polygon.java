@@ -81,6 +81,25 @@ public class Polygon extends Geometry {
             edge2 = vertices[i].subtract(vertices[i - 1]);
             if (positive != (edge1.crossProduct(edge2).dotProduct(n) > 0))
                 throw new IllegalArgumentException("All vertices must be ordered and the polygon must be convex");
+
+            // 3DDDA algorithm to improve rendering performance
+            _maxX = _minX = vertices[0].getX().get();
+            _maxY = _minY = vertices[0].getY().get();
+            _maxZ = _minZ = vertices[0].getZ().get();
+            for (Point3D vertex : vertices) {
+                if (vertex.getX().get() > _maxX)
+                    _maxX = vertex.getX().get();
+                if (vertex.getX().get() < _minX)
+                    _minX = vertex.getX().get();
+                if (vertex.getY().get() > _maxY)
+                    _maxY = vertex.getY().get();
+                if (vertex.getY().get() < _minY)
+                    _minY = vertex.getY().get();
+                if (vertex.getZ().get() > _maxZ)
+                    _maxZ = vertex.getZ().get();
+                if (vertex.getZ().get() < _minZ)
+                    _minZ = vertex.getZ().get();
+            }
         }
     }
 

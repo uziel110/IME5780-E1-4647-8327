@@ -50,7 +50,7 @@ public class ReflectionRefractionTests {
     public void twoSpheresOnMirrors() {
         Scene scene = new Scene("Test scene");
         scene.setCamera(new Camera(new Point3D(0, 0, -10000), new Vector(0, 0, 1), new Vector(0, -1, 0)));
-        scene.setDistance(10000);
+        scene.setDistance(5000);
         scene.setBackground(Color.BLACK);
         scene.setAmbientLight(new AmbientLight(new Color(255, 255, 255), 0.1));
 
@@ -65,7 +65,7 @@ public class ReflectionRefractionTests {
         scene.addLights(new SpotLight(new Color(1020, 400, 400), new Point3D(-750, 750, 150),
                 new Vector(-1, 1, 4), 1, 0.00001, 0.000005));
 
-        ImageWriter imageWriter = new ImageWriter("twoSpheresMirrored", 2500, 2500, 500, 500);
+        ImageWriter imageWriter = new ImageWriter("twoSpheresMirrored", 1250, 1250, 500, 500);
         Render render = new Render(imageWriter, scene);
 
         render.renderImage();
@@ -111,8 +111,8 @@ public class ReflectionRefractionTests {
     @Test
     public void ourTest() {
         Scene scene = new Scene("Test scene");
-        int distance = 1000;
-        scene.setCamera(new Camera(new Point3D(0, 0, 50), distance, 0.5, 1, Math.PI));
+        int distance = 500;
+        scene.setCamera(new Camera(new Point3D(0, 0, 50), 1000, 0.5, 1, Math.PI));
         scene.setDistance(distance);
         scene.setBackground(Color.BLACK);
         scene.setAmbientLight(new AmbientLight(new Color(java.awt.Color.WHITE), 0.15));
@@ -138,7 +138,7 @@ public class ReflectionRefractionTests {
         scene.addLights(new PointLight(new Color(0, 500, 400),
                 new Point3D(0, 0, 100), 1, 4E-5, 2E-7));
 
-        ImageWriter imageWriter = new ImageWriter("ourTest", 200, 200, 600, 600);
+        ImageWriter imageWriter = new ImageWriter("ourTest", 100, 100, 600, 600);
         Render render = new Render(imageWriter, scene);
 
         render.renderImage();
