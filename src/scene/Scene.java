@@ -2,6 +2,7 @@ package scene;
 
 import elements.AmbientLight;
 import elements.Camera;
+import elements.Grid;
 import elements.LightSource;
 import geometries.Geometries;
 import geometries.Intersectable;
@@ -22,6 +23,7 @@ public class Scene {
     private Camera _camera;
     private double _distance;
     private List<LightSource> _lights;
+    private Grid grid;
 
     /**
      * Constructor of scene class, get parameter - name of the scene
