@@ -1,12 +1,10 @@
 package geometries;
 
-import elements.Grid;
 import primitives.Ray;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * class that implements collection of shapes
@@ -41,15 +39,20 @@ public class Geometries implements Intersectable {
         _geometries.addAll(Arrays.asList(geometries));
     }
 
-    public List<Intersectable> getShapes() {
+    /**
+     * return list of all geometries
+     *
+     * @return list of geometries
+     */
+    public List<Intersectable> getGeometries() {
         return _geometries;
     }
 
     @Override
     public List<GeoPoint> findIntersections(Ray ray, double max) {
-        Map<Geometries, Grid> geometriesGridMap;
+        List<Intersectable> geometries = _geometries;
         List<GeoPoint> intersectionPoints = null;
-        for (Intersectable geometry : _geometries) {
+        for (Intersectable geometry : geometries) {
             List<GeoPoint> geometryIntersections = geometry.findIntersections(ray, max);
             // if geometry intersections is null don't add anything
             if (geometryIntersections != null) {

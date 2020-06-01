@@ -70,4 +70,28 @@ public abstract class Geometry implements Intersectable {
      * @return normal to the geometry shape from the received point
      */
     public abstract Vector getNormal(Point3D point);
+
+    public double getMinX() {
+        return _minX;
+    }
+
+    public double getMaxX() {
+        return _maxX;
+    }
+
+    public double getMinY() {
+        return _minY;
+    }
+
+    public double getMaxY() {
+        return _maxY;
+    }
+
+    public double getMinZ() {
+        return _minZ;
+    }
+
+    public double getMaxZ() {
+        return _maxZ;
+    }
 }

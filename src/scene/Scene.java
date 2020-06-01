@@ -5,6 +5,7 @@ import elements.Camera;
 import elements.Grid;
 import elements.LightSource;
 import geometries.Geometries;
+import geometries.Geometry;
 import geometries.Intersectable;
 import primitives.Color;
 
@@ -23,7 +24,6 @@ public class Scene {
     private Camera _camera;
     private double _distance;
     private List<LightSource> _lights;
-    private Grid grid;
 
     /**
      * Constructor of scene class, get parameter - name of the scene

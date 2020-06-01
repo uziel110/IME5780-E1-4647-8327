@@ -27,7 +27,6 @@ public class ReflectionRefractionTests {
         scene.setDistance(1000);
         scene.setBackground(Color.BLACK);
         scene.setAmbientLight(new AmbientLight(Color.BLACK, 0));
-
         scene.addGeometries(
                 new Sphere(new Color(java.awt.Color.BLUE), new Material(0.4, 0.3, 100, 0.3, 0), 50,
                         new Point3D(0, 0, 50)),
