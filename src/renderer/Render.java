@@ -1,7 +1,7 @@
 package renderer;
 
 import elements.Camera;
-import elements.Grid;
+import elements.Box;
 import elements.LightSource;
 import geometries.Intersectable.GeoPoint;
 import primitives.*;
@@ -19,7 +19,7 @@ public class Render {
     private static final double MIN_CALC_COLOR_K = 0.001;
     private ImageWriter _imageWriter;
     private Scene _scene;
-    private Grid _grid;
+    private Box _box;
 
     /**
      * Constructor of Render class, get two parameters - imageWriter and scene
@@ -83,7 +83,7 @@ public class Render {
      * with focus option on or off
      */
     public void renderImage() {
-        _grid = new Grid(_scene.getGeometries(),1);
+        _box = new Box(_scene.getGeometries(),3);
         // scene parameters
         Camera camera = _scene.getCamera();
         Color background = _scene.getBackground();

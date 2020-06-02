@@ -26,8 +26,8 @@ public class Sphere extends RadialGeometry {
         // 3DDDA algorithm to improve rendering performance
         _minX = point.getX().get() - radius;
         _maxX = point.getX().get() + radius;
-        _maxY = point.getY().get() - radius;
-        _minY = point.getY().get() + radius;
+        _minY = point.getY().get() - radius;
+        _maxY = point.getY().get() + radius;
         _minZ = point.getZ().get() - radius;
         _maxZ = point.getZ().get() + radius;
     }

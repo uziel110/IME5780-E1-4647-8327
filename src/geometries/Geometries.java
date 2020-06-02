@@ -50,6 +50,7 @@ public class Geometries implements Intersectable {
 
     @Override
     public List<GeoPoint> findIntersections(Ray ray, double max) {
+
         List<Intersectable> geometries = _geometries;
         List<GeoPoint> intersectionPoints = null;
         for (Intersectable geometry : geometries) {

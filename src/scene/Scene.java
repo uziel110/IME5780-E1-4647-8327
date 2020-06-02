@@ -2,10 +2,8 @@ package scene;
 
 import elements.AmbientLight;
 import elements.Camera;
-import elements.Grid;
 import elements.LightSource;
 import geometries.Geometries;
-import geometries.Geometry;
 import geometries.Intersectable;
 import primitives.Color;
 
