@@ -3,10 +3,15 @@ package elements;
 import geometries.Geometries;
 import geometries.Geometry;
 import geometries.Intersectable;
+import primitives.Point3D;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+
+import static primitives.Util.alignZero;
+import static primitives.Util.isZero;
 
 /**
  * class that implement a grid over all the scene
@@ -18,58 +23,64 @@ public class Box {
      */
     private int _density = 1;
     // 3DDDA algorithm to improve rendering performance
-    private double _minX, _minY, _minZ;
-    private double _maxX, _maxY, _maxZ;
+    private Point3D _min, _max;
+    /*    private double _minX, _minY, _minZ;
+        private double _maxX, _maxY, _maxZ;*/
+    private double _voxelSizeX, _voxelSizeY, _voxelSizeZ;
     private Map<Voxel, Geometries> _voxelGeometriesMap;
+
 
     /**
      * constructor that create a grid over all the scene
      * by set min and max of x y and z axis of the grid
      *
      * @param geometries the geometries in the scene
-     * @param density    number of voxels in width / height / depth
+     * @param lambda     factor for calculate the number of voxels in width / height / depth
      */
-    public Box(Geometries geometries, int density) {
-        _density = density;
+    public Box(Geometries geometries, int lambda) {
         List<Intersectable> geometriesList = geometries.getGeometries();
         Geometry geometry = (Geometry) geometriesList.get(0);
-        _maxX = geometry.getMaxX();
-        _minX = geometry.getMinX();
-        _maxY = geometry.getMaxY();
-        _minY = geometry.getMinY();
-        _maxZ = geometry.getMaxZ();
-        _minZ = geometry.getMinZ();
-
-        for (int i = 1; i < geometriesList.size(); i++) {
+        double _maxX = geometry.getMax().getX().get();
+        double _minX = geometry.getMin().getX().get();
+        double _maxY = geometry.getMax().getY().get();
+        double _minY = geometry.getMin().getY().get();
+        double _maxZ = geometry.getMax().getZ().get();
+        double _minZ = geometry.getMin().getZ().get();
+        int numGeometries = geometriesList.size();
+        for (int i = 1; i < numGeometries; i++) {
             geometry = (Geometry) geometriesList.get(i);
-            if (geometry.getMaxX() > _maxX)
-                _maxX = geometry.getMaxX();
-            if (geometry.getMinX() < _minX)
-                _minX = geometry.getMinX();
-            if (geometry.getMaxY() > _maxY)
-                _maxY = geometry.getMaxY();
-            if (geometry.getMinY() < _minY)
-                _minY = geometry.getMinY();
-            if (geometry.getMaxZ() > _maxZ)
-                _maxZ = geometry.getMaxZ();
-            if (geometry.getMinZ() < _minZ)
-                _minZ = geometry.getMinZ();
+            if (geometry.getMax().getX().get() > _maxX)
+                _maxX = geometry.getMax().getX().get();
+            if (geometry.getMin().getX().get() < _minX)
+                _minX = geometry.getMin().getX().get();
+            if (geometry.getMax().getY().get() > _maxY)
+                _maxY = geometry.getMax().getY().get();
+            if (geometry.getMin().getY().get() < _minY)
+                _minY = geometry.getMin().getY().get();
+            if (geometry.getMax().getZ().get() > _maxZ)
+                _maxZ = geometry.getMax().getZ().get();
+            if (geometry.getMin().getZ().get() < _minZ)
+                _minZ = geometry.getMin().getZ().get();
         }
-        double cellSizeX = (_maxX - _minX) / _density;
-        double cellSizeY = (_maxY - _minY) / _density;
-        double cellSizeZ = (_maxZ - _minZ) / _density;
+        _min = new Point3D(_minX, _minY, _minZ);
+        _max = new Point3D(_maxX, _maxY, _maxZ);
+        double boxVolume = (_maxX - _minX) * (_maxY - _minY) * (_maxZ - _minZ);
+        double averageDimensionSize = ((_maxX - _minX) + (_maxY - _minY) + (_maxZ - _minZ)) / 3;
+        _density = (int) (averageDimensionSize * Math.pow((lambda * numGeometries) / boxVolume, 1.0 / 3));
+
+        _voxelSizeX = alignZero((_maxX - _minX) / _density);
+        _voxelSizeY = alignZero((_maxY - _minY) / _density);
+        _voxelSizeZ = alignZero((_maxZ - _minZ) / _density);
+
         _voxelGeometriesMap = new HashMap<>();
         for (Intersectable intersectable : geometriesList) {
             geometry = (Geometry) intersectable;
-            int voxelMinIndexX = (int) ((geometry.getMinX() - _minX) / cellSizeX);
-            int voxelMaxIndexX = (int) ((geometry.getMaxX() - _minX) / cellSizeX);
-            int voxelMinIndexY = (int) ((geometry.getMinY() - _minY) / cellSizeY);
-            int voxelMaxIndexY = (int) ((geometry.getMaxY() - _minY) / cellSizeY);
-            int voxelMinIndexZ = (int) ((geometry.getMinZ() - _minZ) / cellSizeZ);
-            int voxelMaxIndexZ = (int) ((geometry.getMaxZ() - _minZ) / cellSizeZ);
-            for (int i = voxelMinIndexX; i <= voxelMaxIndexX; i++) {
-                for (int j = voxelMinIndexY; j <= voxelMaxIndexY; j++) {
-                    for (int k = voxelMinIndexZ; k <= voxelMaxIndexZ; k++) {
+            Voxel minVoxel = getMinVoxelIndex(geometry.getMin());
+            Voxel maxVoxel = getMaxVoxelIndex(geometry.getMax());
+
+            for (int i = minVoxel._x; i <= maxVoxel._x; i++) {
+                for (int j = minVoxel._y; j <= maxVoxel._y; j++) {
+                    for (int k = minVoxel._z; k <= maxVoxel._z; k++) {
                         Voxel voxel = new Voxel(i, j, k);
                         if (_voxelGeometriesMap.containsKey(voxel))
                             _voxelGeometriesMap.get(voxel).add(geometry);
@@ -79,6 +90,52 @@ public class Box {
                 }
             }
         }
+    }
+
+    public Voxel getMaxVoxelIndex(Point3D max) {
+        int voxelMaxIndexX = (int) ((max.getX().get() - _min.getX().get()) / _voxelSizeX);
+        if (isZero((max.getX().get() - _min.getX().get()) % _voxelSizeX - _voxelSizeX)) voxelMaxIndexX -= 1;
+        int voxelMaxIndexY = (int) ((max.getY().get() - _min.getY().get()) / _voxelSizeY);
+        if (isZero((max.getY().get() - _min.getY().get()) % _voxelSizeY - _voxelSizeY)) voxelMaxIndexY -= 1;
+        int voxelMaxIndexZ = (int) ((max.getZ().get() - _min.getZ().get()) / _voxelSizeZ);
+        if (isZero((max.getZ().get() - _min.getZ().get()) % _voxelSizeZ - _voxelSizeZ)) voxelMaxIndexZ -= 1;
+        return new Voxel(voxelMaxIndexX, voxelMaxIndexY, voxelMaxIndexZ);
+
+    }
+
+    public Voxel getMinVoxelIndex(Point3D min) {
+        return new Voxel((int) ((min.getX().get() - _min.getX().get()) / _voxelSizeX),
+                (int) ((min.getY().get() - _min.getY().get()) / _voxelSizeY),
+                (int) ((min.getZ().get() - _min.getZ().get()) / _voxelSizeZ));
+    }
+
+    public Point3D getMin() {
+        return _min;
+    }
+
+    public Point3D getMax() {
+        return _max;
+    }
+
+    public double getVoxelSizeX() {
+        return _voxelSizeX;
+    }
+
+    public double getVoxelSizeY() {
+        return _voxelSizeY;
+    }
+
+    public double getVoxelSizeZ() {
+        return _voxelSizeZ;
+    }
+
+    /**
+     * return density
+     *
+     * @return density
+     */
+    public int getDensity() {
+        return _density;
     }
 
     /**
@@ -107,6 +164,11 @@ public class Box {
         @Override
         public String toString() {
             return "Voxel{" + _x + "," + _y + "," + _z + '}';
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(_x, _y, _z);
         }
     }
 }

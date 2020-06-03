@@ -83,7 +83,7 @@ public class Render {
      * with focus option on or off
      */
     public void renderImage() {
-        _box = new Box(_scene.getGeometries(),3);
+        _box = new Box(_scene.getGeometries(),5);
         // scene parameters
         Camera camera = _scene.getCamera();
         Color background = _scene.getBackground();

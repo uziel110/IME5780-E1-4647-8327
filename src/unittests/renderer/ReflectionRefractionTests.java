@@ -3,6 +3,7 @@ package renderer;
 import elements.*;
 import geometries.*;
 import org.junit.Test;
+import parser.TextReader;
 import primitives.Color;
 import primitives.Material;
 import primitives.Point3D;

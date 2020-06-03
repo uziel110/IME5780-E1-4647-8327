@@ -81,25 +81,6 @@ public class Polygon extends Geometry {
             edge2 = vertices[i].subtract(vertices[i - 1]);
             if (positive != (edge1.crossProduct(edge2).dotProduct(n) > 0))
                 throw new IllegalArgumentException("All vertices must be ordered and the polygon must be convex");
-
-            // 3DDDA algorithm to improve rendering performance
-            _maxX = _minX = vertices[0].getX().get();
-            _maxY = _minY = vertices[0].getY().get();
-            _maxZ = _minZ = vertices[0].getZ().get();
-            for (Point3D vertex : vertices) {
-                if (vertex.getX().get() > _maxX)
-                    _maxX = vertex.getX().get();
-                if (vertex.getX().get() < _minX)
-                    _minX = vertex.getX().get();
-                if (vertex.getY().get() > _maxY)
-                    _maxY = vertex.getY().get();
-                if (vertex.getY().get() < _minY)
-                    _minY = vertex.getY().get();
-                if (vertex.getZ().get() > _maxZ)
-                    _maxZ = vertex.getZ().get();
-                if (vertex.getZ().get() < _minZ)
-                    _minZ = vertex.getZ().get();
-            }
         }
     }
 
@@ -112,6 +93,43 @@ public class Polygon extends Geometry {
      */
     public Polygon(Point3D... vertices) {
         this(Color.BLACK, new Material(0, 0, 0), vertices);
+    }
+
+    @Override
+    public Point3D getMin() {
+        // 3DDDA algorithm to improve rendering performance
+        double minX, minY, minZ;
+        minX = _vertices.get(0).getX().get();
+        minY = _vertices.get(0).getY().get();
+        minZ = _vertices.get(0).getZ().get();
+        for (Point3D vertex : _vertices) {
+            if (vertex.getX().get() < minX)
+                minX = vertex.getX().get();
+            if (vertex.getY().get() < minY)
+                minY = vertex.getY().get();
+            if (vertex.getZ().get() < minZ)
+                minZ = vertex.getZ().get();
+        }
+        return new Point3D(minX, minY, minZ);
+
+    }
+
+    @Override
+    public Point3D getMax() {
+// 3DDDA algorithm to improve rendering performance
+        double maxX, maxY, maxZ;
+        maxX = _vertices.get(0).getX().get();
+        maxY = _vertices.get(0).getY().get();
+        maxZ = _vertices.get(0).getZ().get();
+        for (Point3D vertex : _vertices) {
+            if (vertex.getX().get() > maxX)
+                maxX = vertex.getX().get();
+            if (vertex.getY().get() > maxY)
+                maxY = vertex.getY().get();
+            if (vertex.getZ().get() > maxZ)
+                maxZ = vertex.getZ().get();
+        }
+        return new Point3D(maxX, maxY, maxZ);
     }
 
     @Override
