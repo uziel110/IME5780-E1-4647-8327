@@ -9,7 +9,7 @@ import java.util.List;
  * interface for the intersections between the geometry shape and a ray from the camera
  */
 public interface Intersectable {
-
+    int x = 0;
     /**
      * find all the Intersections between the geometry shape and a ray that receive as parameter
      *

@@ -24,14 +24,6 @@ public class Sphere extends RadialGeometry {
         super(emission, material, radius);
         _center = new Point3D(point);
         // 3DDDA algorithm to improve rendering performance
-        double minX = point.getX().get() - radius;
-        double maxX = point.getX().get() + radius;
-        double minY = point.getY().get() - radius;
-        double maxY = point.getY().get() + radius;
-        double minZ = point.getZ().get() - radius;
-        double maxZ = point.getZ().get() + radius;
-        _max = new Point3D(maxX, maxY, maxZ);
-        _min = new Point3D(minX, minY, minZ);
     }
 
     /**
@@ -65,6 +57,22 @@ public class Sphere extends RadialGeometry {
      */
     public Point3D getCenter() {
         return _center;
+    }
+
+    @Override
+    public Point3D getMin() {
+        double minX = _center.getX().get() - _radius;
+        double minY = _center.getY().get() - _radius;
+        double minZ = _center.getZ().get() - _radius;
+        return new Point3D(minX, minY, minZ);
+    }
+
+    @Override
+    public Point3D getMax() {
+        double maxX = _center.getX().get() - _radius;
+        double maxY = _center.getY().get() - _radius;
+        double maxZ = _center.getZ().get() - _radius;
+        return new Point3D(maxX, maxY, maxZ);
     }
 
     @Override

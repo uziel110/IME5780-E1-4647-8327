@@ -5,10 +5,7 @@ import geometries.Geometry;
 import geometries.Intersectable;
 import primitives.Point3D;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
@@ -27,25 +24,26 @@ public class Box {
     /*    private double _minX, _minY, _minZ;
         private double _maxX, _maxY, _maxZ;*/
     private double _voxelSizeX, _voxelSizeY, _voxelSizeZ;
-    private Map<Voxel, Geometries> _voxelGeometriesMap;
-
-
+    private Map<Voxel, List<Intersectable>> _voxelGeometriesMap;
+    /**
+     * factor for calculate the number of voxels in width / height / depth
+     */
+    private int _lambda = 3;
     /**
      * constructor that create a grid over all the scene
      * by set min and max of x y and z axis of the grid
      *
      * @param geometries the geometries in the scene
-     * @param lambda     factor for calculate the number of voxels in width / height / depth
      */
-    public Box(Geometries geometries, int lambda) {
+    public Box(Geometries geometries) {
         List<Intersectable> geometriesList = geometries.getGeometries();
         Geometry geometry = (Geometry) geometriesList.get(0);
-        double _maxX = geometry.getMax().getX().get();
-        double _minX = geometry.getMin().getX().get();
-        double _maxY = geometry.getMax().getY().get();
-        double _minY = geometry.getMin().getY().get();
-        double _maxZ = geometry.getMax().getZ().get();
-        double _minZ = geometry.getMin().getZ().get();
+        double _maxX = -Double.POSITIVE_INFINITY;
+        double _maxY = -Double.POSITIVE_INFINITY;
+        double _maxZ = -Double.POSITIVE_INFINITY;
+        double _minX = Double.POSITIVE_INFINITY;
+        double _minY = Double.POSITIVE_INFINITY;
+        double _minZ = Double.POSITIVE_INFINITY;
         int numGeometries = geometriesList.size();
         for (int i = 1; i < numGeometries; i++) {
             geometry = (Geometry) geometriesList.get(i);
@@ -66,7 +64,7 @@ public class Box {
         _max = new Point3D(_maxX, _maxY, _maxZ);
         double boxVolume = (_maxX - _minX) * (_maxY - _minY) * (_maxZ - _minZ);
         double averageDimensionSize = ((_maxX - _minX) + (_maxY - _minY) + (_maxZ - _minZ)) / 3;
-        _density = (int) (averageDimensionSize * Math.pow((lambda * numGeometries) / boxVolume, 1.0 / 3));
+        _density = (int) (averageDimensionSize * Math.pow((_lambda * numGeometries) / boxVolume, 1.0 / 3));
 
         _voxelSizeX = alignZero((_maxX - _minX) / _density);
         _voxelSizeY = alignZero((_maxY - _minY) / _density);
@@ -84,12 +82,23 @@ public class Box {
                         Voxel voxel = new Voxel(i, j, k);
                         if (_voxelGeometriesMap.containsKey(voxel))
                             _voxelGeometriesMap.get(voxel).add(geometry);
-                        else
-                            _voxelGeometriesMap.put(voxel, new Geometries(geometry));
+                        else {
+                            List<Intersectable> intersects = new LinkedList<>();
+                            intersects.add(geometry);
+                            _voxelGeometriesMap.put(voxel, intersects);
+                        }
                     }
                 }
             }
         }
+    }
+
+    public Map<Voxel, List<Intersectable>> getVoxelMap() {
+        return _voxelGeometriesMap;
+    }
+
+    public void setLambda(int lambda) {
+        _lambda = lambda;
     }
 
     public Voxel getMaxVoxelIndex(Point3D max) {

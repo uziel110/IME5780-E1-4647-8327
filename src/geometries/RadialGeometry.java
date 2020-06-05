@@ -8,7 +8,7 @@ import primitives.Util;
  * abstract class of radial geometries
  */
 public abstract class RadialGeometry extends Geometry {
-    private double _radius;
+    protected double _radius;
 
     /**
      * constructor of RadialGeometry

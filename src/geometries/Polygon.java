@@ -99,9 +99,9 @@ public class Polygon extends Geometry {
     public Point3D getMin() {
         // 3DDDA algorithm to improve rendering performance
         double minX, minY, minZ;
-        minX = _vertices.get(0).getX().get();
-        minY = _vertices.get(0).getY().get();
-        minZ = _vertices.get(0).getZ().get();
+        minX = Double.POSITIVE_INFINITY;
+        minY = Double.POSITIVE_INFINITY;
+        minZ = Double.POSITIVE_INFINITY;
         for (Point3D vertex : _vertices) {
             if (vertex.getX().get() < minX)
                 minX = vertex.getX().get();
@@ -118,9 +118,9 @@ public class Polygon extends Geometry {
     public Point3D getMax() {
 // 3DDDA algorithm to improve rendering performance
         double maxX, maxY, maxZ;
-        maxX = _vertices.get(0).getX().get();
-        maxY = _vertices.get(0).getY().get();
-        maxZ = _vertices.get(0).getZ().get();
+        maxX = -Double.POSITIVE_INFINITY;
+        maxY = -Double.POSITIVE_INFINITY;
+        maxZ = -Double.POSITIVE_INFINITY;
         for (Point3D vertex : _vertices) {
             if (vertex.getX().get() > maxX)
                 maxX = vertex.getX().get();

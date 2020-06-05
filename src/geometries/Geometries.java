@@ -9,13 +9,10 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import static primitives.Util.isZero;
-
 /**
  * class that implements collection of shapes
  */
 public class Geometries implements Intersectable {
-
     private List<Intersectable> _geometries;
     private Box _box;
 
@@ -36,6 +33,14 @@ public class Geometries implements Intersectable {
         _geometries.addAll(Arrays.asList(geometries));
     }
 
+    public Box getBox() {
+        return _box;
+    }
+
+    public void setLambda(int lambda) {
+        _box.setLambda(lambda);
+    }
+
     /**
      * add list of Intersctable to the list
      *
@@ -54,9 +59,8 @@ public class Geometries implements Intersectable {
         return _geometries;
     }
 
-    @Override
-    public List<GeoPoint> findIntersections(Ray ray, double max) {
-        // improve performance
+    private List<Intersectable> getRelevantGeometries(Ray ray){
+
         Vector rayDirection = ray.getVector();
         Point3D rayPoint = ray.getPoint();
         int BoxResolution = _box.getDensity();
@@ -97,14 +101,14 @@ public class Geometries implements Intersectable {
                     rayOrigBox.getEnd().getZ().get() / rayDirection.getEnd().getZ().get();
         }
         double t = 0;
+        return new LinkedList<>();
+    }
 
-
-
-
-
-        List<Intersectable> geometries = _geometries;
+    @Override
+    public List<GeoPoint> findIntersections(Ray ray, double max) {
         List<GeoPoint> intersectionPoints = null;
-        for (Intersectable geometry : geometries) {
+        //for (Intersectable geometry : getRelevantGeometries(ray)) {
+        for (Intersectable geometry : _geometries) {
             List<GeoPoint> geometryIntersections = geometry.findIntersections(ray, max);
             // if geometry intersections is null don't add anything
             if (geometryIntersections != null) {

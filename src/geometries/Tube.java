@@ -126,6 +126,16 @@ public class Tube extends RadialGeometry {
     }
 
     @Override
+    public Point3D getMin() {
+        return null;
+    }
+
+    @Override
+    public Point3D getMax() {
+        return null;
+    }
+
+    @Override
     public Vector getNormal(Point3D point) {
         //v: vector of the ray
         //p: point of the ray

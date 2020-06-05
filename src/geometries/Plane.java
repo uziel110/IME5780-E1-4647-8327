@@ -93,6 +93,16 @@ public class Plane extends Geometry {
     }
 
     @Override
+    public Point3D getMin() {
+        return null;
+    }
+
+    @Override
+    public Point3D getMax() {
+        return null;
+    }
+
+    @Override
     public Vector getNormal(Point3D point) {
         return getNormal();
     }

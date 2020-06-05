@@ -3,7 +3,6 @@ package renderer;
 import elements.*;
 import geometries.*;
 import org.junit.Test;
-import parser.TextReader;
 import primitives.Color;
 import primitives.Material;
 import primitives.Point3D;
@@ -293,6 +292,12 @@ public class ReflectionRefractionTests {
                     upPoint.subtract(downPoint), 10,
                     1, 0.0001, 0.000005));
         }
+
+        scene.getGeometries().setLambda(5);
+
+
+
+
         ImageWriter imageWriter = new ImageWriter("bonusTestWithSpot", 1200, 600, 3600, 1800);
         Render render = new Render(imageWriter, scene);
 
