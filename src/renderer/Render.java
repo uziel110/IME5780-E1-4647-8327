@@ -20,7 +20,7 @@ public class Render {
     private ImageWriter _imageWriter;
     private Scene _scene;
     // ...........
-    private int _threads = 1;
+    private int _threads = 3;
     private boolean _print = false;
 
     /**

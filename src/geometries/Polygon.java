@@ -96,40 +96,57 @@ public class Polygon extends Geometry {
     }
 
     @Override
-    public Point3D getMin() {
-        // 3DDDA algorithm to improve rendering performance
-        double minX, minY, minZ;
-        minX = Double.POSITIVE_INFINITY;
-        minY = Double.POSITIVE_INFINITY;
-        minZ = Double.POSITIVE_INFINITY;
-        for (Point3D vertex : _vertices) {
-            if (vertex.getX().get() < minX)
-                minX = vertex.getX().get();
-            if (vertex.getY().get() < minY)
-                minY = vertex.getY().get();
-            if (vertex.getZ().get() < minZ)
-                minZ = vertex.getZ().get();
-        }
-        return new Point3D(minX, minY, minZ);
-
+    public double getMinX() {
+        double min = Double.POSITIVE_INFINITY;
+        for (Point3D vertex : _vertices)
+            if (vertex.getX().get() < min)
+                min = vertex.getX().get();
+        return min;
     }
 
     @Override
-    public Point3D getMax() {
-// 3DDDA algorithm to improve rendering performance
-        double maxX, maxY, maxZ;
-        maxX = -Double.POSITIVE_INFINITY;
-        maxY = -Double.POSITIVE_INFINITY;
-        maxZ = -Double.POSITIVE_INFINITY;
-        for (Point3D vertex : _vertices) {
-            if (vertex.getX().get() > maxX)
-                maxX = vertex.getX().get();
-            if (vertex.getY().get() > maxY)
-                maxY = vertex.getY().get();
-            if (vertex.getZ().get() > maxZ)
-                maxZ = vertex.getZ().get();
-        }
-        return new Point3D(maxX, maxY, maxZ);
+    public double getMinY() {
+        double min = Double.POSITIVE_INFINITY;
+        for (Point3D vertex : _vertices)
+            if (vertex.getY().get() < min)
+                min = vertex.getY().get();
+        return min;
+    }
+
+    @Override
+    public double getMinZ() {
+        double min = Double.POSITIVE_INFINITY;
+        for (Point3D vertex : _vertices)
+            if (vertex.getZ().get() < min)
+                min = vertex.getZ().get();
+        return min;
+    }
+
+    @Override
+    public double getMaxX() {
+        double max = Double.NEGATIVE_INFINITY;
+        for (Point3D vertex : _vertices)
+            if (vertex.getX().get() < max)
+                max = vertex.getX().get();
+        return max;
+    }
+
+    @Override
+    public double getMaxY() {
+        double max = Double.NEGATIVE_INFINITY;
+        for (Point3D vertex : _vertices)
+            if (vertex.getY().get() < max)
+                max = vertex.getZ().get();
+        return max;
+    }
+
+    @Override
+    public double getMaxZ() {
+        double max = Double.NEGATIVE_INFINITY;
+        for (Point3D vertex : _vertices)
+            if (vertex.getZ().get() < max)
+                max = vertex.getZ().get();
+        return max;
     }
 
     @Override

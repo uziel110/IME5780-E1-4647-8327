@@ -13,12 +13,14 @@ public abstract class Geometry implements Intersectable {
     protected Color _emission;
     protected Material _material;
 
-    public abstract Point3D getMin();
-    public abstract Point3D getMax();
-
     // 3DDDA algorithm to improve rendering performance
-    //protected double _minX, _maxX, _minY, _maxY, _minZ, _maxZ;
-    //protected Point3D _min, _max;
+    public abstract double getMinX();
+    public abstract double getMinY();
+    public abstract double getMinZ();
+    public abstract double getMaxX();
+    public abstract double getMaxY();
+    public abstract double getMaxZ();
+
     /**
      * constructor for Geometry class
      *

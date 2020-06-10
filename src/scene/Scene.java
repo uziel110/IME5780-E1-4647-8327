@@ -1,6 +1,7 @@
 package scene;
 
 import elements.AmbientLight;
+import elements.Box;
 import elements.Camera;
 import elements.LightSource;
 import geometries.Geometries;
@@ -22,6 +23,7 @@ public class Scene {
     private Camera _camera;
     private double _distance;
     private List<LightSource> _lights;
+    private Box _box;
 
     /**
      * Constructor of scene class, get parameter - name of the scene
@@ -32,6 +34,7 @@ public class Scene {
         _name = name;
         _geometries = new Geometries();
         _lights = new LinkedList<>();
+        _box = new Box();
     }
 
     /**
@@ -40,7 +43,10 @@ public class Scene {
      * @param geometries list of Intersctable
      */
     public void addGeometries(Intersectable... geometries) {
+        if (geometries == null)
+            return;
         _geometries.add(geometries);
+        _box.setBoxSize(geometries);
     }
 
     /**

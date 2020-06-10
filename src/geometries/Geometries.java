@@ -14,7 +14,6 @@ import java.util.List;
  */
 public class Geometries implements Intersectable {
     private List<Intersectable> _geometries;
-    private Box _box;
 
     /**
      * default constructor of Geometries
@@ -31,14 +30,6 @@ public class Geometries implements Intersectable {
     public Geometries(Intersectable... geometries) {
         _geometries = new LinkedList<>();
         _geometries.addAll(Arrays.asList(geometries));
-    }
-
-    public Box getBox() {
-        return _box;
-    }
-
-    public void setLambda(int lambda) {
-        _box.setLambda(lambda);
     }
 
     /**

@@ -60,19 +60,33 @@ public class Sphere extends RadialGeometry {
     }
 
     @Override
-    public Point3D getMin() {
-        double minX = _center.getX().get() - _radius;
-        double minY = _center.getY().get() - _radius;
-        double minZ = _center.getZ().get() - _radius;
-        return new Point3D(minX, minY, minZ);
+    public double getMinX() {
+        return _center.getX().get() - _radius;
     }
 
     @Override
-    public Point3D getMax() {
-        double maxX = _center.getX().get() - _radius;
-        double maxY = _center.getY().get() - _radius;
-        double maxZ = _center.getZ().get() - _radius;
-        return new Point3D(maxX, maxY, maxZ);
+    public double getMinY() {
+        return _center.getY().get() - _radius;
+    }
+
+    @Override
+    public double getMinZ() {
+        return _center.getZ().get() - _radius;
+    }
+
+    @Override
+    public double getMaxX() {
+        return _center.getX().get() + _radius;
+    }
+
+    @Override
+    public double getMaxY() {
+        return _center.getY().get() + _radius;
+    }
+
+    @Override
+    public double getMaxZ() {
+        return _center.getZ().get() + _radius;
     }
 
     @Override
