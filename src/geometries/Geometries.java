@@ -111,4 +111,64 @@ public class Geometries implements Intersectable {
         }
         return intersectionPoints;
     }
+
+    public List<GeoPoint> getReleventPoints(Ray ray, Box box) {
+        if (box.getDensity() == 1) {
+            return this.findIntersections(ray);
+        }
+        return null;
+    }
+
+    /**
+     * Getter
+     *
+     * @return List of shapes
+     */
+    public List<Intersectable> getShapes() {
+        return _geometries;
+    }
+
+    @Override
+    public Point3D getMinCoordinates() {
+        double minX = Double.MAX_VALUE;
+        double minY = Double.MAX_VALUE;
+        double minZ = Double.MAX_VALUE;
+        double x, y, z;
+        Point3D p;
+        for (Intersectable i : _geometries) {
+            p = i.getMinCoordinates();
+            x = p.getX().get();
+            y = p.getY().get();
+            z = p.getZ().get();
+            if (x < minX)
+                minX = x;
+            if (y < minY)
+                minY = y;
+            if (z < minZ)
+                minZ = z;
+        }
+        return new Point3D(minX, minY, minZ);
+    }
+
+    @Override
+    public Point3D getMaxCoordinates() {
+        double maxX = -Double.MAX_VALUE;
+        double maxY = -Double.MAX_VALUE;
+        double maxZ = -Double.MAX_VALUE;
+        double x, y, z;
+        Point3D p;
+        for (Intersectable i : _geometries) {
+            p = i.getMaxCoordinates();
+            x = p.getX().get();
+            y = p.getY().get();
+            z = p.getZ().get();
+            if (x > maxX)
+                maxX = x;
+            if (y > maxY)
+                maxY = y;
+            if (z > maxZ)
+                maxZ = z;
+        }
+        return new Point3D(maxX, maxY, maxZ);
+    }
 }

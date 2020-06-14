@@ -34,7 +34,7 @@ public class Scene {
         _name = name;
         _geometries = new Geometries();
         _lights = new LinkedList<>();
-        _box = new Box();
+        _box = new Box(); //todo - need to delete
     }
 
     /**
@@ -46,7 +46,6 @@ public class Scene {
         if (geometries == null)
             return;
         _geometries.add(geometries);
-        _box.setBoxSize(geometries);
     }
 
     /**
@@ -153,5 +152,15 @@ public class Scene {
      */
     public List<LightSource> getLights() {
         return _lights;
+    }
+
+
+
+    public Scene setBoxDensity(int density) {
+        _box = new Box(density, _geometries);
+        return this;
+    }
+    public Box getBox() {
+        return _box;
     }
 }
