@@ -30,15 +30,18 @@ public class Box {
     private double _maxZ = Double.POSITIVE_INFINITY;
     private double _voxelSizeX, _voxelSizeY, _voxelSizeZ;
     private Map<Voxel, Geometries> _voxelGeometriesMap;
+
     /**
      * factor for calculate the number of voxels in width / height / depth
      */
-    private int _lambda = 3;
 
     public Box(int boxDensity, Geometries geometries) {
-        _density = boxDensity;
         setMinBox(geometries.getMinCoordinates());
         setMaxBox(geometries.getMaxCoordinates());
+        /*if (boxDensity > 1)
+            setDensity(geometries.getGeometries().size(), boxDensity);
+        else*/
+        _density = boxDensity;
         setDeltas();
         SetMap(geometries);
     }
@@ -56,27 +59,27 @@ public class Box {
     }
 
     private void setDeltas() {
-        _voxelSizeX = (_maxX - _minX) / _density;
-        _voxelSizeY = (_maxY - _minY) / _density;
-        _voxelSizeZ = (_maxZ - _minZ) / _density;
+        _voxelSizeX = alignZero((_maxX - _minX) / _density);
+        _voxelSizeY = alignZero((_maxY - _minY) / _density);
+        _voxelSizeZ = alignZero((_maxZ - _minZ) / _density);
     }
 
     private Voxel convertPointToVoxel(Point3D min) {
         int x = (int) ((min.getX().get() - _minX) / _voxelSizeX);
         int y = (int) ((min.getY().get() - _minY) / _voxelSizeY);
         int z = (int) ((min.getZ().get() - _minZ) / _voxelSizeZ);
-        return new Voxel(x,y,z);
+        return new Voxel(x, y, z);
     }
 
     public void SetMap(Geometries geometries) {
-        _voxelGeometriesMap = new HashMap<Voxel, Geometries>();
+        _voxelGeometriesMap = new HashMap<>();
         Voxel minVoxel, maxVoxel, voxel;
         for (Intersectable geometry : geometries.getGeometries()) {
             minVoxel = convertPointToVoxel(geometry.getMinCoordinates());
             maxVoxel = convertPointToVoxel(geometry.getMaxCoordinates());
-            for (int x = minVoxel._x; x <= maxVoxel._x; x++)
-                for (int y = minVoxel._y; x <= maxVoxel._y; y++)
-                    for (int z = minVoxel._z; x <= maxVoxel._z; z++) {
+            for (int x = minVoxel._x; x <= maxVoxel._x; ++x)
+                for (int y = minVoxel._y; y <= maxVoxel._y; ++y)
+                    for (int z = minVoxel._z; z <= maxVoxel._z; ++z) {
                         voxel = new Voxel(x, y, z);
                         if (_voxelGeometriesMap.containsKey(voxel))
                             _voxelGeometriesMap.get(voxel).add(geometry);
@@ -88,21 +91,10 @@ public class Box {
         }
     }
 
-/*    public void setDensity() {
-        double boxVolume = (_maxX - _minX) * (_maxY - _minY) * (_maxZ - _minZ);
-        double averageDimensionSize = ((_maxX - _minX) + (_maxY - _minY) + (_maxZ - _minZ)) / 3;
-        _density = (int) (averageDimensionSize * Math.pow((_lambda * geometriesList.size()) / boxVolume, 1.0 / 3));
-
-        _voxelSizeX = alignZero((_maxX - _minX) / _density);
-        _voxelSizeY = alignZero((_maxY - _minY) / _density);
-        _voxelSizeZ = alignZero((_maxZ - _minZ) / _density);
-    }*/
-
     public Voxel getFirstVoxel(Ray ray) {
         Point3D p0 = ray.getPoint();
-        if (isPointInTheBox(p0)) {
+        if (isPointInTheBox(p0))
             return convertPointToVoxel(p0);
-        }
         double minTX = 0, minTY = 0, minTZ = 0;
         double maxTX = Double.POSITIVE_INFINITY, maxTY = maxTX, maxTZ = maxTX;
         Vector v = ray.getDir();
@@ -211,49 +203,6 @@ public class Box {
             tZ = (Math.floor(rayOrigGridZ / _voxelSizeZ + 1) * _voxelSizeZ - rayOrigGridZ) / rayDirectionZ;
 
         }
-//		//////
-//		Vector rayDirection = ray.getDir();
-//		Point3D dirHeadP = rayDirection.getHeadPoint();
-//		Point3D rayOrigin = ray.getP0();
-//		// int BoxResolution = _boxDensity;
-//		double voxelDimX = _voxelSizeX;
-//		double voxelDimY = _voxelSizeY;
-//		double voxelDimZ = _voxelSizeZ;
-//		// Vector nextCrossingT;
-//		double deltaX, deltaY, deltaZ;
-//		double tX, tY, tZ;
-//		Vector rayOrigBox = rayOrigin.subtract(new Point3D(_minX, _minY, _minZ));
-//		Point3D originPoint = rayOrigBox.getHeadPoint();
-//		// X
-//		if (dirHeadP.getX().get() < 0) {
-//			deltaX = (_minX - _maxX) / dirHeadP.getX().get();
-//			tX = (Math.floor(originPoint.getX().get() / voxelDimX) * voxelDimX - originPoint.getX().get())
-//					/ dirHeadP.getX().get();
-//		} else {
-//			deltaX = (_maxX - _minX) / dirHeadP.getX().get();
-//			tX = ((Math.floor(originPoint.getX().get() / voxelDimX) + 1) * voxelDimX - originPoint.getX().get())
-//					/ dirHeadP.getX().get();
-//		}
-//		// Y
-//		if (dirHeadP.getY().get() < 0) {
-//			deltaY = (_minY - _maxY) / dirHeadP.getY().get();
-//			tY = (Math.floor(originPoint.getY().get() / voxelDimY) * voxelDimY - originPoint.getY().get())
-//					/ dirHeadP.getY().get();
-//		} else {
-//			deltaY = (_maxY - _minY) / dirHeadP.getY().get();
-//			tY = ((Math.floor(originPoint.getY().get() / voxelDimY) + 1) * voxelDimY - originPoint.getY().get())
-//					/ dirHeadP.getY().get();
-//		}
-//		// Z
-//		if (dirHeadP.getZ().get() < 0) {
-//			deltaZ = (_minZ - _maxZ) / dirHeadP.getZ().get();
-//			tZ = (Math.floor(originPoint.getZ().get() / voxelDimZ) * voxelDimZ - originPoint.getZ().get())
-//					/ dirHeadP.getZ().get();
-//		} else {
-//			deltaZ = (_maxZ - _minZ) / dirHeadP.getZ().get();
-//			tZ = ((Math.floor(originPoint.getZ().get() / voxelDimZ) + 1) * voxelDimZ - originPoint.getZ().get())
-//					/ dirHeadP.getZ().get();
-//		}
         int[] voxelIndex = new int[3];
         voxelIndex[0] = voxel.getX();
         voxelIndex[1] = voxel.getY();
@@ -345,10 +294,6 @@ public class Box {
         return _voxelGeometriesMap;
     }
 
-    public void setLambda(int lambda) {
-        _lambda = lambda;
-    }
-
     public double getVoxelSizeX() {
         return _voxelSizeX;
     }
@@ -368,6 +313,12 @@ public class Box {
      */
     public int getDensity() {
         return _density;
+    }
+
+    public void setDensity(int numGeometries, int lambda) {
+        double boxVolume = (_maxX - _minX) * (_maxY - _minY) * (_maxZ - _minZ);
+        double averageDimensionSize = ((_maxX - _minX) + (_maxY - _minY) + (_maxZ - _minZ)) / 3;
+        _density = (int) (averageDimensionSize * Math.pow((lambda * numGeometries) / boxVolume, 1 / 3d));
     }
 
     public double getMinX() {

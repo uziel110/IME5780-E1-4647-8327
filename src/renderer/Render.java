@@ -201,6 +201,12 @@ public class Render {
         }
     }
 */
+    public Render setBoxDensity(int boxDensity) {
+        if (boxDensity <= 0)
+            throw new IllegalArgumentException("Box Density must be 1 or bigger\n");
+        _scene.setBoxDensity(boxDensity);
+        return this;
+    }
 
     /**
      * print grid on the image
@@ -357,10 +363,15 @@ public class Render {
      * @return return the closest point to the head of the reflected ray
      */
     private GeoPoint findClosestIntersection(Ray ray) {
-        List<GeoPoint> intersectionPoints = _scene.getGeometries().findIntersections(ray);
+        List<GeoPoint> relevantPoint = _scene.getGeometries().getRelevantPoints(ray, _scene.getBox(), false,
+                Double.POSITIVE_INFINITY);
+        if (relevantPoint == null) return null;
+        return getClosestPoint(ray.getPoint(), relevantPoint);
+
+/*        List<GeoPoint> intersectionPoints = _scene.getGeometries().findIntersections(ray);
         if (intersectionPoints == null)
             return null;
-        return getClosestPoint(ray.getPoint(), intersectionPoints);
+        return getClosestPoint(ray.getPoint(), intersectionPoints);*/
     }
 
     /**
@@ -371,6 +382,7 @@ public class Render {
      * @return GeoPoint the closest point to the ray begin point
      */
     private GeoPoint getClosestPoint(Point3D point, List<GeoPoint> geoPoints) {
+
         GeoPoint closestPoint = null;
         double distance,
                 minDistance = Double.MAX_VALUE;

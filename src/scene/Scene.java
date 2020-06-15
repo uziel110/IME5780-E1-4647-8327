@@ -34,7 +34,6 @@ public class Scene {
         _name = name;
         _geometries = new Geometries();
         _lights = new LinkedList<>();
-        _box = new Box();
     }
 
     /**
@@ -43,10 +42,8 @@ public class Scene {
      * @param geometries list of Intersctable
      */
     public void addGeometries(Intersectable... geometries) {
-        if (geometries == null)
-            return;
+        if (geometries == null) return;
         _geometries.add(geometries);
-        _box.setBoxSize(geometries);
     }
 
     /**
@@ -153,5 +150,20 @@ public class Scene {
      */
     public List<LightSource> getLights() {
         return _lights;
+    }
+
+    /**
+     * set density
+     *
+     * @param density
+     * @return Scene
+     */
+    public Scene setBoxDensity(int density) {
+        _box = new Box(density, _geometries);
+        return this;
+    }
+
+    public Box getBox() {
+        return _box;
     }
 }

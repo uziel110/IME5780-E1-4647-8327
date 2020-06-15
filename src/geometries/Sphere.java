@@ -59,35 +59,6 @@ public class Sphere extends RadialGeometry {
         return _center;
     }
 
-    @Override
-    public double getMinX() {
-        return _center.getX().get() - _radius;
-    }
-
-    @Override
-    public double getMinY() {
-        return _center.getY().get() - _radius;
-    }
-
-    @Override
-    public double getMinZ() {
-        return _center.getZ().get() - _radius;
-    }
-
-    @Override
-    public double getMaxX() {
-        return _center.getX().get() + _radius;
-    }
-
-    @Override
-    public double getMaxY() {
-        return _center.getY().get() + _radius;
-    }
-
-    @Override
-    public double getMaxZ() {
-        return _center.getZ().get() + _radius;
-    }
 
     @Override
     public Vector getNormal(Point3D other) {
@@ -128,5 +99,15 @@ public class Sphere extends RadialGeometry {
         if (t1 <= 0) // only t2 > 0
             return List.of(new GeoPoint(this, ray.getPoint(t2)));
         return List.of(new GeoPoint(this, ray.getPoint(t1)), new GeoPoint(this, ray.getPoint(t2)));
+    }
+
+    @Override
+    public Point3D getMinCoordinates() {
+        return _center.add(new Vector(1,1,1).scale(-_radius));
+    }
+
+    @Override
+    public Point3D getMaxCoordinates() {
+        return _center.add(new Vector(1,1,1).scale(_radius));
     }
 }
