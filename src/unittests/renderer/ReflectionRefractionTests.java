@@ -293,11 +293,6 @@ public class ReflectionRefractionTests {
                     1, 0.0001, 0.000005));
         }
 
-        scene.getGeometries().setLambda(5);
-
-
-
-
         ImageWriter imageWriter = new ImageWriter("bonusTestWithSpot", 1200, 600, 3600, 1800);
         Render render = new Render(imageWriter, scene);
 

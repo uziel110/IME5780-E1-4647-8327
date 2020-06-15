@@ -34,7 +34,6 @@ public class Scene {
         _name = name;
         _geometries = new Geometries();
         _lights = new LinkedList<>();
-        _box = new Box(); //todo - need to delete
     }
 
     /**
@@ -43,8 +42,7 @@ public class Scene {
      * @param geometries list of Intersctable
      */
     public void addGeometries(Intersectable... geometries) {
-        if (geometries == null)
-            return;
+        if (geometries == null) return;
         _geometries.add(geometries);
     }
 
@@ -154,12 +152,17 @@ public class Scene {
         return _lights;
     }
 
-
-
+    /**
+     * set density
+     *
+     * @param density
+     * @return Scene
+     */
     public Scene setBoxDensity(int density) {
         _box = new Box(density, _geometries);
         return this;
     }
+
     public Box getBox() {
         return _box;
     }

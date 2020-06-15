@@ -4,7 +4,6 @@ import elements.Box;
 import elements.Box.Voxel;
 import primitives.Point3D;
 import primitives.Ray;
-import primitives.Vector;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -51,42 +50,39 @@ public class Geometries implements Intersectable {
         return _geometries;
     }
 
-    public List<GeoPoint> getRelevantPoints(Ray ray, Box box, boolean shadowRays, double dis) {
-        if (box == null) {
+    public List<GeoPoint> getRelevantPoints(Ray ray, Box box, boolean shadowRaysCase, double dis) {
+        if (box == null)
             return this.findIntersections(ray, dis);
-        } else {
-            boolean canStop = false;
-            List<GeoPoint> geoPoints = null;
-            // System.out.println(ray);
-            Voxel voxel = box.getFirstVoxel(ray);
-            if (voxel != null) {
-                // System.out.println(voxel);
-                if (box.getMap().containsKey(voxel)) {
-                    Geometries geometries = box.getMap().get(voxel);
-                    for (Intersectable geometry : geometries.getGeometries()) {
-                        List<GeoPoint> gPoints = geometry.findIntersections(ray, dis);
-                        if (gPoints != null) {
-                            if (!shadowRays && !canStop)
-                                canStop = box.isIntersectInVoxelRange(voxel, gPoints);
-                            geoPoints = new LinkedList<GeoPoint>();
-                            geoPoints.addAll(gPoints);
-                        }
-                    }
-                    if (canStop)
-                        return geoPoints;
-                }
-                // Traveling on the box
-                List<GeoPoint> gP = box.checkNextVoxels(voxel, ray, shadowRays, dis);
-                if (gP != null) {
+        boolean intersectionFoundInVoxel = false;
+        List<GeoPoint> geoPoints = null;
+        Voxel firstVoxel = box.getFirstVoxel(ray);
+        if (firstVoxel == null)
+            return null;
+        if (box.getMap().containsKey(firstVoxel)) {
+            Geometries geometries = box.getMap().get(firstVoxel);
+            for (Intersectable geometry : geometries.getGeometries()) {
+                List<GeoPoint> geometryIntersectionPoints = geometry.findIntersections(ray, dis);
+                if (geometryIntersectionPoints != null) {
+                    if (!shadowRaysCase && !intersectionFoundInVoxel)
+                        intersectionFoundInVoxel = box.isIntersectInVoxelRange(firstVoxel, geometryIntersectionPoints);
                     if (geoPoints == null)
                         geoPoints = new LinkedList<GeoPoint>();
-                    geoPoints.addAll(gP);
+                    geoPoints.addAll(geometryIntersectionPoints);
                 }
             }
-            return geoPoints;
+            if (intersectionFoundInVoxel)
+                return geoPoints;
         }
-
+        // Traveling on the box
+        List<GeoPoint> gP = box.checkNextVoxels(firstVoxel, ray, shadowRaysCase, dis);
+        if (gP != null) {
+            if (geoPoints == null)
+                geoPoints = new LinkedList<GeoPoint>();
+            geoPoints.addAll(gP);
+        }
+        return geoPoints;
     }
+
 
     @Override
     public List<GeoPoint> findIntersections(Ray ray, double max) {

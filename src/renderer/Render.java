@@ -19,7 +19,6 @@ public class Render {
     private final int SPARE_THREADS = 2;
     private ImageWriter _imageWriter;
     private Scene _scene;
-    private int _numOfrays;
     // ...........
     private int _threads = 3;
     private boolean _print = false;
@@ -31,19 +30,8 @@ public class Render {
      * @param scene  Scene - scene details
      */
     public Render(ImageWriter writer, Scene scene) {
-        this(writer, scene, 1);
-    }
-
-    /**
-     *
-     * @param writer
-     * @param scene
-     * @param numOfrays
-     */
-    public Render(ImageWriter writer, Scene scene, int numOfrays) {
         _imageWriter = writer;
-        _scene = scene.setBoxDensity(10);
-        _numOfrays = numOfrays;
+        _scene = scene;
     }
 
     /**
@@ -213,6 +201,12 @@ public class Render {
         }
     }
 */
+    public Render setBoxDensity(int boxDensity) {
+        if (boxDensity <= 0)
+            throw new IllegalArgumentException("Box Density must be 1 or bigger\n");
+        _scene.setBoxDensity(boxDensity);
+        return this;
+    }
 
     /**
      * print grid on the image
@@ -369,24 +363,15 @@ public class Render {
      * @return return the closest point to the head of the reflected ray
      */
     private GeoPoint findClosestIntersection(Ray ray) {
-        List<GeoPoint> releventPoint =  _scene.getGeometries().getReleventPoints(ray,_scene.getBox());
-        List<GeoPoint> intersectionPoints = _scene.getGeometries().findIntersections(ray);
+        List<GeoPoint> relevantPoint = _scene.getGeometries().getRelevantPoints(ray, _scene.getBox(), false,
+                Double.POSITIVE_INFINITY);
+        if (relevantPoint == null) return null;
+        return getClosestPoint(ray.getPoint(), relevantPoint);
+
+/*        List<GeoPoint> intersectionPoints = _scene.getGeometries().findIntersections(ray);
         if (intersectionPoints == null)
             return null;
-
-        Point3D head = ray.getPoint();
-        double distance, minDistance = Double.MAX_VALUE;
-        GeoPoint pointToReturn = null;
-        for (GeoPoint gPoint : intersectionPoints) {
-            distance = head.distance(gPoint._point);
-            if (distance < minDistance) {
-            // A point with smaller distance to Camera was found
-                minDistance = distance;
-                pointToReturn = gPoint;
-            }
-        }
-
-        return getClosestPoint(ray.getPoint(), intersectionPoints);
+        return getClosestPoint(ray.getPoint(), intersectionPoints);*/
     }
 
     /**
@@ -397,6 +382,7 @@ public class Render {
      * @return GeoPoint the closest point to the ray begin point
      */
     private GeoPoint getClosestPoint(Point3D point, List<GeoPoint> geoPoints) {
+
         GeoPoint closestPoint = null;
         double distance,
                 minDistance = Double.MAX_VALUE;
@@ -464,7 +450,7 @@ public class Render {
             _maxCols = maxCols;
             _pixels = maxRows * maxCols;
             _nextCounter = _pixels / 100;
-            if (_print) System.out.printf("\r %02d%%", _percents);
+            if (Render.this._print) System.out.printf("\r %02d%%", _percents);
         }
 
         /**

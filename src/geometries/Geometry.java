@@ -13,14 +13,6 @@ public abstract class Geometry implements Intersectable {
     protected Color _emission;
     protected Material _material;
 
-    // 3DDDA algorithm to improve rendering performance
-    public abstract double getMinX();
-    public abstract double getMinY();
-    public abstract double getMinZ();
-    public abstract double getMaxX();
-    public abstract double getMaxY();
-    public abstract double getMaxZ();
-
     /**
      * constructor for Geometry class
      *
@@ -76,28 +68,4 @@ public abstract class Geometry implements Intersectable {
      * @return normal to the geometry shape from the received point
      */
     public abstract Vector getNormal(Point3D point);
-
-    /*public double getMinX() {
-        return _minX;
-    }
-
-    public double getMaxX() {
-        return _maxX;
-    }
-
-    public double getMinY() {
-        return _minY;
-    }
-
-    public double getMaxY() {
-        return _maxY;
-    }
-
-    public double getMinZ() {
-        return _minZ;
-    }
-
-    public double getMaxZ() {
-        return _maxZ;
-    }*/
 }

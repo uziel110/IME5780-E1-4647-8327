@@ -93,16 +93,6 @@ public class Plane extends Geometry {
     }
 
     @Override
-    public Point3D getMin() {
-        return null;
-    }
-
-    @Override
-    public Point3D getMax() {
-        return null;
-    }
-
-    @Override
     public Vector getNormal(Point3D point) {
         return getNormal();
     }
@@ -128,5 +118,15 @@ public class Plane extends Geometry {
         if (t <= 0 || alignZero(t - max) > 0) return null;
 
         return List.of(new GeoPoint(this, ray.getPoint(t)));
+    }
+
+    @Override
+    public Point3D getMinCoordinates() {
+        return null;
+    }
+
+    @Override
+    public Point3D getMaxCoordinates() {
+        return null;
     }
 }
