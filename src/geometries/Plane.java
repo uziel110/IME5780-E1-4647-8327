@@ -118,7 +118,7 @@ public class Plane extends Geometry {
     @Override
     public List<GeoPoint> findIntersections(Ray ray, double max) {
         Point3D p0 = ray.getPoint();
-        Vector v = ray.getVector();
+        Vector v = ray.getDir();
         if (_p.equals(p0)) return null;
 
         double t1 = _normal.dotProduct(_p.subtract(p0));

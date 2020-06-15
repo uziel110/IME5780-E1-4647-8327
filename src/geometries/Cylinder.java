@@ -103,14 +103,14 @@ public class Cylinder extends Tube {
 
     @Override
     public Vector getNormal(Point3D point) {
-        Vector v = new Vector(getAxisRay().getVector());
+        Vector v = new Vector(getAxisRay().getDir());
         Vector qp = point.subtract(getAxisRay().getPoint());
 
         double t = alignZero(v.dotProduct(qp));
 
         // if t == 0 v is orthogonal to qp so return qp
         if (t == 0 || Util.isZero(t - _height))
-            return getAxisRay().getVector();
+            return getAxisRay().getDir();
 
         Point3D o = this.getAxisRay().getPoint().add(v.scale(t));
         return point.subtract(o).normalize();

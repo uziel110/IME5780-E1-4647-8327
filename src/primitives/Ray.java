@@ -79,7 +79,7 @@ public class Ray {
      *
      * @return direction vector of the Ray
      */
-    public Vector getVector() {
+    public Vector getDir() {
         return _vector;
     }
 

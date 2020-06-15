@@ -30,6 +30,20 @@ public interface Intersectable {
     List<GeoPoint> findIntersections(Ray ray, double max);
 
     /**
+     * get min coordinates
+     *
+     * @return min coordinates
+     */
+    public Point3D getMinCoordinates();
+
+    /**
+     * get max coordinates
+     *
+     * @return max coordinates
+     */
+    public Point3D getMaxCoordinates();
+
+    /**
      * class for groping point and his geometry
      */
     public static class GeoPoint {

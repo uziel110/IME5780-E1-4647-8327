@@ -1,6 +1,7 @@
 package geometries;
 
 import elements.Box;
+import elements.Box.Voxel;
 import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
@@ -50,49 +51,41 @@ public class Geometries implements Intersectable {
         return _geometries;
     }
 
-    private List<Intersectable> getRelevantGeometries(Ray ray){
+    public List<GeoPoint> getRelevantPoints(Ray ray, Box box, boolean shadowRays, double dis) {
+        if (box == null) {
+            return this.findIntersections(ray, dis);
+        } else {
+            boolean canStop = false;
+            List<GeoPoint> geoPoints = null;
+            // System.out.println(ray);
+            Voxel voxel = box.getFirstVoxel(ray);
+            if (voxel != null) {
+                // System.out.println(voxel);
+                if (box.getMap().containsKey(voxel)) {
+                    Geometries geometries = box.getMap().get(voxel);
+                    for (Intersectable geometry : geometries.getGeometries()) {
+                        List<GeoPoint> gPoints = geometry.findIntersections(ray, dis);
+                        if (gPoints != null) {
+                            if (!shadowRays && !canStop)
+                                canStop = box.isIntersectInVoxelRange(voxel, gPoints);
+                            geoPoints = new LinkedList<GeoPoint>();
+                            geoPoints.addAll(gPoints);
+                        }
+                    }
+                    if (canStop)
+                        return geoPoints;
+                }
+                // Traveling on the box
+                List<GeoPoint> gP = box.checkNextVoxels(voxel, ray, shadowRays, dis);
+                if (gP != null) {
+                    if (geoPoints == null)
+                        geoPoints = new LinkedList<GeoPoint>();
+                    geoPoints.addAll(gP);
+                }
+            }
+            return geoPoints;
+        }
 
-        Vector rayDirection = ray.getVector();
-        Point3D rayPoint = ray.getPoint();
-        int BoxResolution = _box.getDensity();
-        double voxelDimX = _box.getVoxelSizeX();
-        double voxelDimY = _box.getVoxelSizeY();
-        double voxelDimZ = _box.getVoxelSizeZ();
-        Vector nextCrossingT;
-        double deltaX, deltaY, deltaZ;
-        Vector rayOrigBox = rayPoint.subtract(_box.getMin());
-        //X
-        if (rayDirection.getEnd().getX().get() < 0) {
-            deltaX = (_box.getMin().getX().get() - _box.getMax().getX().get()) / rayDirection.getEnd().getX().get();
-            double tX = (Math.floor(rayOrigBox.getEnd().getX().get() / voxelDimX) * voxelDimX) -
-                    rayOrigBox.getEnd().getX().get() / rayDirection.getEnd().getX().get();
-        } else {
-            deltaX = (_box.getMax().getX().get() - _box.getMin().getX().get()) / rayDirection.getEnd().getX().get();
-            double tX = ((Math.floor(rayOrigBox.getEnd().getX().get() / voxelDimX) + 1) * voxelDimX) -
-                    rayOrigBox.getEnd().getX().get() / rayDirection.getEnd().getX().get();
-        }
-        //Y
-        if (rayDirection.getEnd().getY().get() < 0) {
-            deltaY = (_box.getMin().getY().get() - _box.getMax().getY().get()) / rayDirection.getEnd().getY().get();
-            double tY = (Math.floor(rayOrigBox.getEnd().getY().get() / voxelDimY) * voxelDimY) -
-                    rayOrigBox.getEnd().getY().get() / rayDirection.getEnd().getY().get();
-        } else {
-            deltaY = (_box.getMax().getY().get() - _box.getMin().getY().get()) / rayDirection.getEnd().getY().get();
-            double tY = ((Math.floor(rayOrigBox.getEnd().getY().get() / voxelDimY) + 1) * voxelDimY) -
-                    rayOrigBox.getEnd().getY().get() / rayDirection.getEnd().getY().get();
-        }
-        //Z
-        if (rayDirection.getEnd().getZ().get() < 0) {
-            deltaZ = (_box.getMin().getZ().get() - _box.getMax().getZ().get()) / rayDirection.getEnd().getZ().get();
-            double tZ = (Math.floor(rayOrigBox.getEnd().getZ().get() / voxelDimZ) * voxelDimZ) -
-                    rayOrigBox.getEnd().getZ().get() / rayDirection.getEnd().getZ().get();
-        } else {
-            deltaZ = (_box.getMax().getZ().get() - _box.getMin().getZ().get()) / rayDirection.getEnd().getZ().get();
-            double tZ = ((Math.floor(rayOrigBox.getEnd().getZ().get() / voxelDimZ) + 1) * voxelDimZ) -
-                    rayOrigBox.getEnd().getZ().get() / rayDirection.getEnd().getZ().get();
-        }
-        double t = 0;
-        return new LinkedList<>();
     }
 
     @Override
@@ -112,27 +105,11 @@ public class Geometries implements Intersectable {
         return intersectionPoints;
     }
 
-    public List<GeoPoint> getReleventPoints(Ray ray, Box box) {
-        if (box.getDensity() == 1) {
-            return this.findIntersections(ray);
-        }
-        return null;
-    }
-
-    /**
-     * Getter
-     *
-     * @return List of shapes
-     */
-    public List<Intersectable> getShapes() {
-        return _geometries;
-    }
-
     @Override
     public Point3D getMinCoordinates() {
-        double minX = Double.MAX_VALUE;
-        double minY = Double.MAX_VALUE;
-        double minZ = Double.MAX_VALUE;
+        double minX = Double.POSITIVE_INFINITY;
+        double minY = Double.POSITIVE_INFINITY;
+        double minZ = Double.POSITIVE_INFINITY;
         double x, y, z;
         Point3D p;
         for (Intersectable i : _geometries) {
@@ -152,9 +129,9 @@ public class Geometries implements Intersectable {
 
     @Override
     public Point3D getMaxCoordinates() {
-        double maxX = -Double.MAX_VALUE;
-        double maxY = -Double.MAX_VALUE;
-        double maxZ = -Double.MAX_VALUE;
+        double maxX = Double.NEGATIVE_INFINITY;
+        double maxY = Double.NEGATIVE_INFINITY;
+        double maxZ = Double.NEGATIVE_INFINITY;
         double x, y, z;
         Point3D p;
         for (Intersectable i : _geometries) {

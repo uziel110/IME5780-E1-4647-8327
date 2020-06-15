@@ -311,7 +311,7 @@ public class Render {
      * @return return new ray reflected from the surface at the point
      */
     private Ray constructReflectedRay(Vector n, GeoPoint geoPoint, Ray inRay) {
-        Vector reflectedVector = inRay.getVector().subtract(n.scale(inRay.getVector().dotProduct(n) * 2)); //r
+        Vector reflectedVector = inRay.getDir().subtract(n.scale(inRay.getDir().dotProduct(n) * 2)); //r
         return new Ray(geoPoint._point, reflectedVector, n);
     }
 
@@ -324,7 +324,7 @@ public class Render {
      * @return return new ray refracted from the surface at the point
      */
     private Ray constructRefractedRay(Vector n, GeoPoint geoPoint, Ray inRay) {
-        return new Ray(geoPoint._point, inRay.getVector(), n);// refracted lightRay
+        return new Ray(geoPoint._point, inRay.getDir(), n);// refracted lightRay
     }
 
     /**

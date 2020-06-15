@@ -64,9 +64,9 @@ public class Point3D {
      * @return new Point at the end of vector that begin from this point
      */
     public Point3D add(Vector vector) {
-        return new Point3D(_x._coord + vector.getEnd()._x._coord,
-                _y._coord + vector.getEnd()._y._coord,
-                _z._coord + vector.getEnd()._z._coord);
+        return new Point3D(_x._coord + vector.getHead()._x._coord,
+                _y._coord + vector.getHead()._y._coord,
+                _z._coord + vector.getHead()._z._coord);
     }
 
     /**

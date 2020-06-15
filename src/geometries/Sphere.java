@@ -105,7 +105,7 @@ public class Sphere extends RadialGeometry {
     @Override
     public List<GeoPoint> findIntersections(Ray ray, double max) {
         Point3D p0 = ray.getPoint();
-        Vector v = ray.getVector();
+        Vector v = ray.getDir();
 
         double radius = getRadius();
 

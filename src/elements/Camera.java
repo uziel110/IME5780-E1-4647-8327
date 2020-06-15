@@ -46,15 +46,15 @@ public class Camera {
         _vTo = direction.scale(-1).normalize();
         // calculation for roll the camera
         Vector tempUp;
-        if (isZero(direction.getEnd().getX().get()))
-            tempUp = direction.crossProduct(new Vector(0, direction.getEnd().getZ().get(),
-                    -direction.getEnd().getY().get()).normalize());
-        else if (isZero(direction.getEnd().getY().get()))
-            tempUp = direction.crossProduct(new Vector(direction.getEnd().getZ().get(),
-                    0, -direction.getEnd().getX().get()).normalize());
+        if (isZero(direction.getHead().getX().get()))
+            tempUp = direction.crossProduct(new Vector(0, direction.getHead().getZ().get(),
+                    -direction.getHead().getY().get()).normalize());
+        else if (isZero(direction.getHead().getY().get()))
+            tempUp = direction.crossProduct(new Vector(direction.getHead().getZ().get(),
+                    0, -direction.getHead().getX().get()).normalize());
         else
-            tempUp = direction.crossProduct(new Vector(direction.getEnd().getY().get(),
-                    -direction.getEnd().getX().get(), 0)).normalize();
+            tempUp = direction.crossProduct(new Vector(direction.getHead().getY().get(),
+                    -direction.getHead().getX().get(), 0)).normalize();
 
         Vector tempRight = _vTo.crossProduct(tempUp).normalize();
         double x1 = Math.cos(roll) / tempUp.length();
