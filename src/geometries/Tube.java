@@ -141,7 +141,7 @@ public class Tube extends RadialGeometry {
         //p: point of the ray
         //q: point on the surface
         //qp: q - p
-        Vector v = new Vector(_axisRay.getVector());
+        Vector v = new Vector(_axisRay.getDir());
         Vector qp = point.subtract(_axisRay.getPoint());
 
         double t = alignZero(v.dotProduct(qp));
@@ -158,16 +158,16 @@ public class Tube extends RadialGeometry {
         double radius = this.getRadius();
 
         Point3D rayPoint = new Point3D(ray.getPoint());
-        Vector rayVector = new Vector(ray.getVector());
+        Vector rayVector = new Vector(ray.getDir());
         Point3D axisRayPoint = new Point3D(_axisRay.getPoint());
-        Vector axisRayVector = new Vector(_axisRay.getVector());
+        Vector axisRayVector = new Vector(_axisRay.getDir());
 
-        double alfa = pointMultPoint(axisRayVector.getEnd(), rayPoint);
-        alfa -= pointMultPoint(axisRayVector.getEnd(), axisRayPoint);
+        double alfa = pointMultPoint(axisRayVector.getHead(), rayPoint);
+        alfa -= pointMultPoint(axisRayVector.getHead(), axisRayPoint);
         double beta = rayVector.dotProduct(axisRayVector);
 
-        Point3D a = subtract(subtract(ray.getPoint(), _axisRay.getPoint()), (point3DScale(axisRayVector.getEnd(), alfa)));
-        Point3D b = subtract(rayVector.getEnd(), (point3DScale(axisRayVector.getEnd(), beta)));
+        Point3D a = subtract(subtract(ray.getPoint(), _axisRay.getPoint()), (point3DScale(axisRayVector.getHead(), alfa)));
+        Point3D b = subtract(rayVector.getHead(), (point3DScale(axisRayVector.getHead(), beta)));
 
         double w1, w2, w3;
         w1 = alignZero(pointMultPoint(b, b));

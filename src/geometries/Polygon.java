@@ -178,7 +178,7 @@ public class Polygon extends Geometry {
         }
         nList.add((pList.get(pList.size() - 1).crossProduct(pList.get(0))).normalize());
 
-        Vector v = ray.getVector();
+        Vector v = ray.getDir();
 
         double d = alignZero(v.dotProduct(nList.get(0)));
         boolean positive = d > 0;

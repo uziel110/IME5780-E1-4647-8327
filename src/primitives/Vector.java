@@ -153,7 +153,7 @@ public class Vector {
      *
      * @return point of end of vector that start from "first the hinges"
      */
-    public Point3D getEnd() {
+    public Point3D getHead() {
         return _end;
     }
 
