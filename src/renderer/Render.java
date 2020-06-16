@@ -177,13 +177,11 @@ public class Render {
         Camera camera = _scene.getCamera();
         Color background = _scene.getBackground();
         double distance = _scene.getDistance();
-
         // imageWriter parameters
         int nX = _imageWriter.getNx();
         int nY = _imageWriter.getNy();
         double width = _imageWriter.getWidth();
         double height = _imageWriter.getHeight();
-
         for (int i = 0; i < nY; ++i) {
             for (int j = 0; j < nX; ++j) {
                 List<Ray> rays = camera.constructBeamOfRays(nX, nY, j, i, distance, width, height);

@@ -6,14 +6,12 @@ import geometries.Intersectable.GeoPoint;
 import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
-
 import java.util.*;
-
 import static primitives.Util.alignZero;
 
 /**
  * 3DDDA algorithm to improve rendering performance
- * <p>
+ *
  * class that implement a grid over all the scene
  * and divide it to voxels
  */
@@ -43,24 +41,43 @@ public class Box {
         SetMap(geometries);
     }
 
+    /**
+     * set the minimum coordinates of the box
+     *
+     * @param min the minimum coordinates of the geometries
+     */
     private void setMinBox(Point3D min) {
         _minX = min.getX().get();
         _minY = min.getY().get();
         _minZ = min.getZ().get();
     }
 
+    /**
+     *  set the maximum coordinates of the box
+     *
+     * @param max the maximum coordinates of the geometries
+     */
     private void setMaxBox(Point3D max) {
         _maxX = max.getX().get();
         _maxY = max.getY().get();
         _maxZ = max.getZ().get();
     }
 
+    /**
+     * set voxel size
+     */
     private void setDeltas() {
         _voxelSizeX = (_maxX - _minX) / _density;
         _voxelSizeY = (_maxY - _minY) / _density;
         _voxelSizeZ = (_maxZ - _minZ) / _density;
     }
 
+    /**
+     * convert point to voxel
+     *
+     * @param point to convert
+     * @return voxel
+     */
     private Voxel convertPointToVoxel(Point3D point) {
         int x = (int) ((point.getX().get() - _minX) / _voxelSizeX);
         int y = (int) ((point.getY().get() - _minY) / _voxelSizeY);
@@ -68,6 +85,12 @@ public class Box {
         return new Voxel(x, y, z);
     }
 
+    /**
+     * Assigns voxels to each geometry by the location of the geometry, relative to the box,
+     * and saves the geometry and voxel where the geometry is in the map
+     *
+     * @param geometries all the geometries that exist in the scene
+     */
     public void SetMap(Geometries geometries) {
         _voxelGeometriesMap = new HashMap<>();
         Voxel minVoxel, maxVoxel, voxel;
@@ -88,6 +111,11 @@ public class Box {
         }
     }
 
+    /**
+     *
+     * @param ray
+     * @return
+     */
     public Voxel getFirstVoxel(Ray ray) {
         Point3D p0 = ray.getPoint();
         if (isPointInTheBox(p0))
@@ -199,6 +227,14 @@ public class Box {
         return new double[]{tX, tY, tZ, deltaX, deltaY, deltaZ};
     }
 
+    /**
+     *
+     *
+     * @param voxel
+     * @param ray
+     * @param TandDelta
+     * @return
+     */
     public Voxel getNextVoxel(Voxel voxel, Ray ray, double[] TandDelta) {
         int[] voxelIndex = new int[3];
         voxelIndex[0] = voxel.getX();
@@ -241,6 +277,12 @@ public class Box {
         return new Voxel(voxelIndex[0], voxelIndex[1], voxelIndex[2]);
     }
 
+    /**
+     *
+     * @param voxel
+     * @param intersections
+     * @return
+     */
     public boolean isIntersectInVoxelRange(Voxel voxel, List<GeoPoint> intersections) {
         for (GeoPoint geoPoint : intersections)
             if (convertPointToVoxel(geoPoint._point).equals(voxel))
@@ -248,6 +290,12 @@ public class Box {
         return false;
     }
 
+    /**
+     * return if the point is within the range of the box
+     *
+     * @param p point
+     * @return if the point is within the range of the box
+     */
     private boolean isPointInTheBox(Point3D p) {
         double x = p.getX().get();
         double y = p.getY().get();
@@ -255,18 +303,31 @@ public class Box {
         return x >= _minX && x <= _maxX && y >= _minY && y <= _maxY && z >= _minZ && z <= _maxZ;
     }
 
-    public Map<Voxel, Geometries> getVoxelMap() {
-        return _voxelGeometriesMap;
-    }
 
+
+    /**
+     * return the x size voxel
+     *
+     * @return x size voxel
+     */
     public double getVoxelSizeX() {
         return _voxelSizeX;
     }
 
+    /**
+     * return the y size voxel
+     *
+     * @return y size voxel
+     */
     public double getVoxelSizeY() {
         return _voxelSizeY;
     }
 
+    /**
+     * return the z size voxel
+     *
+     * @return z size voxel
+     */
     public double getVoxelSizeZ() {
         return _voxelSizeZ;
     }
@@ -280,36 +341,77 @@ public class Box {
         return _density;
     }
 
+    /**
+     * set the density of the map
+     *
+     * @param numGeometries amount of the geometries
+     * @param lambda number between 3 to 5
+     */
     public void setDensity(int numGeometries, int lambda) {
         double boxVolume = (_maxX - _minX) * (_maxY - _minY) * (_maxZ - _minZ);
         double averageDimensionSize = ((_maxX - _minX) + (_maxY - _minY) + (_maxZ - _minZ)) / 3;
         _density = (int) (averageDimensionSize * Math.pow((lambda * numGeometries) / boxVolume, 1 / 3d));
     }
 
+    /**
+     * return minimum x coordinate of the box
+     *
+     * @return minimum x coordinate of the box
+     */
     public double getMinX() {
         return _minX;
     }
 
+    /**
+     * return minimum y coordinate of the box
+     *
+     * @return minimum y coordinate of the box
+     */
     public double getMinY() {
         return _minY;
     }
 
+    /**
+     * return minimum z coordinate of the box
+     *
+     * @return minimum z coordinate of the box
+     */
     public double getMinZ() {
         return _minZ;
     }
 
+    /**
+     * return maximum x coordinate of the box
+     *
+     * @return maximum x coordinate of the box
+     */
     public double getMaxX() {
         return _maxX;
     }
 
+    /**
+     * return maximum y coordinate of the box
+     *
+     * @return maximum y coordinate of the box
+     */
     public double getMaxY() {
         return _maxY;
     }
 
+    /**
+     * return maximum z coordinate of the box
+     *
+     * @return maximum z coordinate of the box
+     */
     public double geMaxZ() {
         return _maxZ;
     }
 
+    /**
+     * return map
+     *
+     * @return Map
+     */
     public Map<Voxel, Geometries> getMap() {
         return _voxelGeometriesMap;
     }
@@ -322,6 +424,13 @@ public class Box {
         private final int _y;
         private final int _z;
 
+        /**
+         * constructor
+         *
+         * @param indexX x coordinate
+         * @param indexY y coordinate
+         * @param indexZ z coordinate
+         */
         public Voxel(int indexX, int indexY, int indexZ) {
             _x = indexX;
             _y = indexY;
@@ -347,14 +456,29 @@ public class Box {
             return Objects.hash(_x, _y, _z);
         }
 
+        /**
+         * return x coordinate of the voxel
+         *
+         * @return x coordinate
+         */
         public int getX() {
             return _x;
         }
 
+        /**
+         * return y coordinate of the voxel
+         *
+         * @return y coordinate
+         */
         public int getY() {
             return _y;
         }
 
+        /**
+         * return Z coordinate of the voxel
+         *
+         * @return Z coordinate
+         */
         public int getZ() {
             return _z;
         }
