@@ -5,21 +5,19 @@ import elements.Box.Voxel;
 import primitives.Point3D;
 import primitives.Ray;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * class that implements collection of shapes
  */
 public class Geometries implements Intersectable {
-    private List<Intersectable> _geometries;
+    private List<Intersectable> _geometriesList;
 
     /**
      * default constructor of Geometries
      */
     public Geometries() {
-        _geometries = new LinkedList<>();
+        _geometriesList = new LinkedList<>();
     }
 
     /**
@@ -28,8 +26,8 @@ public class Geometries implements Intersectable {
      * @param geometries list of Intersectable
      */
     public Geometries(Intersectable... geometries) {
-        _geometries = new LinkedList<>();
-        _geometries.addAll(Arrays.asList(geometries));
+        _geometriesList = new LinkedList<>();
+        _geometriesList.addAll(Arrays.asList(geometries));
     }
 
     /**
@@ -38,7 +36,9 @@ public class Geometries implements Intersectable {
      * @param geometries list of Intersctable
      */
     public void add(Intersectable... geometries) {
-        _geometries.addAll(Arrays.asList(geometries));
+        for (Intersectable intersectable : geometries) {
+            _geometriesList.add(intersectable);
+        }
     }
 
     /**
@@ -47,7 +47,7 @@ public class Geometries implements Intersectable {
      * @return list of geometries
      */
     public List<Intersectable> getGeometries() {
-        return _geometries;
+        return _geometriesList;
     }
 
     public List<GeoPoint> getRelevantPoints(Ray ray, Box box, boolean shadowRaysCase, double dis) {
@@ -55,40 +55,42 @@ public class Geometries implements Intersectable {
             return this.findIntersections(ray, dis);
         boolean intersectionFoundInVoxel = false;
         List<GeoPoint> geoPoints = null;
-        Voxel firstVoxel = box.getFirstVoxel(ray);
-        if (firstVoxel == null)
-            return null;
-        if (box.getMap().containsKey(firstVoxel)) {
-            Geometries geometries = box.getMap().get(firstVoxel);
-            for (Intersectable geometry : geometries.getGeometries()) {
-                List<GeoPoint> geometryIntersectionPoints = geometry.findIntersections(ray, dis);
-                if (geometryIntersectionPoints != null) {
-                    if (!shadowRaysCase && !intersectionFoundInVoxel)
-                        intersectionFoundInVoxel = box.isIntersectInVoxelRange(firstVoxel, geometryIntersectionPoints);
-                    if (geoPoints == null)
-                        geoPoints = new LinkedList<GeoPoint>();
-                    geoPoints.addAll(geometryIntersectionPoints);
-                }
+        List<GeoPoint> geometryIntersectionPoints=null;
+        Set<Intersectable> geometriesSet = new HashSet<>();
+        Geometries currentGeometries = new Geometries();
+
+        double[] deltaAndTArr = box.getRayDeltaAndT(ray);
+        Voxel currentVoxel = box.getFirstVoxel(ray);
+
+        while (currentVoxel != null) {
+            if (!box.getMap().containsKey(currentVoxel)) {
+                currentVoxel = box.getNextVoxel(currentVoxel, ray, deltaAndTArr);
+                continue;
             }
-            if (intersectionFoundInVoxel)
-                return geoPoints;
-        }
-        // Traveling on the box
-        List<GeoPoint> gP = box.checkNextVoxels(firstVoxel, ray, shadowRaysCase, dis);
-        if (gP != null) {
-            if (geoPoints == null)
-                geoPoints = new LinkedList<GeoPoint>();
-            geoPoints.addAll(gP);
+            Geometries geometries = box.getMap().get(currentVoxel);
+            for (Intersectable intersectable : geometries.getGeometries())
+                if (!geometriesSet.contains(intersectable)) {
+                    currentGeometries.add(intersectable);
+                    geometriesSet.add(intersectable);
+                }
+            geometryIntersectionPoints = currentGeometries.findIntersections(ray, dis);
+            if (geometryIntersectionPoints != null) {
+                if (geoPoints == null)
+                    geoPoints = new LinkedList<>();
+                geoPoints.addAll(geometryIntersectionPoints);
+                if (!shadowRaysCase && !intersectionFoundInVoxel)
+                    intersectionFoundInVoxel = box.isIntersectInVoxelRange(currentVoxel, geometryIntersectionPoints);
+                else if (intersectionFoundInVoxel)
+                    return geoPoints;
+            }
+            currentVoxel = box.getNextVoxel(currentVoxel, ray, deltaAndTArr);
         }
         return geoPoints;
     }
-
-
     @Override
     public List<GeoPoint> findIntersections(Ray ray, double max) {
         List<GeoPoint> intersectionPoints = null;
-        //for (Intersectable geometry : getRelevantGeometries(ray)) {
-        for (Intersectable geometry : _geometries) {
+        for (Intersectable geometry : _geometriesList) {
             List<GeoPoint> geometryIntersections = geometry.findIntersections(ray, max);
             // if geometry intersections is null don't add anything
             if (geometryIntersections != null) {
@@ -108,7 +110,7 @@ public class Geometries implements Intersectable {
         double minZ = Double.POSITIVE_INFINITY;
         double x, y, z;
         Point3D p;
-        for (Intersectable i : _geometries) {
+        for (Intersectable i : _geometriesList) {
             p = i.getMinCoordinates();
             x = p.getX().get();
             y = p.getY().get();
@@ -130,7 +132,7 @@ public class Geometries implements Intersectable {
         double maxZ = Double.NEGATIVE_INFINITY;
         double x, y, z;
         Point3D p;
-        for (Intersectable i : _geometries) {
+        for (Intersectable i : _geometriesList) {
             p = i.getMaxCoordinates();
             x = p.getX().get();
             y = p.getY().get();

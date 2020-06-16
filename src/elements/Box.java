@@ -21,7 +21,7 @@ public class Box {
     /**
      * number of voxels in width / height / depth
      */
-    private int _density = 1;
+    private int _density;
     private double _minX = Double.NEGATIVE_INFINITY;
     private double _minY = Double.NEGATIVE_INFINITY;
     private double _minZ = Double.NEGATIVE_INFINITY;
@@ -35,13 +35,10 @@ public class Box {
      * factor for calculate the number of voxels in width / height / depth
      */
 
-    public Box(int boxDensity, Geometries geometries) {
+    public Box(int lambda, Geometries geometries) {
         setMinBox(geometries.getMinCoordinates());
         setMaxBox(geometries.getMaxCoordinates());
-        /*if (boxDensity > 1)
-            setDensity(geometries.getGeometries().size(), boxDensity);
-        else*/
-        _density = boxDensity;
+        setDensity(geometries.getGeometries().size(), lambda);
         setDeltas();
         SetMap(geometries);
     }
@@ -59,15 +56,15 @@ public class Box {
     }
 
     private void setDeltas() {
-        _voxelSizeX = alignZero((_maxX - _minX) / _density);
-        _voxelSizeY = alignZero((_maxY - _minY) / _density);
-        _voxelSizeZ = alignZero((_maxZ - _minZ) / _density);
+        _voxelSizeX = (_maxX - _minX) / _density;
+        _voxelSizeY = (_maxY - _minY) / _density;
+        _voxelSizeZ = (_maxZ - _minZ) / _density;
     }
 
-    private Voxel convertPointToVoxel(Point3D min) {
-        int x = (int) ((min.getX().get() - _minX) / _voxelSizeX);
-        int y = (int) ((min.getY().get() - _minY) / _voxelSizeY);
-        int z = (int) ((min.getZ().get() - _minZ) / _voxelSizeZ);
+    private Voxel convertPointToVoxel(Point3D point) {
+        int x = (int) ((point.getX().get() - _minX) / _voxelSizeX);
+        int y = (int) ((point.getY().get() - _minY) / _voxelSizeY);
+        int z = (int) ((point.getZ().get() - _minZ) / _voxelSizeZ);
         return new Voxel(x, y, z);
     }
 
@@ -158,11 +155,10 @@ public class Box {
         if (minT < maxT)
             return null;
         Point3D p = ray.getPoint(maxT);
-        // System.out.println(p);
         return convertPointToVoxel(p);
     }
 
-    public List<GeoPoint> checkNextVoxels(Voxel voxel, Ray ray, boolean shadowRays, double dis) {
+    public double[] getRayDeltaAndT(Ray ray) {
         Vector rayDirection = ray.getDir();
         Point3D rayHead = rayDirection.getHead();
         double rayDirectionX = rayHead.getX().get();
@@ -185,7 +181,6 @@ public class Box {
         } else { // Positive direction on the x axis
             deltaX = _voxelSizeX / rayDirectionX;
             tX = (Math.floor(rayOrigGridX / _voxelSizeX + 1) * _voxelSizeX - rayOrigGridX) / rayDirectionX;
-
         }
         if (rayDirectionY < 0) { // Negative direction on the y axis
             deltaY = -_voxelSizeY / rayDirectionY;
@@ -193,7 +188,6 @@ public class Box {
         } else { // Positive direction on the y axis
             deltaY = _voxelSizeY / rayDirectionY;
             tY = (Math.floor(rayOrigGridY / _voxelSizeY + 1) * _voxelSizeY - rayOrigGridY) / rayDirectionY;
-
         }
         if (rayDirectionZ < 0) { // Negative direction on the z axis
             deltaZ = -_voxelSizeZ / rayDirectionZ;
@@ -201,85 +195,56 @@ public class Box {
         } else { // Positive direction on the z axis
             deltaZ = _voxelSizeZ / rayDirectionZ;
             tZ = (Math.floor(rayOrigGridZ / _voxelSizeZ + 1) * _voxelSizeZ - rayOrigGridZ) / rayDirectionZ;
-
         }
+        return new double[]{tX, tY, tZ, deltaX, deltaY, deltaZ};
+    }
+
+    public Voxel getNextVoxel(Voxel voxel, Ray ray, double[] TandDelta) {
         int[] voxelIndex = new int[3];
         voxelIndex[0] = voxel.getX();
         voxelIndex[1] = voxel.getY();
         voxelIndex[2] = voxel.getZ();
-        List<GeoPoint> geoPoints = null;
-        boolean canStop = false;
-        // double t;
-        while (true) {
-            if (tX < tY)
-                if (tX < tZ) {
-                    // t = tX; // current t, next intersection with cell along ray
-                    tX += deltaX; // increment, next crossing along x
-                    if (rayDirectionX < 0)
-                        voxelIndex[0] -= 1;
-                    else
-                        voxelIndex[0] += 1;
-                } else {
-                    tZ += deltaZ;
-                    if (rayDirectionZ < 0)
-                        voxelIndex[2] -= 1;
-                    else
-                        voxelIndex[2] += 1;
-                }
-            else if (tY < tZ) {
-                // t = tY;
-                tY += deltaY; // increment, next crossing along y
-                if (rayDirectionY < 0)
-                    voxelIndex[1] -= 1;
+        if (TandDelta[0] < TandDelta[1])
+            if (TandDelta[0] < TandDelta[2]) {
+                // t = tX; // current t, next intersection with cell along ray
+                TandDelta[0] += TandDelta[3]; // increment, next crossing along x
+                if (ray.getDir().getHead().getX().get() < 0)
+                    voxelIndex[0] -= 1;
                 else
-                    voxelIndex[1] += 1;
+                    voxelIndex[0] += 1;
             } else {
-                // t = tZ;
-                tZ += deltaZ; // increment, next crossing along y
-                if (rayDirectionZ < 0)
+                TandDelta[2] += TandDelta[5];
+                if (ray.getDir().getHead().getZ().get() < 0)
                     voxelIndex[2] -= 1;
                 else
                     voxelIndex[2] += 1;
             }
-            // if some condition is met break from the loop
-            if (voxelIndex[0] < 0 || voxelIndex[1] < 0 || voxelIndex[2] < 0 || voxelIndex[0] >= _density
-                    || voxelIndex[1] >= _density || voxelIndex[2] >= _density)
-                return geoPoints;
-            Voxel v = new Voxel(voxelIndex[0], voxelIndex[0], voxelIndex[0]);
-            if (_voxelGeometriesMap.containsKey(v)) {
-                Geometries geometries = _voxelGeometriesMap.get(v);
-                for (Intersectable geometry : geometries.getGeometries()) {
-                    List<GeoPoint> gPoints = geometry.findIntersections(ray, dis);
-                    if (gPoints != null) {
-                        if (geoPoints == null)
-                            geoPoints = new LinkedList<GeoPoint>();
-                        if (!shadowRays && !canStop)
-                            if (isIntersectInVoxelRange(v, gPoints))
-                                canStop = true;
-                        geoPoints.addAll(gPoints);
-                    }
-                }
-                if (canStop)
-                    return geoPoints;
-            }
+        else if (TandDelta[1] < TandDelta[2]) {
+            // t = tY;
+            TandDelta[1] += TandDelta[4]; // increment, next crossing along y
+            if (ray.getDir().getHead().getY().get() < 0)
+                voxelIndex[1] -= 1;
+            else
+                voxelIndex[1] += 1;
+        } else {
+            // t = tZ;
+            TandDelta[2] += TandDelta[5]; // increment, next crossing along y
+            if (ray.getDir().getHead().getZ().get() < 0)
+                voxelIndex[2] -= 1;
+            else
+                voxelIndex[2] += 1;
         }
+        // if some condition is met break from the loop
+        if (voxelIndex[0] < 0 || voxelIndex[1] < 0 || voxelIndex[2] < 0 || voxelIndex[0] > _density
+                || voxelIndex[1] > _density || voxelIndex[2] > _density)
+            return null;
+        return new Voxel(voxelIndex[0], voxelIndex[1], voxelIndex[2]);
     }
 
     public boolean isIntersectInVoxelRange(Voxel voxel, List<GeoPoint> intersections) {
-        double minX = _minX + voxel.getX() * _voxelSizeX;
-        double maxX = minX + _voxelSizeX;
-        double minY = _minY + voxel.getY() * _voxelSizeY;
-        double maxY = minY + _voxelSizeY;
-        double minZ = _minZ + voxel.getZ() * _voxelSizeZ;
-        double maxZ = minZ + _voxelSizeZ;
-        double x, y, z;
-        for (GeoPoint geoPoint : intersections) {
-            x = geoPoint._point.getX().get();
-            y = geoPoint._point.getY().get();
-            z = geoPoint._point.getZ().get();
-            if (x >= minX && x <= maxX && y >= minY && y <= maxY && z >= minZ && z <= maxZ)
+        for (GeoPoint geoPoint : intersections)
+            if (convertPointToVoxel(geoPoint._point).equals(voxel))
                 return true;
-        }
         return false;
     }
 
@@ -352,10 +317,10 @@ public class Box {
     /**
      * class that implement voxel (piece of the volume)
      */
-    public class Voxel {
-        private int _x;
-        private int _y;
-        private int _z;
+    public static class Voxel {
+        private final int _x;
+        private final int _y;
+        private final int _z;
 
         public Voxel(int indexX, int indexY, int indexZ) {
             _x = indexX;

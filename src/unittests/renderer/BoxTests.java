@@ -20,12 +20,12 @@ public class BoxTests {
     public void createSpheres() {
         Scene scene = new Scene("Test scene");
         scene.setCamera(new Camera(new Point3D(-2000, 0, 0), new Vector(1, 0, 0), new Vector(0, 0, 1)));
-        scene.setDistance(500);
+        scene.setDistance(300);
         scene.setBackground(Color.BLACK);
         scene.setAmbientLight(new AmbientLight(new Color(132, 124, 65), 0));
 
         Random rand = new Random();
-        int NUM = 500, MOVE = 100;
+        int NUM = 499, MOVE = 100;
 
         Geometries geometries = new Geometries();
         for (int i = NUM; i >= 0; --i) {
@@ -53,13 +53,12 @@ public class BoxTests {
                             Math.abs(rand.nextInt() % 255)),
                     new Material(0.4, 0.7, 100), 50, new Point3D(i * 100 - 200, MOVE * i, -MOVE * i / 2d)));
         }
-
         scene.addGeometries(geometries);
         scene.addLights(new DirectionalLight(new Color(48, 170, 176), new Vector(0, -1, 0)),
                 new PointLight(new Color(103, 110, 13), new Point3D(0, -100, 0), 1, 0, 0));
 // scene.makeTree();
-        ImageWriter imageWriter = new ImageWriter("Box test", 500, 500, 500, 500);
-        Render render = new Render(imageWriter, scene).setMultithreading(3).setBoxDensity(10);
+        ImageWriter imageWriter = new ImageWriter("Box testRR", 500, 500, 1000, 1000);
+        Render render = new Render(imageWriter, scene).setMultithreading(3).setBox(5);
         render.renderImage();
         render.writeToImage();
     }
@@ -73,7 +72,7 @@ public class BoxTests {
         scene.setAmbientLight(new AmbientLight(new Color(132, 124, 65), 0));
 
         Random rand = new Random();
-        int NUM = 500, MOVE = 100;
+        int NUM = 500;
 
         Geometries geometries = new Geometries();
         for (int i = NUM; i >= 0; --i) {
@@ -94,13 +93,13 @@ public class BoxTests {
     @Test
     public void createSpheres1() {
         Scene scene = new Scene("Test scene");
-        scene.setCamera(new Camera(new Point3D(-2000, 0, 0), new Vector(1, 0, 0), new Vector(0, 0, 1)));
+        scene.setCamera(new Camera(new Point3D(-500, 0, 0), new Vector(1, 0, 0), new Vector(0, 0, 1)));
         scene.setDistance(500);
         scene.setBackground(Color.BLACK);
         scene.setAmbientLight(new AmbientLight(new Color(132, 124, 65), 0));
 
         Random rand = new Random();
-        int NUM = 500, MOVE = 75, size = 50;
+        int MOVE = 75, size = 50;
         Material material = new Material(0.4, 0.7, 100, 0.5, 0.5);
         Geometries geometries = new Geometries();
         geometries.add(new Sphere(
@@ -128,8 +127,8 @@ public class BoxTests {
         scene.addLights(new DirectionalLight(new Color(48, 170, 176), new Vector(0, -1, 0)),
                 new PointLight(new Color(103, 110, 13), new Point3D(0, -100, 0), 1, 0, 0));
 // scene.makeTree();
-        ImageWriter imageWriter = new ImageWriter("Box test1", 500, 500, 1000, 1000);
-        Render render = new Render(imageWriter, scene).setBoxDensity(1).setMultithreading(3);
+        ImageWriter imageWriter = new ImageWriter("Box test2", 500, 500, 1000, 1000);
+        Render render = new Render(imageWriter, scene).setBox(1).setMultithreading(3).setBox(4);
         render.renderImage();
         render.writeToImage();
     }
@@ -150,34 +149,33 @@ public class BoxTests {
             geometries.add(new Sphere(
                     new Color(Math.abs(rand.nextInt() % 255), Math.abs(rand.nextInt() % 255),
                             Math.abs(rand.nextInt() % 255)),
-                    new Material(0.4, 0.7, 100), 50, new Point3D(i * 100 - 200, -MOVE * i, MOVE * i / 2)));
+                    new Material(0.4, 0.7, 100), 50, new Point3D(i * 100 - 200, -MOVE * i, MOVE * i / 2d)));
         }
 
         for (int i = NUM; i >= 0; --i) {
             geometries.add(new Sphere(
                     new Color(Math.abs(rand.nextInt() % 255), Math.abs(rand.nextInt() % 255),
                             Math.abs(rand.nextInt() % 255)),
-                    new Material(0.4, 0.7, 100), 50, new Point3D(i * 100 - 200, MOVE * i, MOVE * i / 2)));
+                    new Material(0.4, 0.7, 100), 50, new Point3D(i * 100 - 200, MOVE * i, MOVE * i / 2d)));
         }
         for (int i = 1; i <= NUM; ++i) {
             geometries.add(new Sphere(
                     new Color(Math.abs(rand.nextInt() % 255), Math.abs(rand.nextInt() % 255),
                             Math.abs(rand.nextInt() % 255)),
-                    new Material(0.4, 0.7, 100, 0, 0), 50, new Point3D(i * 100 - 200, -MOVE * i, -MOVE * i / 2)));
+                    new Material(0.4, 0.7, 100, 0, 0), 50, new Point3D(i * 100 - 200, -MOVE * i, -MOVE * i / 2d)));
         }
         for (int i = NUM; i > 1; i--) {
             geometries.add(new Sphere(
                     new Color(Math.abs(rand.nextInt() % 255), Math.abs(rand.nextInt() % 255),
                             Math.abs(rand.nextInt() % 255)),
-                    new Material(0.7, 0.3, 45), 50, new Point3D(i * 100, MOVE * i, -MOVE * i / 2)));
+                    new Material(0.7, 0.3, 45), 50, new Point3D(i * 100, MOVE * i, -MOVE * i / 2d)));
         }
-
         scene.addGeometries(geometries);
         scene.addLights(new DirectionalLight(new Color(48, 170, 176), new Vector(0, -1, 0)),
                 new PointLight(new Color(103, 110, 13), new Point3D(0, -100, 0), 1, 0, 0));
 // scene.makeTree();
-        ImageWriter imageWriter = new ImageWriter("mendyTest", 500, 500, 500, 500);
-        Render render = new Render(imageWriter, scene).setDebugPrint().setMultithreading(3).setBoxDensity(10);
+        ImageWriter imageWriter = new ImageWriter("mendyTest", 1000, 1000, 2000, 2000);
+        Render render = new Render(imageWriter, scene).setMultithreading(3).setBox(5);
         render.renderImage();
         render.writeToImage();
     }
@@ -192,21 +190,21 @@ public class BoxTests {
         Sphere sphere = new Sphere(new Color(100, 100, 100), new Material(0.5, 0.5, 100, 0, 0.5)
                 , 50, new Point3D(100, 100, 100));
         scene.addGeometries(sphere);
-        Sphere spheree = new Sphere(new Color(150, 150, 150), new Material(0.5, 0.5, 100, 0, 0.5)
+        Sphere sphere1 = new Sphere(new Color(150, 150, 150), new Material(0.5, 0.5, 100, 0, 0.5)
                 , 50, new Point3D(100, -100, 100));
-        scene.addGeometries(spheree);
-        Sphere sphere1 = new Sphere(new Color(100, 100, 0), new Material(0.5, 0.5, 100, 0, 0.5)
-                , 50, new Point3D(100, 100, -100));
         scene.addGeometries(sphere1);
-        Sphere spheree2 = new Sphere(new Color(100, 0, 100), new Material(0.5, 0.5, 100, 0, 0.5)
+        Sphere sphere2 = new Sphere(new Color(100, 100, 0), new Material(0.5, 0.5, 100, 0, 0.5)
+                , 50, new Point3D(100, 100, -100));
+        scene.addGeometries(sphere2);
+        Sphere sphere3 = new Sphere(new Color(100, 0, 100), new Material(0.5, 0.5, 100, 0, 0.5)
                 , 50, new Point3D(100, -100, -100));
-        scene.addGeometries(spheree2);
-        Sphere spheree3 = new Sphere(new Color(100, 0, 100), new Material(0.5, 0.5, 100, 0, 0.5)
+        scene.addGeometries(sphere3);
+        Sphere sphere4 = new Sphere(new Color(100, 0, 100), new Material(0.5, 0.5, 100, 0, 0.5)
                 , 50, new Point3D(100, 0, 0));
-        scene.addGeometries(spheree3);
+        scene.addGeometries(sphere4);
         scene.addLights(new DirectionalLight(new Color(400, 235, 486), new Vector(1, 0, 0)));
         ImageWriter imageWriter = new ImageWriter("rr", 300, 300, 500, 500);
-        Render render = new Render(imageWriter, scene).setDebugPrint().setMultithreading(3).setBoxDensity(3);
+        Render render = new Render(imageWriter, scene).setDebugPrint().setMultithreading(3).setBox(3);
         render.renderImage();
         render.writeToImage();
     }
