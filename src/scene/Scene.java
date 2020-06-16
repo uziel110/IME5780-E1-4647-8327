@@ -19,7 +19,7 @@ public class Scene {
     private String _name;
     private Color _background;
     private AmbientLight _ambientLight;
-    private Geometries _geometries;
+    private Geometries _sceneGeometries;
     private Camera _camera;
     private double _distance;
     private List<LightSource> _lights;
@@ -32,8 +32,21 @@ public class Scene {
      */
     public Scene(String name) {
         _name = name;
-        _geometries = new Geometries();
+        _sceneGeometries = new Geometries();
         _lights = new LinkedList<>();
+    }
+
+    /**
+     * add list of Intersctable to the list
+     *
+     * @param geometries list of Intersctable
+     */
+    public void addGeometries(Geometries geometries) {
+        if (geometries == null) return;
+        List<Intersectable> list;
+        list = geometries.getGeometries();
+        for (Intersectable intersectable : list)
+            _sceneGeometries.add(intersectable);
     }
 
     /**
@@ -43,7 +56,7 @@ public class Scene {
      */
     public void addGeometries(Intersectable... geometries) {
         if (geometries == null) return;
-        _geometries.add(geometries);
+        _sceneGeometries.add(geometries);
     }
 
     /**
@@ -104,7 +117,7 @@ public class Scene {
      * @return geometries
      */
     public Geometries getGeometries() {
-        return _geometries;
+        return _sceneGeometries;
     }
 
     /**
@@ -155,11 +168,11 @@ public class Scene {
     /**
      * set density
      *
-     * @param density
+     * @param lambda
      * @return Scene
      */
-    public Scene setBoxDensity(int density) {
-        _box = new Box(density, _geometries);
+    public Scene setBox(int lambda) {
+        _box = new Box(lambda, _sceneGeometries);
         return this;
     }
 

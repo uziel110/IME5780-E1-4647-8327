@@ -6,6 +6,7 @@ import geometries.Intersectable.GeoPoint;
 import primitives.*;
 import scene.Scene;
 
+import java.util.Collection;
 import java.util.List;
 
 import static primitives.Util.alignZero;
@@ -133,7 +134,7 @@ public class Render {
         Vector lightDirection = l.scale(-1); // change direction, from point to lightSource
         Ray lightRay = new Ray(gp._point, lightDirection, n);
         List<GeoPoint> intersections =
-                _scene.getGeometries().findIntersections(lightRay, ls.getDistance(gp._point));
+                _scene.getGeometries().getRelevantPoints(lightRay, _scene.getBox(), true, ls.getDistance(gp._point));
         if (intersections == null) return 1.0;
 
         double ktr = 1.0;
@@ -158,7 +159,7 @@ public class Render {
         Vector lightDirection = l.scale(-1); // change direction, from point to lightSource
         Ray lightRay = new Ray(gp._point, lightDirection, n);
         List<GeoPoint> intersections =
-                _scene.getGeometries().findIntersections(lightRay, light.getDistance(gp._point));
+                _scene.getGeometries().getRelevantPoints(lightRay, _scene.getBox(), true, light.getDistance(gp._point));
         if (intersections == null) return true;
         for (GeoPoint geoPoint : intersections)
             if (geoPoint._geometry.getMaterial().getKT() == 0)
@@ -201,10 +202,10 @@ public class Render {
         }
     }
 */
-    public Render setBoxDensity(int boxDensity) {
-        if (boxDensity <= 0)
+    public Render setBox(int lambda) {
+        if (lambda < 0)
             throw new IllegalArgumentException("Box Density must be 1 or bigger\n");
-        _scene.setBoxDensity(boxDensity);
+        _scene.setBox(lambda);
         return this;
     }
 
@@ -367,11 +368,6 @@ public class Render {
                 Double.POSITIVE_INFINITY);
         if (relevantPoint == null) return null;
         return getClosestPoint(ray.getPoint(), relevantPoint);
-
-/*        List<GeoPoint> intersectionPoints = _scene.getGeometries().findIntersections(ray);
-        if (intersectionPoints == null)
-            return null;
-        return getClosestPoint(ray.getPoint(), intersectionPoints);*/
     }
 
     /**
@@ -381,8 +377,7 @@ public class Render {
      * @param geoPoints list of Point3D
      * @return GeoPoint the closest point to the ray begin point
      */
-    private GeoPoint getClosestPoint(Point3D point, List<GeoPoint> geoPoints) {
-
+    private GeoPoint getClosestPoint(Point3D point, Collection<GeoPoint> geoPoints) {
         GeoPoint closestPoint = null;
         double distance,
                 minDistance = Double.MAX_VALUE;
