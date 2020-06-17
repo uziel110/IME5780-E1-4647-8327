@@ -56,14 +56,9 @@ public class Render {
             threads[i] = new Thread(() -> {
                 Pixel pixel = new Pixel();
                 while (thePixel.nextPixel(pixel)) {
-                    if (pixel.row == 1213 && pixel.col == 576)
-                        System.out.println(pixel);
                     List<Ray> rays = camera.constructBeamOfRays(nX, nY, pixel.col, pixel.row, //
                             dist, width, height);
                     _imageWriter.writePixel(pixel.col, pixel.row, calcColor(rays, background).getColor());
-                    /*if (pixel.row >= 1200 && pixel.row < 1230 &&
-                            pixel.col >= 560 && pixel.col < 590)
-                        _imageWriter.writePixel(pixel.col, pixel.row, java.awt.Color.GREEN);*/
                 }
             });
         }
