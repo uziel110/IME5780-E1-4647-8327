@@ -1,12 +1,14 @@
 package geometries;
 
 import elements.Box;
+import elements.Box.Voxel;
 import primitives.Point3D;
 import primitives.Ray;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.*;
 
 /**
  * class that implements collection of shapes

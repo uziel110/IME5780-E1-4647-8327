@@ -236,35 +236,35 @@ public class Box {
         voxelIndex[0] = voxel.getX();
         voxelIndex[1] = voxel.getY();
         voxelIndex[2] = voxel.getZ();
-        if (TandDelta[0] < TandDelta[1])
-            if (TandDelta[0] < TandDelta[2]) {
+        if (TandDelta[0] < TandDelta[1]) // tX < tY
+            if (TandDelta[0] < TandDelta[2]) { // tX < tZ
                 // t = tX; // current t, next intersection with cell along ray
                 TandDelta[0] += TandDelta[3]; // increment, next crossing along x
                 if (ray.getDir().getHead().getX().get() < 0)
-                    voxelIndex[0] -= 1;
+                    voxelIndex[0] -= 1; // tX -= 1
                 else
-                    voxelIndex[0] += 1;
+                    voxelIndex[0] += 1; // tX += 1
             } else {
-                TandDelta[2] += TandDelta[5];
+                TandDelta[2] += TandDelta[5]; // tZ += deltaZ
                 if (ray.getDir().getHead().getZ().get() < 0)
-                    voxelIndex[2] -= 1;
+                    voxelIndex[2] -= 1; // tZ -= 1
                 else
-                    voxelIndex[2] += 1;
+                    voxelIndex[2] += 1; // tZ += 1
             }
-        else if (TandDelta[1] < TandDelta[2]) {
+        else if (TandDelta[1] < TandDelta[2]) { // tY < tZ
             // t = tY;
             TandDelta[1] += TandDelta[4]; // increment, next crossing along y
             if (ray.getDir().getHead().getY().get() < 0)
-                voxelIndex[1] -= 1;
+                voxelIndex[1] -= 1; // tY -= 1
             else
-                voxelIndex[1] += 1;
+                voxelIndex[1] += 1; // tY += 1
         } else {
             // t = tZ;
             TandDelta[2] += TandDelta[5]; // increment, next crossing along y
             if (ray.getDir().getHead().getZ().get() < 0)
-                voxelIndex[2] -= 1;
+                voxelIndex[2] -= 1; // tZ -= 1
             else
-                voxelIndex[2] += 1;
+                voxelIndex[2] += 1; // tZ += 1
         }
         // if some condition is met break from the loop
         if (voxelIndex[0] < 0 || voxelIndex[1] < 0 || voxelIndex[2] < 0 || voxelIndex[0] > _density
@@ -292,7 +292,8 @@ public class Box {
      * @param p point
      * @return if the point is within the range of the box
      */
-    private boolean isPointInTheBox(Point3D p) {
+    private boolean
+    isPointInTheBox(Point3D p) {
         double x = p.getX().get();
         double y = p.getY().get();
         double z = p.getZ().get();
@@ -341,7 +342,7 @@ public class Box {
      * set the density of the map
      *
      * @param numGeometries amount of the geometries
-     * @param lambda number between 3 to 5
+     * @param lambda parameter for calculating box density (for optimum results the parameter is between 3 to 5)
      */
     public void setDensity(int numGeometries, int lambda) {
         double boxVolume = (_maxX - _minX) * (_maxY - _minY) * (_maxZ - _minZ);

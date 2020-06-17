@@ -75,6 +75,13 @@ public class Render {
         if (_print) System.out.printf("\r100%%\n");
     }
 
+    /**
+     * Calculate the average color of the points that intersections with the rays
+     *
+     * @param rays list of rays
+     * @param background color
+     * @return average color
+     */
     private Color calcColor(List<Ray> rays, Color background) {
         Color averageColor = Color.BLACK;
         for (Ray ray : rays) {
@@ -200,9 +207,16 @@ public class Render {
         }
     }
 */
+
+    /**
+     * set box
+     *
+     * @param lambda parameter for calculating box density (for optimum results the parameter is between 3 to 5)
+     * @return this box
+     */
     public Render setBox(int lambda) {
         if (lambda < 0)
-            throw new IllegalArgumentException("Box Density must be 1 or bigger\n");
+            throw new IllegalArgumentException("lambda must be 0 or bigger\n");
         _scene.setBox(lambda);
         return this;
     }

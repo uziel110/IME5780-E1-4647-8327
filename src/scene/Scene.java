@@ -166,16 +166,20 @@ public class Scene {
     }
 
     /**
-     * set density
+     * set box
      *
-     * @param lambda
-     * @return Scene
+     * @param lambda parameter for calculating box density (for optimum results the parameter is between 3 to 5)
+     * @return this scene
      */
     public Scene setBox(int lambda) {
         _box = new Box(lambda, _sceneGeometries);
         return this;
     }
 
+    /**
+     * return box
+     * @return box
+     */
     public Box getBox() {
         return _box;
     }
