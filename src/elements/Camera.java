@@ -101,7 +101,6 @@ public class Camera {
      * @param screenHeight   height of the screen
      * @return ray from point location on the camera and goes through a certain pixel on the screen
      */
-    /*
     public Ray constructRayThroughPixel(int nX, int nY,
                                         int j, int i, double screenDistance,
                                         double screenWidth, double screenHeight) {
@@ -109,7 +108,6 @@ public class Camera {
         // pij is always not equal to _location
         return new Ray(_location, pij.subtract(_location).normalized());
     }
-*/
 
     /**
      * return list of rays from point pij on view plane and goes through focal point

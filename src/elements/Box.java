@@ -61,7 +61,7 @@ public class Box {
         _voxelSizeZ = (_maxZ - _minZ) / _density;
     }
 
-    private Voxel convertPointToVoxel(Point3D point) {
+    public Voxel convertPointToVoxel(Point3D point) {
         int x = (int) ((point.getX().get() - _minX) / _voxelSizeX);
         int y = (int) ((point.getY().get() - _minY) / _voxelSizeY);
         int z = (int) ((point.getZ().get() - _minZ) / _voxelSizeZ);
@@ -88,10 +88,11 @@ public class Box {
         }
     }
 
-    public Voxel getFirstVoxel(Ray ray) {
+    public Ray getFirstVoxel(Ray ray) {
         Point3D p0 = ray.getPoint();
         if (isPointInTheBox(p0))
-            return convertPointToVoxel(p0);
+            //return convertPointToVoxel(p0);
+            return ray;
         double minTX = 0, minTY = 0, minTZ = 0;
         double maxTX = Double.POSITIVE_INFINITY, maxTY = maxTX, maxTZ = maxTX;
         Vector v = ray.getDir();
@@ -155,10 +156,11 @@ public class Box {
         if (minT < maxT)
             return null;
         Point3D p = ray.getPoint(maxT);
-        return convertPointToVoxel(p);
+        //return convertPointToVoxel(p);
+        return new Ray(p,ray.getDir());
     }
 
-    public double[] getRayDeltaAndT(Ray ray) {
+    public double[] getRayFirstDeltaAndT(Ray ray) {
         Vector rayDirection = ray.getDir();
         Point3D rayHead = rayDirection.getHead();
         double rayDirectionX = rayHead.getX().get();

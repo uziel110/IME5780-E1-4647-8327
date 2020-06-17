@@ -174,7 +174,7 @@ public class BoxTests {
         scene.addLights(new DirectionalLight(new Color(48, 170, 176), new Vector(0, -1, 0)),
                 new PointLight(new Color(103, 110, 13), new Point3D(0, -100, 0), 1, 0, 0));
 // scene.makeTree();
-        ImageWriter imageWriter = new ImageWriter("mendyTest", 1000, 1000, 2000, 2000);
+        ImageWriter imageWriter = new ImageWriter("mendyTestNow", 1000, 1000, 2000, 2000);
         Render render = new Render(imageWriter, scene).setMultithreading(3).setBox(5);
         render.renderImage();
         render.writeToImage();

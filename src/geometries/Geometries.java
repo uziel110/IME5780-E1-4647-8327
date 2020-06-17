@@ -1,11 +1,12 @@
 package geometries;
 
 import elements.Box;
-import elements.Box.Voxel;
 import primitives.Point3D;
 import primitives.Ray;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * class that implements collection of shapes
@@ -55,12 +56,16 @@ public class Geometries implements Intersectable {
             return this.findIntersections(ray, dis);
         boolean intersectionFoundInVoxel = false;
         List<GeoPoint> geoPoints = null;
-        List<GeoPoint> geometryIntersectionPoints=null;
-        Set<Intersectable> geometriesSet = new HashSet<>();
-        Geometries currentGeometries = new Geometries();
+        List<GeoPoint> geometryIntersectionPoints = null;
+/*        Set<Intersectable> geometriesSet = new HashSet<>();
+        Geometries currentGeometries = new Geometries();*/
 
-        double[] deltaAndTArr = box.getRayDeltaAndT(ray);
-        Voxel currentVoxel = box.getFirstVoxel(ray);
+        //Voxel currentVoxel = box.getFirstVoxel(ray);
+        ray = box.getFirstVoxel(ray);
+        if (ray == null) return null;
+        Box.Voxel currentVoxel = box.convertPointToVoxel(ray.getPoint());
+
+        double[] deltaAndTArr = box.getRayFirstDeltaAndT(ray);
 
         while (currentVoxel != null) {
             if (!box.getMap().containsKey(currentVoxel)) {
@@ -68,12 +73,13 @@ public class Geometries implements Intersectable {
                 continue;
             }
             Geometries geometries = box.getMap().get(currentVoxel);
-            for (Intersectable intersectable : geometries.getGeometries())
+/*            for (Intersectable intersectable : geometries.getGeometries())
                 if (!geometriesSet.contains(intersectable)) {
                     currentGeometries.add(intersectable);
                     geometriesSet.add(intersectable);
                 }
-            geometryIntersectionPoints = currentGeometries.findIntersections(ray, dis);
+            geometryIntersectionPoints = currentGeometries.findIntersections(ray, dis);*/
+            geometryIntersectionPoints = geometries.findIntersections(ray, dis);
             if (geometryIntersectionPoints != null) {
                 if (geoPoints == null)
                     geoPoints = new LinkedList<>();
@@ -87,6 +93,7 @@ public class Geometries implements Intersectable {
         }
         return geoPoints;
     }
+
     @Override
     public List<GeoPoint> findIntersections(Ray ray, double max) {
         List<GeoPoint> intersectionPoints = null;
