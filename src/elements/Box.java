@@ -89,15 +89,13 @@ public class Box {
     }
 
     public Ray getFirstVoxel(Ray ray) {
-        Point3D p0 = ray.getPoint();
-        if (isPointInTheBox(p0))
-            //return convertPointToVoxel(p0);
+        Point3D originRay = ray.getPoint();
+        if (isPointInTheBox(originRay))
             return ray;
         double minTX = 0, minTY = 0, minTZ = 0;
         double maxTX = Double.POSITIVE_INFINITY, maxTY = maxTX, maxTZ = maxTX;
         Vector v = ray.getDir();
         Point3D headV = v.getHead();
-        Point3D originRay = ray.getPoint();
         double rayX = alignZero(headV.getX().get());
         double rayY = alignZero(headV.getY().get());
         double rayZ = alignZero(headV.getZ().get());
@@ -156,7 +154,6 @@ public class Box {
         if (minT < maxT)
             return null;
         Point3D p = ray.getPoint(maxT);
-        //return convertPointToVoxel(p);
         return new Ray(p,ray.getDir());
     }
 
