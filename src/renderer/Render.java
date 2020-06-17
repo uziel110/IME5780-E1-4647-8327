@@ -504,5 +504,10 @@ public class Render {
             if (Render.this._print) System.out.printf("\r %02d%%", 100);
             return false;
         }
+
+        @Override
+        public String toString() {
+            return "Pixel{" + row + ", " + col + '}';
+        }
     }
 }

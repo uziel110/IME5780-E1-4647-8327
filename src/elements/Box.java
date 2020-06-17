@@ -6,7 +6,9 @@ import geometries.Intersectable.GeoPoint;
 import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
+
 import java.util.*;
+
 import static primitives.Util.alignZero;
 
 /**
@@ -78,7 +80,7 @@ public class Box {
      * @param point to convert
      * @return voxel
      */
-    private Voxel convertPointToVoxel(Point3D point) {
+    public Voxel convertPointToVoxel(Point3D point) {
         int x = (int) ((point.getX().get() - _minX) / _voxelSizeX);
         int y = (int) ((point.getY().get() - _minY) / _voxelSizeY);
         int z = (int) ((point.getZ().get() - _minZ) / _voxelSizeZ);
@@ -111,20 +113,14 @@ public class Box {
         }
     }
 
-    /**
-     *
-     * @param ray
-     * @return
-     */
-    public Voxel getFirstVoxel(Ray ray) {
-        Point3D p0 = ray.getPoint();
-        if (isPointInTheBox(p0))
-            return convertPointToVoxel(p0);
+    public Ray getFirstVoxel(Ray ray) {
+        Point3D originRay = ray.getPoint();
+        if (isPointInTheBox(originRay))
+            return ray;
         double minTX = 0, minTY = 0, minTZ = 0;
         double maxTX = Double.POSITIVE_INFINITY, maxTY = maxTX, maxTZ = maxTX;
         Vector v = ray.getDir();
         Point3D headV = v.getHead();
-        Point3D originRay = ray.getPoint();
         double rayX = alignZero(headV.getX().get());
         double rayY = alignZero(headV.getY().get());
         double rayZ = alignZero(headV.getZ().get());
@@ -183,10 +179,10 @@ public class Box {
         if (minT < maxT)
             return null;
         Point3D p = ray.getPoint(maxT);
-        return convertPointToVoxel(p);
+        return new Ray(p,ray.getDir());
     }
 
-    public double[] getRayDeltaAndT(Ray ray) {
+    public double[] getRayFirstDeltaAndT(Ray ray) {
         Vector rayDirection = ray.getDir();
         Point3D rayHead = rayDirection.getHead();
         double rayDirectionX = rayHead.getX().get();

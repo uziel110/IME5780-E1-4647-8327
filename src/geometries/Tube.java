@@ -233,13 +233,11 @@ public class Tube extends RadialGeometry {
 
     @Override
     public Point3D getMinCoordinates() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Point3D getMaxCoordinates() {
-        // TODO Auto-generated method stub
         return null;
     }
 }
