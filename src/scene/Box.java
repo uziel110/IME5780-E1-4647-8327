@@ -1,4 +1,4 @@
-package elements;
+package scene;
 
 import geometries.Geometries;
 import geometries.Intersectable;

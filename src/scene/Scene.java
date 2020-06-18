@@ -1,7 +1,6 @@
 package scene;
 
 import elements.AmbientLight;
-import elements.Box;
 import elements.Camera;
 import elements.LightSource;
 import geometries.Geometries;

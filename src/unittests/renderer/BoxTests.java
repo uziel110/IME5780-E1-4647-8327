@@ -1,21 +1,27 @@
 package renderer;
 
-import elements.AmbientLight;
-import elements.Camera;
-import elements.DirectionalLight;
-import elements.PointLight;
+import elements.*;
 import geometries.Geometries;
 import geometries.Sphere;
+import org.junit.Before;
 import org.junit.Test;
 import primitives.Color;
 import primitives.Material;
 import primitives.Point3D;
 import primitives.Vector;
 import scene.Scene;
+import statistics.Statistics;
 
 import java.util.Random;
 
 public class BoxTests {
+    long startAddGeometries;
+
+    @Before
+    public void setUp() {
+        startAddGeometries = System.currentTimeMillis();
+    }
+
     @Test
     public void createSpheres() {
         Scene scene = new Scene("Test scene");
@@ -56,11 +62,8 @@ public class BoxTests {
         scene.addGeometries(geometries);
         scene.addLights(new DirectionalLight(new Color(48, 170, 176), new Vector(0, -1, 0)),
                 new PointLight(new Color(103, 110, 13), new Point3D(0, -100, 0), 1, 0, 0));
-// scene.makeTree();
-        ImageWriter imageWriter = new ImageWriter("Box testRR", 500, 500, 1000, 1000);
-        Render render = new Render(imageWriter, scene).setMultithreading(3).setBox(5);
-        render.renderImage();
-        render.writeToImage();
+
+        Statistics.runAndPrintStatistics(startAddGeometries, scene, 500,500,1000,1000,3,4);
     }
 
     @Test
@@ -137,7 +140,7 @@ public class BoxTests {
     public void mendyTest() {
         long startAddGeometries = System.currentTimeMillis();
 
-        Scene scene = new Scene("Test scene");
+        Scene scene = new Scene("mendy test");
         scene.setCamera(new Camera(new Point3D(-1000, 0, 0), new Vector(1, 0, 0), new Vector(0, 0, 1)));
         scene.setDistance(500);
         scene.setBackground(Color.BLACK);
@@ -176,73 +179,7 @@ public class BoxTests {
         scene.addLights(new DirectionalLight(new Color(48, 170, 176), new Vector(0, -1, 0)),
                 new PointLight(new Color(103, 110, 13), new Point3D(0, -100, 0), 1, 0, 0));
 
-        printStatistics(startAddGeometries, scene);
-    }
-
-    /**
-     * run the test 3 times without improves with multithreading and with box
-     * and print the execution time of all the renders and the ratio between them
-     * <p>
-     * add this before your function "long startAddGeometries = System.currentTimeMillis();"
-     *
-     * @param startAddGeometries the time of starting
-     * @param scene              the scene we render
-     */
-    private void printStatistics(long startAddGeometries, Scene scene) {
-
-        long endAddGeometries = System.currentTimeMillis();
-        double endAddGeometriesDuration = (endAddGeometries - startAddGeometries) / 1000d;
-        print(endAddGeometriesDuration, "Add geometries time: ");
-
-        //---------------
-
-        long startRenderWithoutMultithreading = System.currentTimeMillis();
-        ImageWriter imageWriter = new ImageWriter(scene.getName() + " WithoutMultithreading", 1000, 1000, 2000, 2000);
-        Render render = new Render(imageWriter, scene);
-        render.renderImageWithoutMultithreading();
-        render.writeToImage();
-
-        long endRenderWithoutMultithreading = System.currentTimeMillis();
-        double renderWithoutMultithreadingDuration = (endRenderWithoutMultithreading - startRenderWithoutMultithreading + endAddGeometriesDuration) / 1000d;
-        print(renderWithoutMultithreadingDuration, "Render time without multithreading: ");
-
-        //---------------
-
-        long startRenderWithoutBox = System.currentTimeMillis();
-        imageWriter = new ImageWriter(scene.getName() + " WithMultithreading", 1000, 1000, 2000, 2000);
-        render = new Render(imageWriter, scene).setMultithreading(3);
-        render.renderImage();
-        render.writeToImage();
-
-        long endRenderWithoutBox = System.currentTimeMillis();
-        double renderWithMultithreadingDuration = (endRenderWithoutBox - startRenderWithoutBox + endAddGeometriesDuration) / 1000d;
-        print(renderWithMultithreadingDuration, "Render time with multithreading: ");
-
-        //---------------
-
-        long startRenderWithBox = System.currentTimeMillis();
-        imageWriter = new ImageWriter(scene.getName() + " WithBox", 1000, 1000, 2000, 2000);
-        render = new Render(imageWriter, scene).setMultithreading(3).setBox(4);
-        System.out.println("Density: " + scene.getBox().getDensity());
-        render.renderImage();
-        render.writeToImage();
-
-        long endRenderWithBox = System.currentTimeMillis();
-        double renderWithBoxDuration = (endRenderWithBox - startRenderWithBox + endAddGeometriesDuration) / 1000d;
-        print(renderWithBoxDuration, "Render time with box: ");
-
-        //---------------
-
-        System.out.printf("The ratio between Render with box to normal render is: " + "%.2f\n", 1.0 * renderWithoutMultithreadingDuration / renderWithBoxDuration);
-        System.out.printf("The ratio between Render with box to render with multithreading is: " + "%.2f\n", 1.0 * renderWithMultithreadingDuration / renderWithBoxDuration);
-    }
-
-    private void print(double durationTime, String s) {
-        if (durationTime < 1)
-            System.out.printf(s + "%.3f Ms\n", durationTime);
-        else
-            System.out.printf(s + (((int) durationTime) / 60) + " minutes and "
-                    + "%.2f seconds\n", durationTime % 60);
+        Statistics.runAndPrintStatistics(startAddGeometries, scene, 500,500,500,500,3,4);
     }
 
     @Test
@@ -270,13 +207,34 @@ public class BoxTests {
         scene.addGeometries(sphere4);
         scene.addLights(new DirectionalLight(new Color(400, 235, 486), new Vector(1, 0, 0)));
 
-        printStatistics(startAddGeometries, scene);
+        Statistics.runAndPrintStatistics(startAddGeometries, scene, 300,300,500,500,3,4);
+    }
 
+    @Test
+    public void test() {
+        long startAddGeometries = System.currentTimeMillis();
+        Camera camera = new Camera(new Point3D(0, 0, 150), new Vector(0, -1, 0), new Vector(0, 0, -1));
+        Scene scene = new Scene("malan sphere");
+        SpotLight spot = new SpotLight(new Color(100, 100, 100), new Point3D(100, 0, 0),
+                new Vector(-100, 0, -250).normalize(), 1, 2, 0.01);
+        PointLight pointLight = new PointLight(new Color(77, 0, 0), new Point3D(200, -200, -100), 1, 0.01, 0.01);
+        DirectionalLight directionalLight = new DirectionalLight(new Color(1, 1, 0), new Vector(1, 0, 0));
 
-        /*ImageWriter imageWriter = new ImageWriter("rr", 300, 300, 500, 500);
-        Render render = new Render(imageWriter, scene).setDebugPrint().setMultithreading(3).setBox(3);
-        render.renderImage();
-        render.writeToImage();*/
+        for (int i = 0; i < 100; i++) {
+            for (int j = 0; j < 100; j++) {
+                Sphere sphere = new Sphere(new Color(100 * (i % 2), 100 * (i % 2 + 1), 0),
+                        new Material(500, 20, 100, 0, 0), 10, new Point3D(800 - 25 * i, 800 - 25 * j, -300));
+                scene.addGeometries(sphere);
+            }
+        }
+        scene.setAmbientLight(new AmbientLight(new Color(130, 130, 130), 0.1));
+        scene.addLights(spot);
+        scene.addLights(pointLight);
+        scene.addLights(directionalLight);
+        scene.setBackground(new Color(0, 0, 0));
+        scene.setDistance(149);
+        scene.setCamera(camera);
+        Statistics.runAndPrintStatistics(startAddGeometries, scene, 500,500,500,500,3,4);
     }
 }
 

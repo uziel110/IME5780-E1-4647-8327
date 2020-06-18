@@ -1,14 +1,12 @@
 package geometries;
 
-import elements.Box;
-import elements.Box.Voxel;
+import scene.Box;
 import primitives.Point3D;
 import primitives.Ray;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.*;
 
 /**
  * class that implements collection of shapes
@@ -39,9 +37,8 @@ public class Geometries implements Intersectable {
      * @param geometries list of Intersctable
      */
     public void add(Intersectable... geometries) {
-        for (Intersectable intersectable : geometries) {
+        for (Intersectable intersectable : geometries)
             _geometriesList.add(intersectable);
-        }
     }
 
     /**
@@ -58,7 +55,7 @@ public class Geometries implements Intersectable {
             return this.findIntersections(ray, dis);
         boolean intersectionFoundInVoxel = false;
         List<GeoPoint> geoPoints = null;
-        List<GeoPoint> geometryIntersectionPoints = null;
+        List<GeoPoint> geometryIntersectionPoints;
 /*        Set<Intersectable> geometriesSet = new HashSet<>();
         Geometries currentGeometries = new Geometries();*/
 

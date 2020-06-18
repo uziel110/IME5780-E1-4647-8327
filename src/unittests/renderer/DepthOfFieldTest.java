@@ -5,11 +5,13 @@ import geometries.Plane;
 import geometries.Polygon;
 import geometries.Sphere;
 import geometries.Tube;
+import org.junit.Before;
 import org.junit.Test;
 import primitives.Material;
 import primitives.Point3D;
 import primitives.Vector;
 import scene.Scene;
+import statistics.Statistics;
 
 import java.awt.*;
 
@@ -17,6 +19,13 @@ import java.awt.*;
  * test for depthOfField operation
  */
 public class DepthOfFieldTest {
+    long startAddGeometries;
+
+    @Before
+    public void setUp() {
+        startAddGeometries = System.currentTimeMillis();
+    }
+
     /**
      * test some balls DOF Test
      * Produce a picture of some Balls with depthOfFieldTest option on
@@ -45,10 +54,7 @@ public class DepthOfFieldTest {
 
         scene.addLights(new DirectionalLight(new primitives.Color(200, 200, 200), new Vector(-1, 1, -1)));
 
-        ImageWriter imageWriter = new ImageWriter("fourBallsDepthOfFieldTest_one100", 600, 600, 800, 800);
-        Render render = new Render(imageWriter, scene).setMultithreading(3).setDebugPrint();;
-        render.renderImage();
-        render.writeToImage();
+        Statistics.runAndPrintStatistics(startAddGeometries, scene, 600, 600, 800, 800,3,4);
     }
 
     /**

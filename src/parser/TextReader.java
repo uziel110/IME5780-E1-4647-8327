@@ -75,7 +75,7 @@ public class TextReader {
                                 geometryPoints[2]
                         )
                 );
-            } else {
+            } else if (geometryDataNums[0] == 4){
 //                System.out.println(
 //                        geometryDataNums[1] + " "
 //                        + geometryDataNums[2]+ " "
@@ -114,8 +114,7 @@ public class TextReader {
     static Scanner getScanner(String fileName) {
         try {
             File myObj = new File("./off/" + fileName + ".off");
-            Scanner myReader = new Scanner(myObj);
-            return myReader;
+            return new Scanner(myObj);
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
