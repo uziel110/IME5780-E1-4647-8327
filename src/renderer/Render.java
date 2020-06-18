@@ -178,8 +178,7 @@ public class Render {
      * create image from the scene
      * with focus option on or off
      */
-    /*
-    public void renderImage() {
+    public void renderImageWithoutMultithreading() {
         // scene parameters
         Camera camera = _scene.getCamera();
         Color background = _scene.getBackground();
@@ -206,7 +205,6 @@ public class Render {
             }
         }
     }
-*/
 
     /**
      * set box

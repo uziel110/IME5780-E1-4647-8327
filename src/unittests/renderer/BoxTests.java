@@ -135,6 +135,8 @@ public class BoxTests {
 
     @Test
     public void mendyTest() {
+        long startAddGeometries = System.currentTimeMillis();
+
         Scene scene = new Scene("Test scene");
         scene.setCamera(new Camera(new Point3D(-1000, 0, 0), new Vector(1, 0, 0), new Vector(0, 0, 1)));
         scene.setDistance(500);
@@ -173,15 +175,79 @@ public class BoxTests {
         scene.addGeometries(geometries);
         scene.addLights(new DirectionalLight(new Color(48, 170, 176), new Vector(0, -1, 0)),
                 new PointLight(new Color(103, 110, 13), new Point3D(0, -100, 0), 1, 0, 0));
-// scene.makeTree();
-        ImageWriter imageWriter = new ImageWriter("mendyTestBox", 1000, 1000, 2000, 2000);
-        Render render = new Render(imageWriter, scene).setMultithreading(3).setBox(4);
+
+        printStatistics(startAddGeometries, scene);
+    }
+
+    /**
+     * run the test 3 times without improves with multithreading and with box
+     * and print the execution time of all the renders and the ratio between them
+     * <p>
+     * add this before your function "long startAddGeometries = System.currentTimeMillis();"
+     *
+     * @param startAddGeometries the time of starting
+     * @param scene              the scene we render
+     */
+    private void printStatistics(long startAddGeometries, Scene scene) {
+
+        long endAddGeometries = System.currentTimeMillis();
+        double endAddGeometriesDuration = (endAddGeometries - startAddGeometries) / 1000d;
+        print(endAddGeometriesDuration, "Add geometries time: ");
+
+        //---------------
+
+        long startRenderWithoutMultithreading = System.currentTimeMillis();
+        ImageWriter imageWriter = new ImageWriter(scene.getName() + " WithoutMultithreading", 1000, 1000, 2000, 2000);
+        Render render = new Render(imageWriter, scene);
+        render.renderImageWithoutMultithreading();
+        render.writeToImage();
+
+        long endRenderWithoutMultithreading = System.currentTimeMillis();
+        double renderWithoutMultithreadingDuration = (endRenderWithoutMultithreading - startRenderWithoutMultithreading + endAddGeometriesDuration) / 1000d;
+        print(renderWithoutMultithreadingDuration, "Render time without multithreading: ");
+
+        //---------------
+
+        long startRenderWithoutBox = System.currentTimeMillis();
+        imageWriter = new ImageWriter(scene.getName() + " WithMultithreading", 1000, 1000, 2000, 2000);
+        render = new Render(imageWriter, scene).setMultithreading(3);
         render.renderImage();
         render.writeToImage();
+
+        long endRenderWithoutBox = System.currentTimeMillis();
+        double renderWithMultithreadingDuration = (endRenderWithoutBox - startRenderWithoutBox + endAddGeometriesDuration) / 1000d;
+        print(renderWithMultithreadingDuration, "Render time with multithreading: ");
+
+        //---------------
+
+        long startRenderWithBox = System.currentTimeMillis();
+        imageWriter = new ImageWriter(scene.getName() + " WithBox", 1000, 1000, 2000, 2000);
+        render = new Render(imageWriter, scene).setMultithreading(3).setBox(4);
+        System.out.println("Density: " + scene.getBox().getDensity());
+        render.renderImage();
+        render.writeToImage();
+
+        long endRenderWithBox = System.currentTimeMillis();
+        double renderWithBoxDuration = (endRenderWithBox - startRenderWithBox + endAddGeometriesDuration) / 1000d;
+        print(renderWithBoxDuration, "Render time with box: ");
+
+        //---------------
+
+        System.out.printf("The ratio between Render with box to normal render is: " + "%.2f\n", 1.0 * renderWithoutMultithreadingDuration / renderWithBoxDuration);
+        System.out.printf("The ratio between Render with box to render with multithreading is: " + "%.2f\n", 1.0 * renderWithMultithreadingDuration / renderWithBoxDuration);
+    }
+
+    private void print(double durationTime, String s) {
+        if (durationTime < 1)
+            System.out.printf(s + "%.3f Ms\n", durationTime);
+        else
+            System.out.printf(s + (((int) durationTime) / 60) + " minutes and "
+                    + "%.2f seconds\n", durationTime % 60);
     }
 
     @Test
     public void testSetMap() {
+        long startAddGeometries = System.currentTimeMillis();
         Scene scene = new Scene("test2_1");
         scene.setCamera(new Camera(new Point3D(-1000, 0, 0), new Vector(1, 0, 0), new Vector(0, 0, 1)));
         scene.setDistance(1000);
@@ -203,10 +269,14 @@ public class BoxTests {
                 , 50, new Point3D(100, 0, 0));
         scene.addGeometries(sphere4);
         scene.addLights(new DirectionalLight(new Color(400, 235, 486), new Vector(1, 0, 0)));
-        ImageWriter imageWriter = new ImageWriter("rr", 300, 300, 500, 500);
+
+        printStatistics(startAddGeometries, scene);
+
+
+        /*ImageWriter imageWriter = new ImageWriter("rr", 300, 300, 500, 500);
         Render render = new Render(imageWriter, scene).setDebugPrint().setMultithreading(3).setBox(3);
         render.renderImage();
-        render.writeToImage();
+        render.writeToImage();*/
     }
 }
 
