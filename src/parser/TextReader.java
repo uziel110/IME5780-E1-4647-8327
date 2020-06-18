@@ -75,7 +75,7 @@ public class TextReader {
                                 geometryPoints[2]
                         )
                 );
-            } else if (geometryDataNums[0] == 4){
+            } else{
 //                System.out.println(
 //                        geometryDataNums[1] + " "
 //                        + geometryDataNums[2]+ " "
