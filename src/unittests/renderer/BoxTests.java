@@ -238,9 +238,9 @@ public class BoxTests {
     }
 
     @Test
-    public void mizbeachTast1() {
+    public void mizbeachTast() {
         Scene scene = new Scene("mizbeah");
-        scene.setCamera(new Camera(new Point3D(0, 0, 0), 2500, 3.75, 1.1, Math.PI));
+        scene.setCamera(new Camera(new Point3D(0, 0, 0), 2500, 4, 1.1, Math.PI));
         //scene.getCamera().setDepthOfField(2500, 32, 100);
         scene.setDistance(300);
         scene.setBackground(Color.BLACK);
