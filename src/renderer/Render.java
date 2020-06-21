@@ -207,19 +207,6 @@ public class Render {
     }
 
     /**
-     * set box
-     *
-     * @param lambda parameter for calculating box density (for optimum results the parameter is between 3 to 5)
-     * @return this box
-     */
-    public Render setBox(int lambda) {
-        if (lambda < 0)
-            throw new IllegalArgumentException("lambda must be 0 or bigger\n");
-        _scene.setBox(lambda);
-        return this;
-    }
-
-    /**
      * print grid on the image
      *
      * @param interval distance between the lines of the grid

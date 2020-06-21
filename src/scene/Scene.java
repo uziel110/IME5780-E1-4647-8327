@@ -171,6 +171,8 @@ public class Scene {
      * @return this scene
      */
     public Scene setBox(int lambda) {
+        if (lambda < 0)
+            throw new IllegalArgumentException("lambda must be 0 or bigger\n");
         _box = new Box(lambda, _sceneGeometries);
         return this;
     }

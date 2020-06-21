@@ -14,6 +14,7 @@ import statistics.Statistics;
 import java.util.Random;
 
 public class BoxTests {
+    private static Random random = new Random();
     long startAddGeometries;
 
     @Before
@@ -130,7 +131,7 @@ public class BoxTests {
                 new PointLight(new Color(103, 110, 13), new Point3D(0, -100, 0), 1, 0, 0));
 // scene.makeTree();
         ImageWriter imageWriter = new ImageWriter("Box test2", 500, 500, 1000, 1000);
-        Render render = new Render(imageWriter, scene).setBox(1).setMultithreading(3).setBox(4);
+        Render render = new Render(imageWriter, scene).setMultithreading(3);//.setBox(4);
         render.renderImage();
         render.writeToImage();
     }
@@ -237,40 +238,33 @@ public class BoxTests {
     }
 
     @Test
-    public void mizbeachTast() {
+    public void mizbeachTast1() {
         Scene scene = new Scene("mizbeah");
-        scene.setCamera(new Camera(new Point3D(0, 0, 50), 2500, 3.75, 1, Math.PI));
-        scene.setDistance(100);
+        scene.setCamera(new Camera(new Point3D(0, 0, 0), 2500, 3.75, 1.1, Math.PI));
+        //scene.getCamera().setDepthOfField(2500, 32, 100);
+        scene.setDistance(300);
         scene.setBackground(Color.BLACK);
-        scene.setAmbientLight(new AmbientLight(Color.BLACK, 0));
-
-        //scene.addLights(new PointLight(new Color(700, 400, 400), new Point3D(-60, 50, 200), 1, 4E-5, 2E-7));
-        /*scene.addLights(new PointLight(new Color(0, 500, 400),
-                new Point3D(0, 0, 50), 1, 4E-5, 2E-7));
-        scene.addLights(new SpotLight(new Color(200, 200, 200),
-                new Point3D(0, 0, 1500),new Vector(0,0,-1),5, 1, 4E-5, 2E-7));*/
-        scene.addLights(new DirectionalLight(new Color(150, 150, 150), new Vector(-1, 1, -1)));
 
         double kr = 0.2, kt = 0.0, ks = 0.3, kd = 1 - ks;
 
-        Color woodColor = new Color(85, 60, 42);
+        Color woodColor = new Color(70, 45, 27);
         Color goldColor = new Color(109, 82, 16);
         Color sikraColor = new Color(255, 0, 0);
         Material woodMaterial = new Material(kd, ks, 30, kt, kr);
-        Material goldMaterial = new Material(0.3, 0.7, 30, 0, 0.1);
-        Material coalMaterial = new Material(kd, ks, 10, kt, kr);
+        Material goldMaterial = new Material(0.2, 0.8, 50, 0, 0);
+        Material coalMaterial = new Material(0.2, 0.01, 5, 0, 0);
         Material sikraMaterial = new Material(kd, ks, 30, kt, kr);
-
-        scene.addGeometries(
+        int woodColorRange = 54;
+        {scene.addGeometries(
 
                 //scene floor
-                /*new Polygon(new Color(java.awt.Color.BLACK), new Material(kd, ks, 30, kt, 0)
-                        , new Point3D(-1000, -1000, -10), new Point3D(-500, 500, -10),
-                        new Point3D(500, 500, -10), new Point3D(500, -1000, -10)),*/
+/*                new Polygon(new Color(java.awt.Color.BLACK), new Material(kd, ks, 30, kt, 0)
+                        , new Point3D(-1000, -1000, -10), new Point3D(-1000, 1000, -10),
+                        new Point3D(2000, 2000, -10), new Point3D(1000, -1000, -10)),*/
 
                 new Plane(new Color(java.awt.Color.BLACK), new Material(kd, ks, 30, kt, 0)
-                        , new Point3D(-1000, -1000, -10), new Point3D(-500, 500, -10),
-                        new Point3D(500, 500, -10)),
+                        , new Point3D(-1000, -1000, 0), new Point3D(-500, 500, 0),
+                        new Point3D(500, 500, 0)),
 
                 //1 down
                 new Polygon(goldColor, goldMaterial,
@@ -487,63 +481,108 @@ public class BoxTests {
                         new Point3D(-174, -672, 40), new Point3D(-174, -672, 0),
                         new Point3D(-174, -442, 0), new Point3D(-174, -642, 40)),
 
-                new Sphere(new Color(44, 56, 74), coalMaterial,
+                new Sphere(new Color(21, 27, 31), coalMaterial,
                         50, new Point3D(0, 0, 144)),
                 //2 West
                 new Polygon(sikraColor, sikraMaterial,
-                        new Point3D(-273, -273, 80), new Point3D(-273, 273, 80),
-                        new Point3D(-273, 273, 87), new Point3D(-273, -273, 87)),
+                        new Point3D(-273.001, -273.001, 80), new Point3D(-273.001, 273.001, 80),
+                        new Point3D(-273.001, 273.001, 87), new Point3D(-273.001, -273.001, 87)),
                 //2 North
                 new Polygon(sikraColor, sikraMaterial,
-                        new Point3D(-273, 273, 80), new Point3D(273, 273, 80),
-                        new Point3D(273, 273, 87), new Point3D(-273, 273, 87)),
+                        new Point3D(-273.001, 273.001, 80), new Point3D(273.001, 273.001, 80),
+                        new Point3D(273.001, 273.001, 87), new Point3D(-273.001, 273.001, 87)),
                 //2 East
                 new Polygon(sikraColor, sikraMaterial,
-                        new Point3D(273, 273, 80), new Point3D(273, -273, 80),
-                        new Point3D(273, -273, 87), new Point3D(273, 273, 87)),
+                        new Point3D(273.001, 273.001, 80), new Point3D(273.001, -273.001, 80),
+                        new Point3D(273.001, -273.001, 87), new Point3D(273.001, 273.001, 87)),
                 //2 South
                 new Polygon(sikraColor, sikraMaterial,
-                        new Point3D(273, -273, 80), new Point3D(-273, -273, 80),
-                        new Point3D(-273, -273, 87), new Point3D(273, -273, 87)));
+                        new Point3D(273.001, -273.001, 80), new Point3D(-273.001, -273.001, 80),
+                        new Point3D(-273.001, -273.001, 87), new Point3D(273.001, -273.001, 87)));}
 
         for (int y = 195; y > 55; y -= 20) {
-            scene.addGeometries(new Polygon(woodColor, woodMaterial,
+            scene.addGeometries(new Polygon(generateWoodColor(woodColor, woodColorRange), woodMaterial,
                     new Point3D(-205, y, 160), new Point3D(-85, y, 160),
                     new Point3D(-85, y - 10, 160), new Point3D(-205, y - 10, 160)));
         }
         for (int x = -195; x < -95; x += 20) {
-            scene.addGeometries(new Polygon(woodColor, woodMaterial,
+            scene.addGeometries(new Polygon(generateWoodColor(woodColor, woodColorRange), woodMaterial,
                     new Point3D(x, 205, 160), new Point3D(x + 10, 205, 160),
                     new Point3D(x + 10, 45, 160), new Point3D(x, 45, 160)));
         }
 
         for (int y = -35; y > -195; y -= 20) {
-            scene.addGeometries(new Polygon(woodColor, woodMaterial,
+            scene.addGeometries(new Polygon(generateWoodColor(woodColor, woodColorRange), woodMaterial,
                     new Point3D(-205, y, 160), new Point3D(-85, y, 160),
                     new Point3D(-85, y - 10, 160), new Point3D(-205, y - 10, 160)));
         }
         for (int x = -195; x < -95; x += 20) {
-            scene.addGeometries(new Polygon(woodColor, woodMaterial,
+            scene.addGeometries(new Polygon(generateWoodColor(woodColor, woodColorRange), woodMaterial,
                     new Point3D(x, -35, 160), new Point3D(x + 10, -35, 160),
                     new Point3D(x + 10, -195, 160), new Point3D(x, -195, 160)));
         }
 
         for (int y = 195; y > -195; y -= 20) {
-            scene.addGeometries(new Polygon(woodColor, woodMaterial,
+            scene.addGeometries(new Polygon(generateWoodColor(woodColor, woodColorRange), woodMaterial,
                     new Point3D(85, y, 160), new Point3D(205, y, 160),
                     new Point3D(205, y - 10, 160), new Point3D(85, y - 10, 160)));
         }
         for (int x = 85; x < 205; x += 20) {
-            scene.addGeometries(new Polygon(woodColor, woodMaterial,
+            scene.addGeometries(new Polygon(generateWoodColor(woodColor, woodColorRange), woodMaterial,
                     new Point3D(x, 195, 160), new Point3D(x + 10, 195, 160),
                     new Point3D(x + 10, -195, 160), new Point3D(x, -195, 160)));
         }
 
-        Statistics.runAndPrintStatistics(startAddGeometries,scene,80, 45, 800, 450,3,4);
-        /*ImageWriter imageWriter = new ImageWriter("mizbeach", 80, 45, 800, 450);
-        Render render = new Render(imageWriter, scene).setDebugPrint().setMultithreading(3).setBox(4);
+        double lightRadius = 900;
+        int numOfSpotes = 10;
+        double t = Math.PI * 2 / numOfSpotes / 4;
+        for (int i = 0; i < numOfSpotes; ++i) {
+            double theta = Math.PI * 2 * (i * 1.0 / numOfSpotes);
+            Point3D downPoint = new Point3D(lightRadius * Math.cos(theta), lightRadius * Math.sin(theta), 0);
+            scene.addGeometries(new Sphere(new Color(21, 27, 31), coalMaterial,
+                    40, downPoint));
+            downPoint = new Point3D(lightRadius * Math.cos(theta + t), lightRadius * Math.sin(theta + t), 0);
+            scene.addGeometries(new Sphere(new Color(21, 27, 31), coalMaterial,
+                    50, downPoint));
+            downPoint = new Point3D(lightRadius * Math.cos(theta - t * .8), lightRadius * Math.sin(theta - t * .8), 0);
+            scene.addGeometries(new Sphere(new Color(21, 27, 31), coalMaterial,
+                    30, downPoint));
+        }
+
+        // lights
+        scene.setAmbientLight(new AmbientLight(Color.BLACK, 0));
+
+        //scene.addLights(new PointLight(new Color(700, 400, 400), new Point3D(-60, 50, 200), 1, 4E-5, 2E-7));
+        /*scene.addLights(new PointLight(new Color(0, 500, 400),
+                new Point3D(0, 0, 50), 1, 4E-5, 2E-7));*/
+        scene.addLights(new SpotLight(new Color(300, 300, 300),
+                new Point3D(0, 0, 1500),new Vector(0,0,-1),5, 1, 4E-5, 2E-7));
+        scene.addLights(new DirectionalLight(new Color(150, 150, 150), new Vector(-1, 1, -1)));
+
+        lightRadius = 1200;
+        Point3D upPoint = new Point3D(0, 0, 100);
+        numOfSpotes = 10;
+        for (int i = 0; i < numOfSpotes; ++i) {
+            double theta = Math.PI * 2 * (i * 1.0 / numOfSpotes);
+            Point3D downPoint = new Point3D(lightRadius * Math.cos(theta), lightRadius * Math.sin(theta), 5);
+            scene.addLights(new SpotLight(new primitives.Color(950, 150, 150), downPoint,
+                    upPoint.subtract(downPoint), 15, 1, 0.0001, 0.000005));
+        }
+
+        //Statistics.runAndPrintStatistics(startAddGeometries,scene,320, 180, 1600, 900,3,4);
+        ImageWriter imageWriter = new ImageWriter("mizbeach123", 320, 180, 1600, 900);
+        scene.setBox(4);
+        Render render = new Render(imageWriter, scene).setDebugPrint().setMultithreading(3);
         render.renderImage();
-        render.writeToImage();*/
+        render.writeToImage();
+    }
+
+    private Color generateWoodColor(Color woodColor, int randomRange) {
+        int t = random.nextInt(randomRange) - randomRange / 2;
+        int x = woodColor.getColor().getRed();
+        int y = woodColor.getColor().getGreen();
+        int z = woodColor.getColor().getBlue();
+        return new Color(x + t, y + t, z + t);
     }
 }
 

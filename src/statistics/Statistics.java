@@ -18,7 +18,10 @@ public class Statistics {
 
         long endAddGeometries = System.currentTimeMillis();
         double endAddGeometriesDuration = (endAddGeometries - startAddGeometries) / 1000d;
+
         print(endAddGeometriesDuration, "Add geometries time: ");
+        System.out.println( "Number of geometries: " + scene.getGeometries().getGeometries().size());
+        System.out.println( "Number of lights: " + scene.getLights().size());
 
         //---------------
 
@@ -48,7 +51,8 @@ public class Statistics {
 
         long startRenderWithBox = System.currentTimeMillis();
         imageWriter = new ImageWriter(scene.getName() + " WithBox", width, height, nX, nY);
-        render = new Render(imageWriter, scene).setMultithreading(threads).setBox(lambda);
+        scene.setBox(lambda);
+        render = new Render(imageWriter, scene).setMultithreading(threads);//.setBox(lambda);
         render.renderImage();
         render.writeToImage();
 
