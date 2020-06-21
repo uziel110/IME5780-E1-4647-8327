@@ -1,5 +1,6 @@
-package elements;
+package unitests;
 
+import elements.Camera;
 import geometries.Geometry;
 import geometries.Intersectable.GeoPoint;
 import geometries.Plane;

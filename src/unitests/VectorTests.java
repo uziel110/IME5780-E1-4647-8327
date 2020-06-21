@@ -1,6 +1,7 @@
-package primitives;
+package unitests;
 
 import org.junit.Test;
+import primitives.Vector;
 
 import static java.lang.System.out;
 import static org.junit.Assert.*;

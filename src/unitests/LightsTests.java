@@ -1,4 +1,4 @@
-package renderer;
+package unitests;
 
 import elements.*;
 import geometries.Sphere;
@@ -9,6 +9,8 @@ import primitives.Color;
 import primitives.Material;
 import primitives.Point3D;
 import primitives.Vector;
+import renderer.ImageWriter;
+import renderer.Render;
 import scene.Scene;
 
 import static java.lang.Math.random;

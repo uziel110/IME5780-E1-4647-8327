@@ -1,4 +1,4 @@
-package renderer;
+package unitests;
 
 import elements.*;
 import geometries.Plane;
@@ -10,6 +10,8 @@ import org.junit.Test;
 import primitives.Material;
 import primitives.Point3D;
 import primitives.Vector;
+import renderer.ImageWriter;
+import renderer.Render;
 import scene.Scene;
 import statistics.Statistics;
 

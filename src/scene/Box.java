@@ -240,31 +240,19 @@ public class Box {
             if (TandDelta[0] < TandDelta[2]) { // tX < tZ
                 // t = tX; // current t, next intersection with cell along ray
                 TandDelta[0] += TandDelta[3]; // increment, next crossing along x
-                if (ray.getDir().getHead().getX().get() < 0)
-                    voxelIndex[0] -= 1; // tX -= 1
-                else
-                    voxelIndex[0] += 1; // tX += 1
+                voxelIndex[0] += ray.getDir().getHead().getX().get() < 0 ? -1 : 1;
             } else {
                 TandDelta[2] += TandDelta[5]; // tZ += deltaZ
-                if (ray.getDir().getHead().getZ().get() < 0)
-                    voxelIndex[2] -= 1; // tZ -= 1
-                else
-                    voxelIndex[2] += 1; // tZ += 1
+                voxelIndex[2] += ray.getDir().getHead().getZ().get() < 0 ? -1 : 1;
             }
         else if (TandDelta[1] < TandDelta[2]) { // tY < tZ
             // t = tY;
             TandDelta[1] += TandDelta[4]; // increment, next crossing along y
-            if (ray.getDir().getHead().getY().get() < 0)
-                voxelIndex[1] -= 1; // tY -= 1
-            else
-                voxelIndex[1] += 1; // tY += 1
+            voxelIndex[1] += ray.getDir().getHead().getY().get() < 0 ? -1 : 1;
         } else {
             // t = tZ;
             TandDelta[2] += TandDelta[5]; // increment, next crossing along y
-            if (ray.getDir().getHead().getZ().get() < 0)
-                voxelIndex[2] -= 1; // tZ -= 1
-            else
-                voxelIndex[2] += 1; // tZ += 1
+            voxelIndex[2] += ray.getDir().getHead().getZ().get() < 0 ? -1 : 1;
         }
         // if some condition is met break from the loop
         if (voxelIndex[0] < 0 || voxelIndex[1] < 0 || voxelIndex[2] < 0 || voxelIndex[0] > _density
@@ -299,8 +287,6 @@ public class Box {
         double z = p.getZ().get();
         return x >= _minX && x <= _maxX && y >= _minY && y <= _maxY && z >= _minZ && z <= _maxZ;
     }
-
-
 
     /**
      * return the x size voxel
