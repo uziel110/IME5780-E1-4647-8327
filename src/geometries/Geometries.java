@@ -1,6 +1,7 @@
 package geometries;
 
 import scene.Box;
+import scene.Box.Voxel;
 import primitives.Point3D;
 import primitives.Ray;
 
@@ -53,16 +54,19 @@ public class Geometries implements Intersectable {
     public List<GeoPoint> getRelevantPoints(Ray ray, Box box, boolean shadowRaysCase, double dis) {
         if (box == null)
             return this.findIntersections(ray, dis);
+
+        // for infinite geometries
+        List<GeoPoint> geoPoints = box.getInfiniteGeometries().findIntersections(ray,dis);
+
         boolean intersectionFoundInVoxel = false;
-        List<GeoPoint> geoPoints = null;
         List<GeoPoint> geometryIntersectionPoints;
 /*        Set<Intersectable> geometriesSet = new HashSet<>();
         Geometries currentGeometries = new Geometries();*/
 
         //Voxel currentVoxel = box.getFirstVoxel(ray);
         ray = box.getFirstVoxel(ray);
-        if (ray == null) return null;
-        Box.Voxel currentVoxel = box.convertPointToVoxel(ray.getPoint());
+        if (ray == null) return geoPoints;
+        Voxel currentVoxel = box.convertPointToVoxel(ray.getPoint());
 
         double[] deltaAndTArr = box.getRayFirstDeltaAndT(ray);
 
@@ -117,6 +121,8 @@ public class Geometries implements Intersectable {
         double x, y, z;
         Point3D p;
         for (Intersectable i : _geometriesList) {
+            if (i.getMinCoordinates() == null)
+                continue;
             p = i.getMinCoordinates();
             x = p.getX().get();
             y = p.getY().get();
@@ -139,6 +145,8 @@ public class Geometries implements Intersectable {
         double x, y, z;
         Point3D p;
         for (Intersectable i : _geometriesList) {
+            if (i.getMaxCoordinates() == null)
+                continue;
             p = i.getMaxCoordinates();
             x = p.getX().get();
             y = p.getY().get();

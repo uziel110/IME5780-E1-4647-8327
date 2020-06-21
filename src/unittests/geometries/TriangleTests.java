@@ -1,7 +1,6 @@
-package unitests;
+package geometries;
 
 import geometries.Intersectable.GeoPoint;
-import geometries.Triangle;
 import org.junit.Test;
 import primitives.Point3D;
 import primitives.Ray;

@@ -1,8 +1,7 @@
 package renderer;
 
 import elements.*;
-import geometries.Geometries;
-import geometries.Sphere;
+import geometries.*;
 import org.junit.Before;
 import org.junit.Test;
 import primitives.Color;
@@ -63,7 +62,7 @@ public class BoxTests {
         scene.addLights(new DirectionalLight(new Color(48, 170, 176), new Vector(0, -1, 0)),
                 new PointLight(new Color(103, 110, 13), new Point3D(0, -100, 0), 1, 0, 0));
 
-        Statistics.runAndPrintStatistics(startAddGeometries, scene, 500,500,1000,1000,3,4);
+        Statistics.runAndPrintStatistics(startAddGeometries, scene, 500, 500, 1000, 1000, 3, 4);
     }
 
     @Test
@@ -179,7 +178,7 @@ public class BoxTests {
         scene.addLights(new DirectionalLight(new Color(48, 170, 176), new Vector(0, -1, 0)),
                 new PointLight(new Color(103, 110, 13), new Point3D(0, -100, 0), 1, 0, 0));
 
-        Statistics.runAndPrintStatistics(startAddGeometries, scene, 500,500,500,500,3,4);
+        Statistics.runAndPrintStatistics(startAddGeometries, scene, 500, 500, 500, 500, 3, 4);
     }
 
     @Test
@@ -207,7 +206,7 @@ public class BoxTests {
         scene.addGeometries(sphere4);
         scene.addLights(new DirectionalLight(new Color(400, 235, 486), new Vector(1, 0, 0)));
 
-        Statistics.runAndPrintStatistics(startAddGeometries, scene, 300,300,500,500,3,4);
+        Statistics.runAndPrintStatistics(startAddGeometries, scene, 300, 300, 500, 500, 3, 4);
     }
 
     @Test
@@ -234,7 +233,317 @@ public class BoxTests {
         scene.setBackground(new Color(0, 0, 0));
         scene.setDistance(149);
         scene.setCamera(camera);
-        Statistics.runAndPrintStatistics(startAddGeometries, scene, 500,500,500,500,3,4);
+        Statistics.runAndPrintStatistics(startAddGeometries, scene, 500, 500, 500, 500, 3, 4);
+    }
+
+    @Test
+    public void mizbeachTast() {
+        Scene scene = new Scene("mizbeah");
+        scene.setCamera(new Camera(new Point3D(0, 0, 50), 2500, 3.75, 1, Math.PI));
+        scene.setDistance(100);
+        scene.setBackground(Color.BLACK);
+        scene.setAmbientLight(new AmbientLight(Color.BLACK, 0));
+
+        //scene.addLights(new PointLight(new Color(700, 400, 400), new Point3D(-60, 50, 200), 1, 4E-5, 2E-7));
+        /*scene.addLights(new PointLight(new Color(0, 500, 400),
+                new Point3D(0, 0, 50), 1, 4E-5, 2E-7));
+        scene.addLights(new SpotLight(new Color(200, 200, 200),
+                new Point3D(0, 0, 1500),new Vector(0,0,-1),5, 1, 4E-5, 2E-7));*/
+        scene.addLights(new DirectionalLight(new Color(150, 150, 150), new Vector(-1, 1, -1)));
+
+        double kr = 0.2, kt = 0.0, ks = 0.3, kd = 1 - ks;
+
+        Color woodColor = new Color(85, 60, 42);
+        Color goldColor = new Color(109, 82, 16);
+        Color sikraColor = new Color(255, 0, 0);
+        Material woodMaterial = new Material(kd, ks, 30, kt, kr);
+        Material goldMaterial = new Material(0.3, 0.7, 30, 0, 0.1);
+        Material coalMaterial = new Material(kd, ks, 10, kt, kr);
+        Material sikraMaterial = new Material(kd, ks, 30, kt, kr);
+
+        scene.addGeometries(
+
+                //scene floor
+                /*new Polygon(new Color(java.awt.Color.BLACK), new Material(kd, ks, 30, kt, 0)
+                        , new Point3D(-1000, -1000, -10), new Point3D(-500, 500, -10),
+                        new Point3D(500, 500, -10), new Point3D(500, -1000, -10)),*/
+
+                new Plane(new Color(java.awt.Color.BLACK), new Material(kd, ks, 30, kt, 0)
+                        , new Point3D(-1000, -1000, -10), new Point3D(-500, 500, -10),
+                        new Point3D(500, 500, -10)),
+
+                //1 down
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(-288, -288, 0), new Point3D(-288, 288, 0),
+                        new Point3D(288, 288, 0), new Point3D(288, -288, 0)),
+                //1 up
+                new Polygon(goldColor
+                        , new Material(kd, ks, 30, kt, kr),
+                        new Point3D(-288, -288, 15), new Point3D(-288, 288, 15),
+                        new Point3D(288, 288, 15), new Point3D(288, -288, 15)),
+
+                //1 West
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(-288, -288, 0), new Point3D(-288, 288, 0),
+                        new Point3D(-288, 288, 15), new Point3D(-288, -288, 15)),
+                //1 North
+                new Polygon(new Color(109, 82, 16), goldMaterial,
+                        new Point3D(-288, 288, 0), new Point3D(288, 288, 0),
+                        new Point3D(288, 288, 15), new Point3D(-288, 288, 15)),
+                //1 East
+                new Polygon(new Color(109, 82, 16), goldMaterial,
+                        new Point3D(288, 288, 0), new Point3D(288, -288, 0),
+                        new Point3D(288, -288, 15), new Point3D(288, 288, 15)),
+                //1 South
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(288, -288, 0), new Point3D(-288, -288, 0),
+                        new Point3D(-288, -288, 15), new Point3D(288, -288, 15)),
+
+                //2 down
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(-273, -273, 15), new Point3D(-273, 273, 15),
+                        new Point3D(273, 273, 15), new Point3D(273, -273, 15)),
+                //2 up
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(-273, -273, 105), new Point3D(-273, 273, 105),
+                        new Point3D(273, 273, 105), new Point3D(273, -273, 105)),
+
+                //2 West
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(-273, -273, 15), new Point3D(-273, 273, 15),
+                        new Point3D(-273, 273, 105), new Point3D(-273, -273, 105)),
+                //2 North
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(-273, 273, 15), new Point3D(273, 273, 15),
+                        new Point3D(273, 273, 105), new Point3D(-273, 273, 105)),
+                //2 East
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(273, 273, 15), new Point3D(273, -273, 15),
+                        new Point3D(273, -273, 105), new Point3D(273, 273, 105)),
+                //2 South
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(273, -273, 15), new Point3D(-273, -273, 15),
+                        new Point3D(-273, -273, 105), new Point3D(273, -273, 105)),
+
+                //3 down
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(-258, -258, 105), new Point3D(-258, 258, 105),
+                        new Point3D(258, 258, 105), new Point3D(258, -258, 105)),
+                //3 up
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(-258, -258, 159), new Point3D(-258, 258, 159),
+                        new Point3D(258, 258, 159), new Point3D(258, -258, 159)),
+
+                //3 West
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(-258, -258, 105), new Point3D(-258, 258, 105),
+                        new Point3D(-258, 258, 159), new Point3D(-258, -258, 159)),
+                //3 North
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(-258, 258, 105), new Point3D(258, 258, 105),
+                        new Point3D(258, 258, 159), new Point3D(-258, 258, 159)),
+                //3 East
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(258, 258, 105), new Point3D(258, -258, 105),
+                        new Point3D(258, -258, 159), new Point3D(258, 258, 159)),
+                //3 South
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(258, -258, 105), new Point3D(-258, -258, 105),
+                        new Point3D(-258, -258, 159), new Point3D(258, -258, 159)),
+
+                //4 West
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(-258, -258, 105), new Point3D(-258, 258, 105),
+                        new Point3D(-258, 258, 159), new Point3D(-258, -258, 159)),
+                //4 North
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(-258, 258, 105), new Point3D(258, 258, 105),
+                        new Point3D(258, 258, 159), new Point3D(-258, 258, 159)),
+                //4 East
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(258, 258, 105), new Point3D(258, -258, 105),
+                        new Point3D(258, -258, 159), new Point3D(258, 258, 159)),
+                //4 South
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(258, -258, 105), new Point3D(-258, -258, 105),
+                        new Point3D(-258, -258, 159), new Point3D(258, -258, 159)),
+
+                //1 WS
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(-258, -258, 159), new Point3D(-258, -240, 159),
+                        new Point3D(-258, -240, 174), new Point3D(-258, -258, 174)),
+                //2 WS
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(-258, -240, 159), new Point3D(-240, -240, 159),
+                        new Point3D(-240, -240, 174), new Point3D(-258, -240, 174)),
+                //3 WS
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(-240, -240, 159), new Point3D(-240, -258, 159),
+                        new Point3D(-240, -258, 174), new Point3D(-240, -240, 174)),
+                //4 WS
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(-240, -258, 159), new Point3D(-258, -258, 159),
+                        new Point3D(-258, -258, 174), new Point3D(-240, -258, 174)),
+
+                //1 NW
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(-258, 240, 159), new Point3D(-258, 258, 159),
+                        new Point3D(-258, 258, 174), new Point3D(-258, 240, 174)),
+                //2 NW
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(-258, 258, 159), new Point3D(-240, 258, 159),
+                        new Point3D(-240, 258, 174), new Point3D(-258, 258, 174)),
+                //3 NW
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(-240, 258, 159), new Point3D(-240, 240, 159),
+                        new Point3D(-240, 240, 174), new Point3D(-240, 258, 174)),
+                //4 NW
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(-240, 240, 159), new Point3D(-258, 240, 159),
+                        new Point3D(-258, 240, 174), new Point3D(-240, 240, 174)),
+
+                //1 EN
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(240, 258, 159), new Point3D(258, 258, 159),
+                        new Point3D(258, 258, 174), new Point3D(240, 258, 174)),
+                //2 EN
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(258, 258, 159), new Point3D(258, 240, 159),
+                        new Point3D(258, 240, 174), new Point3D(258, 258, 174)),
+                //3 EN
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(258, 240, 159), new Point3D(240, 240, 159),
+                        new Point3D(240, 240, 174), new Point3D(258, 240, 174)),
+                //4 EN
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(240, 240, 159), new Point3D(240, 258, 159),
+                        new Point3D(240, 258, 174), new Point3D(240, 240, 174)),
+                //1 ES
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(258, -240, 159), new Point3D(258, -258, 159),
+                        new Point3D(258, -258, 174), new Point3D(258, -240, 174)),
+                //2 ES
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(258, -258, 159), new Point3D(240, -258, 159),
+                        new Point3D(240, -258, 174), new Point3D(258, -258, 174)),
+                //3 ES
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(240, -258, 159), new Point3D(240, -240, 159),
+                        new Point3D(240, -240, 174), new Point3D(240, -258, 174)),
+                //4 ES
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(240, -240, 159), new Point3D(258, -240, 159),
+                        new Point3D(258, -240, 174), new Point3D(240, -240, 174)),
+
+                //main ramp
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(-144, -258, 0), new Point3D(144, -258, 0),
+                        new Point3D(144, -834, 0), new Point3D(-144, -834, 0)),
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(-144, -258, 159), new Point3D(144, -258, 159),
+                        new Point3D(144, -834, 0), new Point3D(-144, -834, 0)),
+                new Triangle(goldColor, goldMaterial,
+                        new Point3D(-144, -258, 159), new Point3D(-144, -834, 0),
+                        new Point3D(-144, -258, 0)),
+                new Triangle(goldColor, goldMaterial,
+                        new Point3D(144, -258, 159), new Point3D(144, -834, 0),
+                        new Point3D(144, -258, 0)),
+                //east ramp
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(144, -273, 0), new Point3D(169, -273, 0),
+                        new Point3D(169, -834, 0), new Point3D(144, -834, 0)),
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(144, -273, 105), new Point3D(169, -273, 105),
+                        new Point3D(169, -834, 0), new Point3D(144, -834, 0)),
+                new Triangle(goldColor, goldMaterial,
+                        new Point3D(169, -273, 105), new Point3D(169, -834, 0),
+                        new Point3D(169, -273, 0)),
+                //west ramp
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(-159, -273, 0), new Point3D(-144, -273, 0),
+                        new Point3D(-144, -642, 0), new Point3D(-159, -642, 0)),
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(-159, -273, 105), new Point3D(-144, -273, 105),
+                        new Point3D(-144, -642, 40), new Point3D(-159, -642, 40)),
+
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(-159, -273, 105), new Point3D(-159, -273, 0),
+                        new Point3D(-159, -642, 0), new Point3D(-159, -642, 40)),
+
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(-174, -672, 40), new Point3D(-144, -672, 40),
+                        new Point3D(-144, -672, 0), new Point3D(-174, -672, 0)),
+
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(-174, -642, 40), new Point3D(-144, -642, 40),
+                        new Point3D(-144, -672, 40), new Point3D(-174, -672, 40)),
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(-159, -672, 0), new Point3D(-174, -672, 0),
+                        new Point3D(-174, -442, 0), new Point3D(-159, -442, 0)),
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(-159, -672, 40), new Point3D(-174, -672, 40),
+                        new Point3D(-174, -442, 0), new Point3D(-159, -442, 0)),
+                new Polygon(goldColor, goldMaterial,
+                        new Point3D(-174, -672, 40), new Point3D(-174, -672, 0),
+                        new Point3D(-174, -442, 0), new Point3D(-174, -642, 40)),
+
+                new Sphere(new Color(44, 56, 74), coalMaterial,
+                        50, new Point3D(0, 0, 144)),
+                //2 West
+                new Polygon(sikraColor, sikraMaterial,
+                        new Point3D(-273, -273, 80), new Point3D(-273, 273, 80),
+                        new Point3D(-273, 273, 87), new Point3D(-273, -273, 87)),
+                //2 North
+                new Polygon(sikraColor, sikraMaterial,
+                        new Point3D(-273, 273, 80), new Point3D(273, 273, 80),
+                        new Point3D(273, 273, 87), new Point3D(-273, 273, 87)),
+                //2 East
+                new Polygon(sikraColor, sikraMaterial,
+                        new Point3D(273, 273, 80), new Point3D(273, -273, 80),
+                        new Point3D(273, -273, 87), new Point3D(273, 273, 87)),
+                //2 South
+                new Polygon(sikraColor, sikraMaterial,
+                        new Point3D(273, -273, 80), new Point3D(-273, -273, 80),
+                        new Point3D(-273, -273, 87), new Point3D(273, -273, 87)));
+
+        for (int y = 195; y > 55; y -= 20) {
+            scene.addGeometries(new Polygon(woodColor, woodMaterial,
+                    new Point3D(-205, y, 160), new Point3D(-85, y, 160),
+                    new Point3D(-85, y - 10, 160), new Point3D(-205, y - 10, 160)));
+        }
+        for (int x = -195; x < -95; x += 20) {
+            scene.addGeometries(new Polygon(woodColor, woodMaterial,
+                    new Point3D(x, 205, 160), new Point3D(x + 10, 205, 160),
+                    new Point3D(x + 10, 45, 160), new Point3D(x, 45, 160)));
+        }
+
+        for (int y = -35; y > -195; y -= 20) {
+            scene.addGeometries(new Polygon(woodColor, woodMaterial,
+                    new Point3D(-205, y, 160), new Point3D(-85, y, 160),
+                    new Point3D(-85, y - 10, 160), new Point3D(-205, y - 10, 160)));
+        }
+        for (int x = -195; x < -95; x += 20) {
+            scene.addGeometries(new Polygon(woodColor, woodMaterial,
+                    new Point3D(x, -35, 160), new Point3D(x + 10, -35, 160),
+                    new Point3D(x + 10, -195, 160), new Point3D(x, -195, 160)));
+        }
+
+        for (int y = 195; y > -195; y -= 20) {
+            scene.addGeometries(new Polygon(woodColor, woodMaterial,
+                    new Point3D(85, y, 160), new Point3D(205, y, 160),
+                    new Point3D(205, y - 10, 160), new Point3D(85, y - 10, 160)));
+        }
+        for (int x = 85; x < 205; x += 20) {
+            scene.addGeometries(new Polygon(woodColor, woodMaterial,
+                    new Point3D(x, 195, 160), new Point3D(x + 10, 195, 160),
+                    new Point3D(x + 10, -195, 160), new Point3D(x, -195, 160)));
+        }
+
+        Statistics.runAndPrintStatistics(startAddGeometries,scene,80, 45, 800, 450,3,4);
+        /*ImageWriter imageWriter = new ImageWriter("mizbeach", 80, 45, 800, 450);
+        Render render = new Render(imageWriter, scene).setDebugPrint().setMultithreading(3).setBox(4);
+        render.renderImage();
+        render.writeToImage();*/
     }
 }
 

@@ -1,7 +1,6 @@
-package unitests;
+package renderer;
 
 import org.junit.Test;
-import renderer.ImageWriter;
 
 import java.awt.*;
 

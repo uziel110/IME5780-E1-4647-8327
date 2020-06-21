@@ -1,9 +1,5 @@
-package unitests;
+package geometries;
 
-import geometries.Geometries;
-import geometries.Plane;
-import geometries.Polygon;
-import geometries.Sphere;
 import org.junit.Test;
 import primitives.Point3D;
 import primitives.Ray;

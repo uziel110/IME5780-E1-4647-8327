@@ -7,13 +7,16 @@ import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import static primitives.Util.alignZero;
 
 /**
  * 3DDDA algorithm to improve rendering performance
- *
+ * <p>
  * class that implement a grid over all the scene
  * and divide it to voxels
  */
@@ -30,6 +33,7 @@ public class Box {
     private double _maxZ = Double.POSITIVE_INFINITY;
     private double _voxelSizeX, _voxelSizeY, _voxelSizeZ;
     private Map<Voxel, Geometries> _voxelGeometriesMap;
+    private Geometries _infiniteGeometries;
 
     /**
      * factor for calculate the number of voxels in width / height / depth
@@ -44,6 +48,15 @@ public class Box {
     }
 
     /**
+     * return infinite geometries
+     *
+     * @return infinite geometries
+     */
+    public Geometries getInfiniteGeometries() {
+        return _infiniteGeometries;
+    }
+
+    /**
      * set the minimum coordinates of the box
      *
      * @param min the minimum coordinates of the geometries
@@ -55,7 +68,7 @@ public class Box {
     }
 
     /**
-     *  set the maximum coordinates of the box
+     * set the maximum coordinates of the box
      *
      * @param max the maximum coordinates of the geometries
      */
@@ -95,21 +108,26 @@ public class Box {
      */
     public void SetMap(Geometries geometries) {
         _voxelGeometriesMap = new HashMap<>();
+        _infiniteGeometries = new Geometries();
         Voxel minVoxel, maxVoxel, voxel;
         for (Intersectable geometry : geometries.getGeometries()) {
-            minVoxel = convertPointToVoxel(geometry.getMinCoordinates());
-            maxVoxel = convertPointToVoxel(geometry.getMaxCoordinates());
-            for (int x = minVoxel._x; x <= maxVoxel._x; ++x)
-                for (int y = minVoxel._y; y <= maxVoxel._y; ++y)
-                    for (int z = minVoxel._z; z <= maxVoxel._z; ++z) {
-                        voxel = new Voxel(x, y, z);
-                        if (_voxelGeometriesMap.containsKey(voxel))
-                            _voxelGeometriesMap.get(voxel).add(geometry);
-                        else {
-                            Geometries g = new Geometries(geometry);
-                            _voxelGeometriesMap.put(voxel, g);
+            if (geometry.getMaxCoordinates() == null)
+                _infiniteGeometries.add(geometry);
+            else {
+                minVoxel = convertPointToVoxel(geometry.getMinCoordinates());
+                maxVoxel = convertPointToVoxel(geometry.getMaxCoordinates());
+                for (int x = minVoxel._x; x <= maxVoxel._x; ++x)
+                    for (int y = minVoxel._y; y <= maxVoxel._y; ++y)
+                        for (int z = minVoxel._z; z <= maxVoxel._z; ++z) {
+                            voxel = new Voxel(x, y, z);
+                            if (_voxelGeometriesMap.containsKey(voxel))
+                                _voxelGeometriesMap.get(voxel).add(geometry);
+                            else {
+                                Geometries g = new Geometries(geometry);
+                                _voxelGeometriesMap.put(voxel, g);
+                            }
                         }
-                    }
+            }
         }
     }
 
@@ -119,8 +137,7 @@ public class Box {
             return ray;
         double minTX = 0, minTY = 0, minTZ = 0;
         double maxTX = Double.POSITIVE_INFINITY, maxTY = maxTX, maxTZ = maxTX;
-        Vector v = ray.getDir();
-        Point3D headV = v.getHead();
+        Point3D headV = ray.getDir().getHead();
         double rayX = alignZero(headV.getX().get());
         double rayY = alignZero(headV.getY().get());
         double rayZ = alignZero(headV.getZ().get());
@@ -172,14 +189,11 @@ public class Box {
             maxTZ = (_minZ - rayPZ) / rayZ;
             minTZ = Double.max(0, (_maxZ - rayPZ) / rayZ);
         }
-        double minT = Double.min(maxTX, maxTY);
-        minT = Double.min(minT, maxTZ);
-        double maxT = Double.max(minTX, minTY);
-        maxT = Double.max(maxT, minTZ);
+        double minT = Double.min(maxTX, Double.min(maxTY, maxTZ));
+        double maxT = Double.max(minTX, Double.max(minTY, minTZ));
         if (minT < maxT)
             return null;
-        Point3D p = ray.getPoint(maxT);
-        return new Ray(p,ray.getDir());
+        return new Ray(ray.getPoint(maxT), ray.getDir());
     }
 
     public double[] getRayFirstDeltaAndT(Ray ray) {
@@ -224,8 +238,6 @@ public class Box {
     }
 
     /**
-     *
-     *
      * @param voxel
      * @param ray
      * @param TandDelta
@@ -262,7 +274,6 @@ public class Box {
     }
 
     /**
-     *
      * @param voxel
      * @param intersections
      * @return
@@ -328,7 +339,7 @@ public class Box {
      * set the density of the map
      *
      * @param numGeometries amount of the geometries
-     * @param lambda parameter for calculating box density (for optimum results the parameter is between 3 to 5)
+     * @param lambda        parameter for calculating box density (for optimum results the parameter is between 3 to 5)
      */
     public void setDensity(int numGeometries, int lambda) {
         double boxVolume = (_maxX - _minX) * (_maxY - _minY) * (_maxZ - _minZ);

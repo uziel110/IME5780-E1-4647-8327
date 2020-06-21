@@ -1,9 +1,6 @@
-package unitests;
+package primitives;
 
-import org.junit.Assert;
 import org.junit.Test;
-import primitives.Point3D;
-import primitives.Vector;
 
 import static org.junit.Assert.assertEquals;
 
@@ -20,7 +17,7 @@ public class Point3DTest {
     public void subtract() {
         Point3D p1 = new Point3D(2, 3, 4);
         Point3D p2 = new Point3D(4, 3, 2);
-        Assert.assertEquals("subtract failed!", new Vector(2, 0, -2), p2.subtract(p1));
+        assertEquals("subtract failed!", new Vector(2, 0, -2), p2.subtract(p1));
     }
 
     /**

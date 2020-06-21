@@ -1,4 +1,4 @@
-package unitests;
+package renderer;
 
 import elements.*;
 import geometries.*;
@@ -7,8 +7,6 @@ import primitives.Color;
 import primitives.Material;
 import primitives.Point3D;
 import primitives.Vector;
-import renderer.ImageWriter;
-import renderer.Render;
 import scene.Scene;
 
 /**

@@ -1,6 +1,5 @@
-package unitests;
+package geometries;
 
-import geometries.Cylinder;
 import org.junit.Test;
 import primitives.Point3D;
 import primitives.Vector;
