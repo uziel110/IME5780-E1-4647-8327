@@ -117,49 +117,46 @@ public class Cylinder extends Tube {
         return point.subtract(o).normalize();
     }
 
-
     @Override
     public Point3D getMinCoordinates() {
-        Point3D center = _axisRay.getPoint();
-        double minX = center.getX().get();
-        double minY = center.getY().get();
-        double minZ = center.getZ().get();
-        Point3D centerHeight = this._axisRay.getPoint(_height);
-        double centerHeightX = centerHeight.getX().get();
-        double centerHeightY = centerHeight.getY().get();
-        double centerHeightZ = centerHeight.getZ().get();
-        if (minX > centerHeightX)
-            minX = centerHeightX;
-        if (minY > centerHeightY)
-            minY = centerHeightY;
-        if (minZ > centerHeightZ)
-            minZ = centerHeightZ;
-        minX -= _radius;
-        minY -= _radius;
-        minZ -= _radius;
-        return new Point3D(minX, minY, minZ);
+        Point3D pa = _axisRay.getPoint();
+        Vector n = _axisRay.getDir();
+        Point3D pb = _axisRay.getPoint(_height);
+        double ndn = n.dotProduct(n);
+        double nx = n.getHead().getX().get();
+        double ny = n.getHead().getY().get();
+        double nz = n.getHead().getZ().get();
+        double ex = _radius * Math.sqrt(1.0 - nx*nx / ndn);
+        double ey = _radius * Math.sqrt(1.0 - ny*ny / ndn);
+        double ez = _radius * Math.sqrt(1.0 - nz*nz / ndn);
+        double ax = pa.getX().get() - ex;
+        double ay = pa.getY().get() - ey;
+        double az = pa.getZ().get() - ez;
+        double bx = pb.getX().get() - ex;
+        double by = pb.getY().get() - ey;
+        double bz = pb.getZ().get() - ez;
+        return new Point3D(Math.min(ax,bx),Math.min(ay,by),Math.min(az,bz));
     }
 
     @Override
     public Point3D getMaxCoordinates() {
-        Point3D center = this._axisRay.getPoint();
-        double maxX = center.getX().get();
-        double maxY = center.getY().get();
-        double maxZ = center.getZ().get();
-        Point3D centerHeight = this._axisRay.getPoint(_height);
-        double centerHeightX = centerHeight.getX().get();
-        double centerHeightY = centerHeight.getY().get();
-        double centerHeightZ = centerHeight.getZ().get();
-        if (maxX < centerHeightX)
-            maxX = centerHeightX;
-        if (maxY < centerHeightY)
-            maxY = centerHeightY;
-        if (maxZ < centerHeightZ)
-            maxZ = centerHeightZ;
-        maxX += _radius;
-        maxY += _radius;
-        maxZ += _radius;
-        return new Point3D(maxX, maxY, maxZ);
+        Point3D pa = _axisRay.getPoint();
+        Vector n = _axisRay.getDir();
+        Point3D pb = _axisRay.getPoint(_height);
+        double ndn = n.dotProduct(n);
+        double nx = n.getHead().getX().get();
+        double ny = n.getHead().getY().get();
+        double nz = n.getHead().getZ().get();
+        double ex = _radius * Math.sqrt(1.0 - nx*nx / ndn);
+        double ey = _radius * Math.sqrt(1.0 - ny*ny / ndn);
+        double ez = _radius * Math.sqrt(1.0 - nz*nz / ndn);
+        double ax = pa.getX().get() + ex;
+        double ay = pa.getY().get() + ey;
+        double az = pa.getZ().get() + ez;
+        double bx = pb.getX().get() + ex;
+        double by = pb.getY().get() + ey;
+        double bz = pb.getZ().get() + ez;
+        return new Point3D(Math.max(ax,bx),Math.max(ay,by),Math.max(az,bz));
     }
 
     @Override
