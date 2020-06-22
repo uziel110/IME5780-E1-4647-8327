@@ -118,18 +118,62 @@ public class Cylinder extends Tube {
     }
 
     @Override
-    public List<GeoPoint> findIntersections(Ray ray,double max) {
+    public Point3D getMinCoordinates() {
+        Point3D center = _axisRay.getPoint();
+        double minX = center.getX().get();
+        double minY = center.getY().get();
+        double minZ = center.getZ().get();
+        Point3D centerHeight = this._axisRay.getPoint(_height);
+        double centerHeightX = centerHeight.getX().get();
+        double centerHeightY = centerHeight.getY().get();
+        double centerHeightZ = centerHeight.getZ().get();
+        if (minX > centerHeightX)
+            minX = centerHeightX;
+        if (minY > centerHeightY)
+            minY = centerHeightY;
+        if (minZ > centerHeightZ)
+            minZ = centerHeightZ;
+        minX -= _radius;
+        minY -= _radius;
+        minZ -= _radius;
+        return new Point3D(minX, minY, minZ);
+    }
+
+    @Override
+    public Point3D getMaxCoordinates() {
+        Point3D center = this._axisRay.getPoint();
+        double maxX = center.getX().get();
+        double maxY = center.getY().get();
+        double maxZ = center.getZ().get();
+        Point3D centerHeight = this._axisRay.getPoint(_height);
+        double centerHeightX = centerHeight.getX().get();
+        double centerHeightY = centerHeight.getY().get();
+        double centerHeightZ = centerHeight.getZ().get();
+        if (maxX < centerHeightX)
+            maxX = centerHeightX;
+        if (maxY < centerHeightY)
+            maxY = centerHeightY;
+        if (maxZ < centerHeightZ)
+            maxZ = centerHeightZ;
+        maxX += _radius;
+        maxY += _radius;
+        maxZ += _radius;
+        return new Point3D(maxX, maxY, maxZ);
+    }
+
+    @Override
+    public List<GeoPoint> findIntersections(Ray ray, double max) {
         Point3D centerP = _axisRay.getPoint();
         Vector cylinderDir = _axisRay.getDir();
-        List<GeoPoint> intersectios = super.findIntersections(ray,max);
+        List<GeoPoint> intersectios = super.findIntersections(ray, max);
         List<GeoPoint> toReturn = null;
         // Check if there are intersections with the bottum of cylinder and/or the top
         // cylinder
         Plane buttomCap = new Plane(centerP, cylinderDir);
         Point3D pointAtTop = new Point3D(centerP.add(cylinderDir.scale(_height)));
         Plane topCap = new Plane(pointAtTop, cylinderDir);
-        List<GeoPoint> intsB = buttomCap.findIntersections(ray,max);
-        List<GeoPoint> intsT = topCap.findIntersections(ray,max);
+        List<GeoPoint> intsB = buttomCap.findIntersections(ray, max);
+        List<GeoPoint> intsT = topCap.findIntersections(ray, max);
         if (intsT != null) {
             GeoPoint topInter = intsT.get(0);
             double d = Util.alignZero(topInter._point.distance(pointAtTop) - _radius);
@@ -162,8 +206,8 @@ public class Cylinder extends Tube {
         // check if intersection point(s) of tube relevant also for the cylinder
         GeoPoint gPoint = intersectios.get(0);
         gPoint._geometry = this;
-        intsT = topCap.findIntersections(new Ray(gPoint._point, cylinderDir),max);
-        intsB = buttomCap.findIntersections(new Ray(gPoint._point, cylinderDir.scale(-1)),max);
+        intsT = topCap.findIntersections(new Ray(gPoint._point, cylinderDir), max);
+        intsB = buttomCap.findIntersections(new Ray(gPoint._point, cylinderDir.scale(-1)), max);
         if (intsT != null && intsB != null) {
             if (toReturn == null)
                 toReturn = new LinkedList<GeoPoint>();
@@ -172,8 +216,8 @@ public class Cylinder extends Tube {
         if (intersectios.size() == 2) {
             gPoint = intersectios.get(1);
             gPoint._geometry = this;
-            intsT = topCap.findIntersections(new Ray(gPoint._point, cylinderDir),max);
-            intsB = buttomCap.findIntersections(new Ray(gPoint._point, cylinderDir.scale(-1)),max);
+            intsT = topCap.findIntersections(new Ray(gPoint._point, cylinderDir), max);
+            intsB = buttomCap.findIntersections(new Ray(gPoint._point, cylinderDir.scale(-1)), max);
             if (intsT != null && intsB != null) {
                 if (toReturn == null)
                     toReturn = new LinkedList<GeoPoint>();

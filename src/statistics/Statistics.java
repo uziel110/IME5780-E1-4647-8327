@@ -33,7 +33,7 @@ public class Statistics {
 
         long endRenderWithoutMultithreading = System.currentTimeMillis();
         double renderWithoutMultithreadingDuration = (endRenderWithoutMultithreading - startRenderWithoutMultithreading + endAddGeometriesDuration) / 1000d;
-        print(renderWithoutMultithreadingDuration, "Render time without multithreading: ");
+        print(renderWithoutMultithreadingDuration, "Render time without multithreading:");
 
         //---------------
 
@@ -45,7 +45,7 @@ public class Statistics {
 
         long endRenderWithoutBox = System.currentTimeMillis();
         double renderWithMultithreadingDuration = (endRenderWithoutBox - startRenderWithoutBox + endAddGeometriesDuration) / 1000d;
-        print(renderWithMultithreadingDuration, "Render time with multithreading: ");
+        print(renderWithMultithreadingDuration, "Render time with multithreading:");
 
         //---------------
 
@@ -57,7 +57,7 @@ public class Statistics {
 
         long endRenderWithBox = System.currentTimeMillis();
         double renderWithBoxDuration = (endRenderWithBox - startRenderWithBox + endAddGeometriesDuration) / 1000d;
-        print(renderWithBoxDuration, "Render time with box when density = " + scene.getBox().getDensity() + " is: ");
+        print(renderWithBoxDuration, "Render time with box when density = " + scene.getBox().getDensity() + " is:");
 
         //---------------
 
@@ -73,11 +73,12 @@ public class Statistics {
      */
     private static void print(double durationTime, String s) {
         if (durationTime < 1)
-            System.out.printf(s + "%.3f Ms\n", durationTime);
+            System.out.printf(s + " %.3f Ms\n", durationTime);
         else {
+            System.out.print(s);
             if (((int) durationTime) / 60 > 0)
-                System.out.print(s + (((int) durationTime) / 60) + " minutes and ");
-            System.out.printf("%.1f seconds\n", durationTime % 60);
+                System.out.print(" " + (((int) durationTime) / 60) + " minutes and");
+            System.out.printf(" %.1f seconds\n", durationTime % 60);
         }
     }
 }
