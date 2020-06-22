@@ -25,13 +25,13 @@ public class Box {
      * number of voxels in width / height / depth
      */
     private int _density;
-    private double _minX = Double.NEGATIVE_INFINITY;
-    private double _minY = Double.NEGATIVE_INFINITY;
-    private double _minZ = Double.NEGATIVE_INFINITY;
-    private double _maxX = Double.POSITIVE_INFINITY;
-    private double _maxY = Double.POSITIVE_INFINITY;
-    private double _maxZ = Double.POSITIVE_INFINITY;
-    private double _voxelSizeX, _voxelSizeY, _voxelSizeZ;
+    private static double _minX = Double.NEGATIVE_INFINITY;
+    private static double _minY = Double.NEGATIVE_INFINITY;
+    private static double _minZ = Double.NEGATIVE_INFINITY;
+    private static double _maxX = Double.POSITIVE_INFINITY;
+    private static double _maxY = Double.POSITIVE_INFINITY;
+    private static double _maxZ = Double.POSITIVE_INFINITY;
+    private static double _voxelSizeX, _voxelSizeY, _voxelSizeZ;
     private Map<Voxel, Geometries> _voxelGeometriesMap;
     private Geometries _infiniteGeometries;
 
@@ -93,7 +93,7 @@ public class Box {
      * @param point to convert
      * @return voxel
      */
-    public Voxel convertPointToVoxel(Point3D point) {
+    public static Voxel convertPointToVoxel(Point3D point) {
         int x = (int) ((point.getX().get() - _minX) / _voxelSizeX);
         int y = (int) ((point.getY().get() - _minY) / _voxelSizeY);
         int z = (int) ((point.getZ().get() - _minZ) / _voxelSizeZ);
@@ -131,7 +131,13 @@ public class Box {
         }
     }
 
-    public Ray getFirstVoxel(Ray ray) {
+    /**
+     * return new ray with point on the box
+     *
+     * @param ray the ray that we work with it
+     * @return new ray with point on the box
+     */
+    public Ray getRayOnTheBox(Ray ray) {
         Point3D originRay = ray.getPoint();
         if (isPointInTheBox(originRay))
             return ray;
@@ -196,6 +202,14 @@ public class Box {
         return new Ray(ray.getPoint(maxT), ray.getDir());
     }
 
+    /**
+     * return array of parameters to move to next voxel on the ray track
+     * [0,1,2] = [tx,ty,tz]
+     * [3,4,5] = [deltaX,deltaY,deltaZ]
+     *
+     * @param ray the ray that we work with it
+     * @return array of parameters to move to next voxel
+     */
     public double[] getRayFirstDeltaAndT(Ray ray) {
         Vector rayDirection = ray.getDir();
         Point3D rayHead = rayDirection.getHead();
@@ -238,10 +252,12 @@ public class Box {
     }
 
     /**
-     * @param voxel
-     * @param ray
-     * @param TandDelta
-     * @return
+     * @param voxel     the current voxel
+     * @param ray       the ray that we work with it
+     * @param TandDelta array of parameters to move to next voxel
+     *                  [0,1,2] = [tx,ty,tz]
+     *                  [3,4,5] = [deltaX,deltaY,deltaZ]
+     * @return next voxel in the track of the ray
      */
     public Voxel getNextVoxel(Voxel voxel, Ray ray, double[] TandDelta) {
         int[] voxelIndex = new int[3];
@@ -271,18 +287,6 @@ public class Box {
                 || voxelIndex[1] > _density || voxelIndex[2] > _density)
             return null;
         return new Voxel(voxelIndex[0], voxelIndex[1], voxelIndex[2]);
-    }
-
-    /**
-     * @param voxel
-     * @param intersections
-     * @return
-     */
-    public boolean isIntersectInVoxelRange(Voxel voxel, List<GeoPoint> intersections) {
-        for (GeoPoint geoPoint : intersections)
-            if (convertPointToVoxel(geoPoint._point).equals(voxel))
-                return true;
-        return false;
     }
 
     /**

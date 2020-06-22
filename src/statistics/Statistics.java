@@ -14,14 +14,14 @@ public class Statistics {
      * @param startAddGeometries the time of starting
      * @param scene              the scene we render
      */
-    public static void runAndPrintStatistics(long startAddGeometries, Scene scene, double width, double height, int nX, int nY,int threads, int lambda) {
+    public static void runAndPrintStatistics(long startAddGeometries, Scene scene, double width, double height, int nX, int nY, int threads, int lambda) {
 
         long endAddGeometries = System.currentTimeMillis();
         double endAddGeometriesDuration = (endAddGeometries - startAddGeometries) / 1000d;
 
         print(endAddGeometriesDuration, "Add geometries time: ");
-        System.out.println( "Number of geometries: " + scene.getGeometries().getGeometries().size());
-        System.out.println( "Number of lights: " + scene.getLights().size());
+        System.out.println("Number of geometries: " + scene.getGeometries().getGeometries().size());
+        System.out.println("Number of lights: " + scene.getLights().size());
 
         //---------------
 
@@ -57,7 +57,7 @@ public class Statistics {
 
         long endRenderWithBox = System.currentTimeMillis();
         double renderWithBoxDuration = (endRenderWithBox - startRenderWithBox + endAddGeometriesDuration) / 1000d;
-        print(renderWithBoxDuration, "Render time with box when density = "+scene.getBox().getDensity()+" is: ");
+        print(renderWithBoxDuration, "Render time with box when density = " + scene.getBox().getDensity() + " is: ");
 
         //---------------
 
@@ -66,11 +66,18 @@ public class Statistics {
         System.out.printf("Multithreading render/box render ratio is: " + "%.1f\n", 1.0 * renderWithMultithreadingDuration / renderWithBoxDuration);
     }
 
+    /**
+     * print duration time formatted
+     * @param durationTime duration time to print
+     * @param s text to print
+     */
     private static void print(double durationTime, String s) {
         if (durationTime < 1)
             System.out.printf(s + "%.3f Ms\n", durationTime);
-        else
-            System.out.printf(s + (((int) durationTime) / 60) + " minutes and "
-                    + "%.1f seconds\n", durationTime % 60);
+        else {
+            if (((int) durationTime) / 60 > 0)
+                System.out.print(s + (((int) durationTime) / 60) + " minutes and ");
+            System.out.printf("%.1f seconds\n", durationTime % 60);
+        }
     }
 }

@@ -1,9 +1,9 @@
 package geometries;
 
-import scene.Box;
-import scene.Box.Voxel;
 import primitives.Point3D;
 import primitives.Ray;
+import scene.Box;
+import scene.Box.Voxel;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -51,50 +51,76 @@ public class Geometries implements Intersectable {
         return _geometriesList;
     }
 
-    public List<GeoPoint> getRelevantPoints(Ray ray, Box box, boolean shadowRaysCase, double dis) {
+    /**
+     * return list of GeoPoints that intersect with the ray
+     *
+     * @param ray            the ray that we find intersections points on it
+     * @param box            the box that contains the scene
+     * @param shadowRaysCase boolean variable - true in the case that we want all the intersection points
+     * @param dis            upper bound of distance from the ray head to the intersection point
+     * @return list of GeoPoints that intersect with the ray
+     */
+    public List<GeoPoint> getRelevantGeoPoints(Ray ray, Box box, boolean shadowRaysCase, double dis) {
         if (box == null)
             return this.findIntersections(ray, dis);
 
         // for infinite geometries
-        List<GeoPoint> geoPoints = box.getInfiniteGeometries().findIntersections(ray,dis);
+        List<GeoPoint> geoPoints = box.getInfiniteGeometries().findIntersections(ray, dis);
 
+        // to stop run on the voxels when found closest intersections
         boolean intersectionFoundInVoxel = false;
         List<GeoPoint> geometryIntersectionPoints;
 /*        Set<Intersectable> geometriesSet = new HashSet<>();
         Geometries currentGeometries = new Geometries();*/
 
-        //Voxel currentVoxel = box.getFirstVoxel(ray);
-        ray = box.getFirstVoxel(ray);
-        if (ray == null) return geoPoints;
-        Voxel currentVoxel = box.convertPointToVoxel(ray.getPoint());
-
+        // update ray's head position
+        ray = box.getRayOnTheBox(ray);
+        if (ray == null) return geoPoints; // in case that the ray not intersect with the box
+        Voxel currentVoxel = box.convertPointToVoxel(ray.getPoint()); // the first voxel
         double[] deltaAndTArr = box.getRayFirstDeltaAndT(ray);
 
+        // run over all the voxels through the ray
         while (currentVoxel != null) {
+            // If there are no geometries in current voxel continue to next voxel
             if (!box.getMap().containsKey(currentVoxel)) {
                 currentVoxel = box.getNextVoxel(currentVoxel, ray, deltaAndTArr);
                 continue;
             }
-            Geometries geometries = box.getMap().get(currentVoxel);
-/*            for (Intersectable intersectable : geometries.getGeometries())
+/*          Geometries geometries = box.getMap().get(currentVoxel);
+            for (Intersectable intersectable : geometries.getGeometries())
                 if (!geometriesSet.contains(intersectable)) {
                     currentGeometries.add(intersectable);
                     geometriesSet.add(intersectable);
                 }
             geometryIntersectionPoints = currentGeometries.findIntersections(ray, dis);*/
-            geometryIntersectionPoints = geometries.findIntersections(ray, dis);
+
+            // run findIntersection func on current geometries
+            geometryIntersectionPoints = box.getMap().get(currentVoxel).findIntersections(ray, dis);
             if (geometryIntersectionPoints != null) {
                 if (geoPoints == null)
                     geoPoints = new LinkedList<>();
                 geoPoints.addAll(geometryIntersectionPoints);
                 if (!shadowRaysCase && !intersectionFoundInVoxel)
-                    intersectionFoundInVoxel = box.isIntersectInVoxelRange(currentVoxel, geometryIntersectionPoints);
+                    intersectionFoundInVoxel = isIntersectInVoxelRange(currentVoxel, geometryIntersectionPoints);
+                    // if found intersections in current voxel then they are the closest points
                 else if (intersectionFoundInVoxel)
                     return geoPoints;
             }
             currentVoxel = box.getNextVoxel(currentVoxel, ray, deltaAndTArr);
         }
         return geoPoints;
+    }
+
+    /**
+     * @param voxel         the current voxel
+     * @param intersections list of intersections
+     * @return
+     */
+    public boolean isIntersectInVoxelRange(Voxel voxel, List<GeoPoint> intersections) {
+        for (GeoPoint geoPoint : intersections)
+            if (Box.convertPointToVoxel(geoPoint._point).equals(voxel))
+                return true;
+        return false;
     }
 
     @Override

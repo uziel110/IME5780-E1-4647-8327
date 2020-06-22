@@ -36,7 +36,7 @@ public class Scene {
     }
 
     /**
-     * add list of Intersctable to the list
+     * add one Intersctable to the list
      *
      * @param geometries list of Intersctable
      */

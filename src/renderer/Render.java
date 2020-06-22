@@ -141,7 +141,7 @@ public class Render {
         Vector lightDirection = l.scale(-1); // change direction, from point to lightSource
         Ray lightRay = new Ray(gp._point, lightDirection, n);
         List<GeoPoint> intersections =
-                _scene.getGeometries().getRelevantPoints(lightRay, _scene.getBox(), true, ls.getDistance(gp._point));
+                _scene.getGeometries().getRelevantGeoPoints(lightRay, _scene.getBox(), true, ls.getDistance(gp._point));
         if (intersections == null) return 1.0;
 
         double ktr = 1.0;
@@ -166,7 +166,7 @@ public class Render {
         Vector lightDirection = l.scale(-1); // change direction, from point to lightSource
         Ray lightRay = new Ray(gp._point, lightDirection, n);
         List<GeoPoint> intersections =
-                _scene.getGeometries().getRelevantPoints(lightRay, _scene.getBox(), true, light.getDistance(gp._point));
+                _scene.getGeometries().getRelevantGeoPoints(lightRay, _scene.getBox(), true, light.getDistance(gp._point));
         if (intersections == null) return true;
         for (GeoPoint geoPoint : intersections)
             if (geoPoint._geometry.getMaterial().getKT() == 0)
@@ -361,7 +361,7 @@ public class Render {
      * @return return the closest point to the head of the reflected ray
      */
     private GeoPoint findClosestIntersection(Ray ray) {
-        List<GeoPoint> relevantPoint = _scene.getGeometries().getRelevantPoints(ray, _scene.getBox(), false,
+        List<GeoPoint> relevantPoint = _scene.getGeometries().getRelevantGeoPoints(ray, _scene.getBox(), false,
                 Double.POSITIVE_INFINITY);
         if (relevantPoint == null) return null;
         return getClosestPoint(ray.getPoint(), relevantPoint);
