@@ -12,7 +12,7 @@ import static primitives.Util.isZero;
  * class that implements Tube
  */
 public class Tube extends RadialGeometry {
-    private Ray _axisRay;
+    protected Ray _axisRay;
 
     /**
      * constructor of Tube that receive

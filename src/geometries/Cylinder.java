@@ -2,6 +2,7 @@ package geometries;
 
 import primitives.*;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import static primitives.Util.alignZero;
@@ -117,7 +118,68 @@ public class Cylinder extends Tube {
     }
 
     @Override
-    public List<GeoPoint> findIntersections(Ray ray) {
-        return null;
+    public List<GeoPoint> findIntersections(Ray ray,double max) {
+        Point3D centerP = _axisRay.getPoint();
+        Vector cylinderDir = _axisRay.getDir();
+        List<GeoPoint> intersectios = super.findIntersections(ray,max);
+        List<GeoPoint> toReturn = null;
+        // Check if there are intersections with the bottum of cylinder and/or the top
+        // cylinder
+        Plane buttomCap = new Plane(centerP, cylinderDir);
+        Point3D pointAtTop = new Point3D(centerP.add(cylinderDir.scale(_height)));
+        Plane topCap = new Plane(pointAtTop, cylinderDir);
+        List<GeoPoint> intsB = buttomCap.findIntersections(ray,max);
+        List<GeoPoint> intsT = topCap.findIntersections(ray,max);
+        if (intsT != null) {
+            GeoPoint topInter = intsT.get(0);
+            double d = Util.alignZero(topInter._point.distance(pointAtTop) - _radius);
+            if (d < 0) {
+                // intersect the top
+                if (toReturn == null)
+                    toReturn = new LinkedList<GeoPoint>();
+                topInter._geometry = this;
+                toReturn.add(topInter);
+            }
+        }
+        if (intsB != null) {
+            GeoPoint bInter = intsB.get(0);
+            double d = Util.alignZero(bInter._point.distance(centerP) - _radius);
+            if (d < 0) {
+                // intersect the buttom
+                if (toReturn == null)
+                    toReturn = new LinkedList<GeoPoint>();
+                bInter._geometry = this;
+                toReturn.add(bInter);
+            }
+        }
+        if (toReturn != null && toReturn.size() == 2) // The maximum intersection points are 2
+            return toReturn;
+        if (intersectios == null) {
+            return toReturn;
+        }
+        // In this point We knows that we got minimum 1 intersection point from the
+        // tube.
+        // check if intersection point(s) of tube relevant also for the cylinder
+        GeoPoint gPoint = intersectios.get(0);
+        gPoint._geometry = this;
+        intsT = topCap.findIntersections(new Ray(gPoint._point, cylinderDir),max);
+        intsB = buttomCap.findIntersections(new Ray(gPoint._point, cylinderDir.scale(-1)),max);
+        if (intsT != null && intsB != null) {
+            if (toReturn == null)
+                toReturn = new LinkedList<GeoPoint>();
+            toReturn.add(gPoint);
+        }
+        if (intersectios.size() == 2) {
+            gPoint = intersectios.get(1);
+            gPoint._geometry = this;
+            intsT = topCap.findIntersections(new Ray(gPoint._point, cylinderDir),max);
+            intsB = buttomCap.findIntersections(new Ray(gPoint._point, cylinderDir.scale(-1)),max);
+            if (intsT != null && intsB != null) {
+                if (toReturn == null)
+                    toReturn = new LinkedList<GeoPoint>();
+                toReturn.add(gPoint);
+            }
+        }
+        return toReturn;
     }
 }

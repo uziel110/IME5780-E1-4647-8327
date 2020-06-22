@@ -28,7 +28,7 @@ public class Statistics {
         long startRenderWithoutMultithreading = System.currentTimeMillis();
         ImageWriter imageWriter = new ImageWriter(scene.getName() + " WithoutMultithreading", width, height, nX, nY);
         Render render = new Render(imageWriter, scene).setMultithreading(1);
-        render.renderImage();
+        //render.renderImage();
         render.writeToImage();
 
         long endRenderWithoutMultithreading = System.currentTimeMillis();
