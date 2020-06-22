@@ -414,6 +414,19 @@ public class Render {
     }
 
     /**
+     * set box
+     *
+     * @param lambda parameter for calculating box density (for optimum results the parameter is between 3 to 5)
+     * @return this box
+     */
+    public Render setBox(int lambda) {
+        if (lambda < 0)
+            throw new IllegalArgumentException("lambda must be 0 or bigger\n");
+        _scene.setBox(lambda);
+        return this;
+    }
+
+    /**
      * Pixel is an internal helper class whose objects are associated with a Render object that
      * they are generated in scope of. It is used for multithreading in the Renderer and for follow up
      * its progress.<br/>

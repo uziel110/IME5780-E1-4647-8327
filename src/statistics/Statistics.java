@@ -51,8 +51,7 @@ public class Statistics {
 
         long startRenderWithBox = System.currentTimeMillis();
         imageWriter = new ImageWriter(scene.getName() + " WithBox", width, height, nX, nY);
-        scene.setBox(lambda);
-        render = new Render(imageWriter, scene).setMultithreading(threads);//.setBox(lambda);
+        render = new Render(imageWriter, scene).setMultithreading(threads).setBox(lambda);
         render.renderImage();
         render.writeToImage();
 

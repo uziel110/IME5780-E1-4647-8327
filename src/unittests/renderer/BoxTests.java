@@ -575,8 +575,7 @@ public class BoxTests {
 
         //Statistics.runAndPrintStatistics(startAddGeometries,scene,320, 180, 1600, 900,3,4);
         ImageWriter imageWriter = new ImageWriter("mizbeach1234", 320, 180, 1600, 900);
-        scene.setBox(4);
-        Render render = new Render(imageWriter, scene).setDebugPrint().setMultithreading(3);
+        Render render = new Render(imageWriter, scene).setDebugPrint().setMultithreading(3).setBox(4);
         render.renderImage();
         render.writeToImage();
     }

@@ -40,7 +40,6 @@ public class SaxHandlerTest {
         scene.addLights(new PointLight(new Color(654, 495, 96),
                 new Point3D(0, 0, 1500), 1, 4E-5, 2E-7));
         ImageWriter imageWriter = new ImageWriter("heart", 500, 500, 500, 500);
-        scene.setBox(4);
         Render render = new Render(imageWriter, scene).setMultithreading(3);//
 
         render.renderImage();
