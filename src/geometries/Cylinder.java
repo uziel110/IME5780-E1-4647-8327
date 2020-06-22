@@ -117,6 +117,7 @@ public class Cylinder extends Tube {
         return point.subtract(o).normalize();
     }
 
+
     @Override
     public Point3D getMinCoordinates() {
         Point3D center = _axisRay.getPoint();
