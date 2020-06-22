@@ -105,7 +105,7 @@ public class Render {
      */
     public Render setMultithreading(int threads) {
         if (threads < 0)
-            throw new IllegalArgumentException("Multithreading patameter must be 0 or higher");
+            throw new IllegalArgumentException("Multithreading parameter must be 0 or higher");
         if (threads != 0)
             _threads = threads;
         else {

@@ -240,7 +240,7 @@ public class BoxTests {
     @Test
     public void mizbeachTast() {
         Scene scene = new Scene("mizbeah");
-        scene.setCamera(new Camera(new Point3D(0, 0, 0), 2500, 4, 1.1, Math.PI));
+        scene.setCamera(new Camera(new Point3D(0, -273, 0), 2500, 4, 1.1, Math.PI));
         //scene.getCamera().setDepthOfField(2500, 32, 100);
         scene.setDistance(300);
         scene.setBackground(Color.BLACK);
@@ -538,13 +538,13 @@ public class BoxTests {
         double t = Math.PI * 2 / numOfSpotes / 4;
         for (int i = 0; i < numOfSpotes; ++i) {
             double theta = Math.PI * 2 * (i * 1.0 / numOfSpotes);
-            Point3D downPoint = new Point3D(lightRadius * Math.cos(theta), lightRadius * Math.sin(theta), 0);
+            Point3D downPoint = new Point3D(lightRadius * Math.cos(theta), lightRadius * Math.sin(theta)-273, 0);
             scene.addGeometries(new Sphere(new Color(21, 27, 31), coalMaterial,
                     40, downPoint));
-            downPoint = new Point3D(lightRadius * Math.cos(theta + t), lightRadius * Math.sin(theta + t), 0);
+            downPoint = new Point3D(lightRadius * Math.cos(theta + t), lightRadius * Math.sin(theta + t)-273, 0);
             scene.addGeometries(new Sphere(new Color(21, 27, 31), coalMaterial,
                     50, downPoint));
-            downPoint = new Point3D(lightRadius * Math.cos(theta - t * .8), lightRadius * Math.sin(theta - t * .8), 0);
+            downPoint = new Point3D(lightRadius * Math.cos(theta - t * .8), lightRadius * Math.sin(theta - t * .8)-273, 0);
             scene.addGeometries(new Sphere(new Color(21, 27, 31), coalMaterial,
                     30, downPoint));
         }
@@ -556,21 +556,25 @@ public class BoxTests {
         /*scene.addLights(new PointLight(new Color(0, 500, 400),
                 new Point3D(0, 0, 50), 1, 4E-5, 2E-7));*/
         scene.addLights(new SpotLight(new Color(300, 300, 300),
-                new Point3D(0, 0, 1500),new Vector(0,0,-1),5, 1, 4E-5, 2E-7));
+                new Point3D(0, -273, 1500),new Vector(0,0,-1),5, 1, 4E-5, 2E-7));
+
+        scene.addLights(new SpotLight(new Color(440, 0, 0),
+                new Point3D(0, 0, 200),new Vector(0,0,-1),5, 1, 4E-5, 2E-7));
+
         scene.addLights(new DirectionalLight(new Color(150, 150, 150), new Vector(-1, 1, -1)));
 
         lightRadius = 1200;
-        Point3D upPoint = new Point3D(0, 0, 100);
+        Point3D upPoint = new Point3D(0, -273, 100);
         numOfSpotes = 10;
         for (int i = 0; i < numOfSpotes; ++i) {
             double theta = Math.PI * 2 * (i * 1.0 / numOfSpotes);
-            Point3D downPoint = new Point3D(lightRadius * Math.cos(theta), lightRadius * Math.sin(theta), 5);
+            Point3D downPoint = new Point3D(lightRadius * Math.cos(theta), lightRadius * Math.sin(theta)-273, 5);
             scene.addLights(new SpotLight(new primitives.Color(950, 150, 150), downPoint,
                     upPoint.subtract(downPoint), 15, 1, 0.0001, 0.000005));
         }
 
         //Statistics.runAndPrintStatistics(startAddGeometries,scene,320, 180, 1600, 900,3,4);
-        ImageWriter imageWriter = new ImageWriter("mizbeach123", 320, 180, 1600, 900);
+        ImageWriter imageWriter = new ImageWriter("mizbeach1234", 320, 180, 1600, 900);
         scene.setBox(4);
         Render render = new Render(imageWriter, scene).setDebugPrint().setMultithreading(3);
         render.renderImage();
