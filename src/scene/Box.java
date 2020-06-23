@@ -207,11 +207,6 @@ public class Box {
         boolean intersectionFoundInVoxel = false;
         List<GeoPoint> geometryIntersectionPoints;
 
-        // Set-----
-        Set<Intersectable> geometriesSet = new HashSet<>();
-        Geometries currentGeometries = new Geometries();
-        //---------
-
         // update ray's head position
         ray = getRayOnTheBox(ray);
         if (ray == null) return null; // in case that the ray not intersect with the box
@@ -226,16 +221,7 @@ public class Box {
                 currentVoxel = getNextVoxel(currentVoxel, ray, deltaAndTArr);
                 continue;
             }
-            if (shadowRaysCase) {
-                Geometries geometries = getMap().get(currentVoxel);
-                for (Intersectable intersectable : geometries.getGeometries())
-                    if (!geometriesSet.contains(intersectable)) {
-                        currentGeometries.add(intersectable);
-                        geometriesSet.add(intersectable);
-                    }
-            } else
-                currentGeometries = getMap().get(currentVoxel);
-            geometryIntersectionPoints = currentGeometries.findIntersections(ray, dis);
+            geometryIntersectionPoints = getMap().get(currentVoxel).findIntersections(ray, dis);
 
             // run findIntersection func on current geometries
             if (geometryIntersectionPoints != null) {
