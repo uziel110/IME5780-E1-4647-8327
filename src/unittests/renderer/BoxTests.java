@@ -87,10 +87,12 @@ public class BoxTests {
         scene.addGeometries(geometries);
         scene.addLights(new DirectionalLight(new Color(48, 170, 176), new Vector(0, -1, 0)),
                 new PointLight(new Color(103, 110, 13), new Point3D(0, -100, 0), 1, 0, 0));
-        ImageWriter imageWriter = new ImageWriter("Box test3", 500, 500, 10000, 10000);
+        Statistics.runAndPrintStatistics(startAddGeometries, scene, 500, 500, 10000, 10000, 3, 4);
+
+        /*ImageWriter imageWriter = new ImageWriter("Box test3", 500, 500, 10000, 10000);
         Render render = new Render(imageWriter, scene).setMultithreading(3);//.setBoxDensity(10);
         render.renderImage();
-        render.writeToImage();
+        render.writeToImage();*/
     }
 
     @Test
@@ -130,10 +132,12 @@ public class BoxTests {
         scene.addLights(new DirectionalLight(new Color(48, 170, 176), new Vector(0, -1, 0)),
                 new PointLight(new Color(103, 110, 13), new Point3D(0, -100, 0), 1, 0, 0));
 // scene.makeTree();
-        ImageWriter imageWriter = new ImageWriter("Box test2", 500, 500, 1000, 1000);
+        Statistics.runAndPrintStatistics(startAddGeometries, scene, 500, 500, 1000, 1000, 3, 4);
+
+       /* ImageWriter imageWriter = new ImageWriter("Box test2", 500, 500, 1000, 1000);
         Render render = new Render(imageWriter, scene).setMultithreading(3);//.setBox(4);
         render.renderImage();
-        render.writeToImage();
+        render.writeToImage();*/
     }
 
     @Test
@@ -239,7 +243,7 @@ public class BoxTests {
 
     @Test
     public void mizbeachTast() {
-        Scene scene = new Scene("mizbeah");
+        Scene scene = new Scene("mizbeach");
         scene.setCamera(new Camera(new Point3D(0, -273, -100), 2500, 4, 1.1, Math.PI));
         //scene.getCamera().setDepthOfField(2500, 32, 100);
         scene.setDistance(260);
@@ -255,16 +259,10 @@ public class BoxTests {
         Material coalMaterial = new Material(0.2, 0.01, 5, 0, 0);
         Material sikraMaterial = new Material(kd, ks, 30, kt, kr);
         int woodColorRange = 27;
-        {scene.addGeometries(
+        Geometries geometries = new Geometries();
 
-                //scene floor
-/*                new Polygon(new Color(java.awt.Color.BLACK), new Material(kd, ks, 30, kt, 0)
-                        , new Point3D(-1000, -1000, -10), new Point3D(-1000, 1000, -10),
-                        new Point3D(2000, 2000, -10), new Point3D(1000, -1000, -10)),*/
-
-              /*  new Plane(new Color(java.awt.Color.BLACK), new Material(kd, ks, 30, kt, 0)
-                        , new Point3D(-1000, -1000, 0), new Point3D(-500, 500, 0),
-                        new Point3D(500, 500, 0)),*/
+        //mizbeach
+        {geometries.add(
 
                 //1 down
                 new Polygon(goldColor, goldMaterial,
@@ -275,7 +273,6 @@ public class BoxTests {
                         , new Material(kd, ks, 30, kt, kr),
                         new Point3D(-288, -288, 15), new Point3D(-288, 288, 15),
                         new Point3D(288, 288, 15), new Point3D(288, -288, 15)),
-
                 //1 West
                 new Polygon(goldColor, goldMaterial,
                         new Point3D(-288, -288, 0), new Point3D(-288, 288, 0),
@@ -301,7 +298,6 @@ public class BoxTests {
                 new Polygon(goldColor, goldMaterial,
                         new Point3D(-273, -273, 105), new Point3D(-273, 273, 105),
                         new Point3D(273, 273, 105), new Point3D(273, -273, 105)),
-
                 //2 West
                 new Polygon(goldColor, goldMaterial,
                         new Point3D(-273, -273, 15), new Point3D(-273, 273, 15),
@@ -327,7 +323,6 @@ public class BoxTests {
                 new Polygon(goldColor, goldMaterial,
                         new Point3D(-258, -258, 159), new Point3D(-258, 258, 159),
                         new Point3D(258, 258, 159), new Point3D(258, -258, 159)),
-
                 //3 West
                 new Polygon(goldColor, goldMaterial,
                         new Point3D(-258, -258, 105), new Point3D(-258, 258, 105),
@@ -345,40 +340,23 @@ public class BoxTests {
                         new Point3D(258, -258, 105), new Point3D(-258, -258, 105),
                         new Point3D(-258, -258, 159), new Point3D(258, -258, 159)),
 
-                //4 West
-                new Polygon(goldColor, goldMaterial,
-                        new Point3D(-258, -258, 105), new Point3D(-258, 258, 105),
-                        new Point3D(-258, 258, 159), new Point3D(-258, -258, 159)),
-                //4 North
-                new Polygon(goldColor, goldMaterial,
-                        new Point3D(-258, 258, 105), new Point3D(258, 258, 105),
-                        new Point3D(258, 258, 159), new Point3D(-258, 258, 159)),
-                //4 East
-                new Polygon(goldColor, goldMaterial,
-                        new Point3D(258, 258, 105), new Point3D(258, -258, 105),
-                        new Point3D(258, -258, 159), new Point3D(258, 258, 159)),
-                //4 South
-                new Polygon(goldColor, goldMaterial,
-                        new Point3D(258, -258, 105), new Point3D(-258, -258, 105),
-                        new Point3D(-258, -258, 159), new Point3D(258, -258, 159)),
-
-                //1 WS
+                /**** Krnot Hmizbeach****/
+                //1 SW
                 new Polygon(goldColor, goldMaterial,
                         new Point3D(-258, -258, 159), new Point3D(-258, -240, 159),
                         new Point3D(-258, -240, 174), new Point3D(-258, -258, 174)),
-                //2 WS
+                //2 SW
                 new Polygon(goldColor, goldMaterial,
                         new Point3D(-258, -240, 159), new Point3D(-240, -240, 159),
                         new Point3D(-240, -240, 174), new Point3D(-258, -240, 174)),
-                //3 WS
+                //3 SW
                 new Polygon(goldColor, goldMaterial,
                         new Point3D(-240, -240, 159), new Point3D(-240, -258, 159),
                         new Point3D(-240, -258, 174), new Point3D(-240, -240, 174)),
-                //4 WS
+                //4 SW
                 new Polygon(goldColor, goldMaterial,
                         new Point3D(-240, -258, 159), new Point3D(-258, -258, 159),
                         new Point3D(-258, -258, 174), new Point3D(-240, -258, 174)),
-
                 //1 NW
                 new Polygon(goldColor, goldMaterial,
                         new Point3D(-258, 240, 159), new Point3D(-258, 258, 159),
@@ -395,40 +373,40 @@ public class BoxTests {
                 new Polygon(goldColor, goldMaterial,
                         new Point3D(-240, 240, 159), new Point3D(-258, 240, 159),
                         new Point3D(-258, 240, 174), new Point3D(-240, 240, 174)),
-
-                //1 EN
+                //1 NE
                 new Polygon(goldColor, goldMaterial,
                         new Point3D(240, 258, 159), new Point3D(258, 258, 159),
                         new Point3D(258, 258, 174), new Point3D(240, 258, 174)),
-                //2 EN
+                //2 NE
                 new Polygon(goldColor, goldMaterial,
                         new Point3D(258, 258, 159), new Point3D(258, 240, 159),
                         new Point3D(258, 240, 174), new Point3D(258, 258, 174)),
-                //3 EN
+                //3 NE
                 new Polygon(goldColor, goldMaterial,
                         new Point3D(258, 240, 159), new Point3D(240, 240, 159),
                         new Point3D(240, 240, 174), new Point3D(258, 240, 174)),
-                //4 EN
+                //4 NE
                 new Polygon(goldColor, goldMaterial,
                         new Point3D(240, 240, 159), new Point3D(240, 258, 159),
                         new Point3D(240, 258, 174), new Point3D(240, 240, 174)),
-                //1 ES
+                //1 SE
                 new Polygon(goldColor, goldMaterial,
                         new Point3D(258, -240, 159), new Point3D(258, -258, 159),
                         new Point3D(258, -258, 174), new Point3D(258, -240, 174)),
-                //2 ES
+                //2 SE
                 new Polygon(goldColor, goldMaterial,
                         new Point3D(258, -258, 159), new Point3D(240, -258, 159),
                         new Point3D(240, -258, 174), new Point3D(258, -258, 174)),
-                //3 ES
+                //3 SE
                 new Polygon(goldColor, goldMaterial,
                         new Point3D(240, -258, 159), new Point3D(240, -240, 159),
                         new Point3D(240, -240, 174), new Point3D(240, -258, 174)),
-                //4 ES
+                //4 SE
                 new Polygon(goldColor, goldMaterial,
                         new Point3D(240, -240, 159), new Point3D(258, -240, 159),
                         new Point3D(258, -240, 174), new Point3D(240, -240, 174)),
 
+                /**** ramps ****/
                 //main ramp
                 new Polygon(goldColor, goldMaterial,
                         new Point3D(-144, -258, 0), new Point3D(144, -258, 0),
@@ -459,15 +437,12 @@ public class BoxTests {
                 new Polygon(goldColor, goldMaterial,
                         new Point3D(-159, -273, 105), new Point3D(-144, -273, 105),
                         new Point3D(-144, -642, 40), new Point3D(-159, -642, 40)),
-
                 new Polygon(goldColor, goldMaterial,
                         new Point3D(-159, -273, 105), new Point3D(-159, -273, 0),
                         new Point3D(-159, -642, 0), new Point3D(-159, -642, 40)),
-
                 new Polygon(goldColor, goldMaterial,
                         new Point3D(-174, -672, 40), new Point3D(-144, -672, 40),
                         new Point3D(-144, -672, 0), new Point3D(-174, -672, 0)),
-
                 new Polygon(goldColor, goldMaterial,
                         new Point3D(-174, -642, 40), new Point3D(-144, -642, 40),
                         new Point3D(-144, -672, 40), new Point3D(-174, -672, 40)),
@@ -481,67 +456,85 @@ public class BoxTests {
                         new Point3D(-174, -672, 40), new Point3D(-174, -672, 0),
                         new Point3D(-174, -442, 0), new Point3D(-174, -642, 40)),
 
-                new Sphere(new Color(21, 27, 31), coalMaterial,
-                        50, new Point3D(0, 0, 144)),
-                //2 West
+                /**** The sikra wire ****/
+                //West
                 new Polygon(sikraColor, sikraMaterial,
                         new Point3D(-273.001, -273.001, 80), new Point3D(-273.001, 273.001, 80),
                         new Point3D(-273.001, 273.001, 87), new Point3D(-273.001, -273.001, 87)),
-                //2 North
+                //North
                 new Polygon(sikraColor, sikraMaterial,
                         new Point3D(-273.001, 273.001, 80), new Point3D(273.001, 273.001, 80),
                         new Point3D(273.001, 273.001, 87), new Point3D(-273.001, 273.001, 87)),
-                //2 East
+                //East
                 new Polygon(sikraColor, sikraMaterial,
                         new Point3D(273.001, 273.001, 80), new Point3D(273.001, -273.001, 80),
                         new Point3D(273.001, -273.001, 87), new Point3D(273.001, 273.001, 87)),
-                //2 South
+                //South
                 new Polygon(sikraColor, sikraMaterial,
                         new Point3D(273.001, -273.001, 80), new Point3D(-273.001, -273.001, 80),
-                        new Point3D(-273.001, -273.001, 87), new Point3D(273.001, -273.001, 87)));}
+                        new Point3D(-273.001, -273.001, 87), new Point3D(273.001, -273.001, 87)),
+
+                new Sphere(new Color(21, 27, 31), coalMaterial,
+                        50, new Point3D(0, 0, 144)));
+        }
+
+        // spheres on the mizbeach
+        {
+            int radius = 7;
+            int j = -273;
+            for (int i = 0; j + i < 266; i += 2 * radius)
+                geometries.add(new Sphere(goldColor, goldMaterial, radius, new Point3D(j + i, -273, 87 + radius)),
+                        new Sphere(goldColor, goldMaterial, radius, new Point3D(j + i, -273, 80 - radius)));
+            for (int i = 0; j + i < 283; i += 2 * radius)
+                geometries.add(new Sphere(goldColor, goldMaterial, radius, new Point3D(-273, j + i, 87 + radius)),
+                        new Sphere(goldColor, goldMaterial, radius, new Point3D(-273, j + i, 80 - radius)));
+            for (int i = 0; j + i < 283; i += 2 * radius)
+                geometries.add(new Sphere(goldColor, goldMaterial, radius, new Point3D(j + i, 273, 87 + radius)),
+                        new Sphere(goldColor, goldMaterial, radius, new Point3D(j + i, 273, 80 - radius)));
+            for (int i = 0; j + i < 283; i += 2 * radius)
+                geometries.add(new Sphere(goldColor, goldMaterial, radius, new Point3D(273, j + i, 87 + radius)),
+                        new Sphere(goldColor, goldMaterial, radius, new Point3D(273, j + i, 80 - radius)));
+        }
 
        //woods
         {
             int radius = 5;
             for (int y = 195; y > 55; y -= 30) {
-                scene.addGeometries(new Cylinder(generateWoodColor(woodColor, woodColorRange), woodMaterial,
+                geometries.add(new Cylinder(generateWoodColor(woodColor, woodColorRange), woodMaterial,
                         new Point3D(-205, y, 160 +3* radius), new Vector(1, 0, 0),
                         radius, 120));
             }
             for (int x = -195; x < -85; x += 20) {
-                scene.addGeometries(new Cylinder(generateWoodColor(woodColor, woodColorRange), woodMaterial,
+                geometries.add(new Cylinder(generateWoodColor(woodColor, woodColorRange), woodMaterial,
                         new Point3D(x, 205, 160 + radius), new Vector(0, -1, 0),
                         radius, 160));
             }
-
             for (int y = -35; y > -195; y -= 30) {
-                scene.addGeometries(new Cylinder(generateWoodColor(woodColor, woodColorRange), woodMaterial,
+                geometries.add(new Cylinder(generateWoodColor(woodColor, woodColorRange), woodMaterial,
                         new Point3D(-205, y, 160 + 3*radius), new Vector(1, 0, 0),
                         radius, 120));
             }
             for (int x = -195; x < -85; x += 20) {
-                scene.addGeometries(new Cylinder(generateWoodColor(woodColor, woodColorRange), woodMaterial,
+                geometries.add(new Cylinder(generateWoodColor(woodColor, woodColorRange), woodMaterial,
                         new Point3D(x, -35, 160 + radius), new Vector(0, -1, 0),
                         radius, 160));
             }
-
             for (int y = 210; y > -145; y -= 30) {
-                scene.addGeometries(new Cylinder(generateWoodColor(woodColor, woodColorRange), woodMaterial,
+                geometries.add(new Cylinder(generateWoodColor(woodColor, woodColorRange), woodMaterial,
                         new Point3D(85, y, 160 + 3*radius), new Vector(1, 0, 0),
                         radius, 120));
             }
             for (int x = 85; x < 215; x += 20) {
-                scene.addGeometries(new Cylinder(generateWoodColor(woodColor, woodColorRange), woodMaterial,
+                geometries.add(new Cylinder(generateWoodColor(woodColor, woodColorRange), woodMaterial,
                         new Point3D(x, 215, 160 + radius), new Vector(0, -1, 0),
                         radius, 350));
             }
         }
 
         //glass
-        {
-            Material glassMaterial = new Material(0.05, 0.2, 50, 1, 0.1);
-            int x = 318, y = -866, z = 204;
-            scene.addGeometries(
+        Material glassMaterial = new Material(0.05, 0.2, 50, 1, 0.1);
+        {/* int x = 318, y = -866, z = 204;
+           geometries.add(
                     new Polygon(Color.BLACK, glassMaterial, new Point3D(-x, y, 0), new Point3D(-x, x, 0),
                             new Point3D(-x, x, z), new Point3D(-x, y, z)),
                     new Polygon(Color.BLACK, glassMaterial, new Point3D(-x, x, 0), new Point3D(x, x, 0),
@@ -551,60 +544,74 @@ public class BoxTests {
                     new Polygon(Color.BLACK, glassMaterial, new Point3D(x, y, 0), new Point3D(-x, y, 0),
                             new Point3D(-x, y, z), new Point3D(x, y, z)),
                     new Polygon(Color.BLACK, glassMaterial, new Point3D(-x, y, z), new Point3D(-x, x, z),
-                            new Point3D(x, x, z), new Point3D(x, y, z)));
-            //scene.addGeometries(new Sphere(Color.BLACK , glassMaterial, 1000,new Point3D( 0, -273 ,0)));
+                            new Point3D(x, x, z), new Point3D(x, y, z)));*/
+            scene.addGeometries(new Sphere(Color.BLACK , glassMaterial, 700,new Point3D( 0, -273 ,0)));
         }
 
         int moveCenterY = -273;
-        double sphereRadius = 900;
+ /*         double sphereRadius = 900;
         int numOfSpotes = 10;
         double t = Math.PI * 2 / numOfSpotes / 4;
         for (int i = 0; i < numOfSpotes; ++i) {
             double theta = Math.PI * 2 * (i * 1.0 / numOfSpotes);
             Point3D downPoint = new Point3D(sphereRadius * Math.cos(theta), sphereRadius * Math.sin(theta) + moveCenterY, 0);
-            scene.addGeometries(new Sphere(new Color(21, 27, 31), coalMaterial,
+            geometries.add(new Sphere(new Color(21, 27, 31), coalMaterial,
                     40, downPoint));
             downPoint = new Point3D(sphereRadius * Math.cos(theta + t), sphereRadius * Math.sin(theta + t) + moveCenterY, 0);
-            scene.addGeometries(new Sphere(new Color(21, 27, 31), coalMaterial,
+            geometries.add(new Sphere(new Color(21, 27, 31), coalMaterial,
                     50, downPoint));
             downPoint = new Point3D(sphereRadius * Math.cos(theta - t * .8), sphereRadius * Math.sin(theta - t * .8) - 273, 0);
-            scene.addGeometries(new Sphere(new Color(21, 27, 31), coalMaterial,
+            geometries.add(new Sphere(new Color(21, 27, 31), coalMaterial,
                     30, downPoint));
-        }
+        }*/
 
         // lights
-        scene.setAmbientLight(new AmbientLight(Color.BLACK, 0));
-
-        scene.addLights(new SpotLight(new Color(300, 300, 300),
-                new Point3D(0, -273, 1500), new Vector(0, 0, -1), 5, 1, 4E-5, 2E-7));
-
-        scene.addLights(new SpotLight(new Color(440, 0, 0),
-                new Point3D(0, 0, 200), new Vector(0, 0, -1), 5, 1, 4E-5, 2E-7));
-
-        scene.addLights(new DirectionalLight(new Color(150, 150, 150), new Vector(-1, 1, -1)));
-
         double lightRadius = 1200;
-        Point3D upPoint = new Point3D(0, -273, 100);
-        numOfSpotes = 10;
-        int sphereInRadius = 10;
-        double sphereExRadius = lightRadius + sphereInRadius;
-        for (int i = 0; i < numOfSpotes; ++i) {
-            double theta = Math.PI * 2 * (i * 1.0 / numOfSpotes);
-            Point3D downPoint = new Point3D(lightRadius * Math.cos(theta), lightRadius * Math.sin(theta) + moveCenterY, 5);
-            scene.addLights(new SpotLight(new primitives.Color(950, 150, 150), downPoint,
-                    upPoint.subtract(downPoint), 15, 1, 0.0001, 0.000005));
-            downPoint = new Point3D(sphereExRadius * Math.cos(theta), sphereExRadius * Math.sin(theta) + moveCenterY, 0);
-            scene.addGeometries(new Sphere(new Color(95, 15, 15), coalMaterial,
-                    sphereInRadius, downPoint));
+        {
+            scene.setAmbientLight(new AmbientLight(Color.BLACK, 0));
+
+            scene.addLights(new SpotLight(new Color(300, 300, 300),
+                    new Point3D(0, -273, 1500), new Vector(0, 0, -1), 5, 1, 4E-5, 2E-7));
+
+            scene.addLights(new SpotLight(new Color(440, 0, 0),
+                    new Point3D(0, 0, 200), new Vector(0, 0, -1), 5, 1, 4E-5, 2E-7));
+
+            scene.addLights(new DirectionalLight(new Color(150, 150, 150), new Vector(-1, 1, -1)));
+
+
+            Point3D upPoint = new Point3D(0, -273, 100);
+            int numOfSpotes = 50;
+            int sphereInRadius = 10;
+            double sphereExRadius = lightRadius + sphereInRadius;
+            for (int i = 0; i < numOfSpotes; ++i) {
+                double theta = Math.PI * 2 * (i * 1.0 / numOfSpotes);
+                Point3D downPoint = new Point3D(lightRadius * Math.cos(theta), lightRadius * Math.sin(theta) + moveCenterY, 30);
+                scene.addLights(new SpotLight(new primitives.Color(950, 150, 150), downPoint,
+                        upPoint.subtract(downPoint), 15, 1, 0.0001, 0.000005));
+                downPoint = new Point3D(sphereExRadius * Math.cos(theta), sphereExRadius * Math.sin(theta) + moveCenterY, 30);
+                scene.addGeometries(new Sphere(new Color(95, 15, 15), coalMaterial,
+                        sphereInRadius, downPoint));
+            }
+        }
+        int minRadius = 600;
+        int maxRadius = ((int) lightRadius);
+        for (int i = 0; i < 3000; ++i) {
+            double theta = Math.PI * 2 * random.nextDouble();
+            double radius = random.nextInt(maxRadius-minRadius)+minRadius;
+            Point3D position = new Point3D(radius * Math.cos(theta), radius * Math.sin(theta) + moveCenterY, 0);
+            scene.addGeometries(new Sphere(new Color(21, 27, 31), coalMaterial,
+                    random.nextInt(10)+10, position));
         }
 
-        scene.addGeometries(new Cylinder(Color.BLACK, new Material(kd, ks, 30, kt, 0),
+        geometries.add(new Cylinder(Color.BLACK, new Material(kd, ks, 30, kt, 0),
                 new Point3D(0, moveCenterY, 0), new Vector(0, 0, -1), lightRadius + 50, 1));
-        //Statistics.runAndPrintStatistics(startAddGeometries,scene,320, 180, 1600, 900,3,4);
-        ImageWriter imageWriter = new ImageWriter("mizbeachWithGlassBox2", 320, 180, 1600, 900);
-        Render render = new Render(imageWriter, scene).setDebugPrint().setMultithreading(3)/*.setBox(4)*/;
+
+        scene.addGeometries(geometries);
+       Statistics.runAndPrintStatistics(startAddGeometries,scene,320, 200, 1600, 900,3,5);
+      /*  ImageWriter imageWriter = new ImageWriter("mizbeachWithGlassBox2", 320, 180, 1600, 900);
+        Render render = new Render(imageWriter, scene).setDebugPrint().setMultithreading(3).setBox(4);
         render.renderImage();
-        render.writeToImage();
+        render.writeToImage();*/
     }
 
     private Color generateWoodColor(Color woodColor, int randomRange) {
@@ -615,4 +622,3 @@ public class BoxTests {
         return new Color(x + t, y + t, z + t);
     }
 }
-
