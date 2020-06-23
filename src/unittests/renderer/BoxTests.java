@@ -613,7 +613,7 @@ public class BoxTests {
         //Statistics.runAndPrintStatistics(startAddGeometries, scene, 320, 200, 1600, 1000, 3, 5);
 
         ImageWriter imageWriter = new ImageWriter("mizbeach", 320, 200, 1600, 1000);
-        scene.setBox(4);
+        scene.setBox(5);
         Render render = new Render(imageWriter, scene).setDebugPrint().setMultithreading(3);
         System.out.println("Density: " + scene.getBox().getDensity());
         render.renderImage();

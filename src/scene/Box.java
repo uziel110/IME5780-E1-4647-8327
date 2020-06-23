@@ -128,7 +128,55 @@ public class Box {
         }
     }
 
-    /**
+        /**
+     * return list of GeoPoints that intersect with the ray
+     *
+     * @param ray            the ray that we find intersections points on it
+     * @param shadowRaysCase boolean variable - true in the case that we want all the intersection points
+     * @param dis            upper bound of distance from the ray head to the intersection point
+     * @return list of GeoPoints that intersect with the ray
+     */
+    public List<GeoPoint> getRelevantGeoPointsInBox(Ray ray, boolean shadowRaysCase, double dis) {
+        // for infinite geometries
+        List<GeoPoint> geoPoints = getInfiniteGeometries().findIntersections(ray, dis);
+
+        // to stop run on the voxels when found closest intersections
+        boolean intersectionFoundInVoxel = false;
+        List<GeoPoint> geometryIntersectionPoints;
+
+        // update ray's head position
+        ray = getRayOnTheBox(ray);
+        if (ray == null) return null; // in case that the ray not intersect with the box
+
+        Voxel currentVoxel = convertPointToVoxel(ray.getPoint()); // the first voxel
+        double[] deltaAndTArr = getRayFirstDeltaAndT(ray);
+
+        // run over all the voxels through the ray
+        while (currentVoxel != null) {
+            // If there are no geometries in current voxel continue to next voxel
+            if (!getMap().containsKey(currentVoxel)) {
+                currentVoxel = getNextVoxel(currentVoxel, ray, deltaAndTArr);
+                continue;
+            }
+            geometryIntersectionPoints = getMap().get(currentVoxel).findIntersections(ray, dis);
+
+            // run findIntersection func on current geometries
+            if (geometryIntersectionPoints != null) {
+                if (geoPoints == null)
+                    geoPoints = new LinkedList<>();
+                geoPoints.addAll(geometryIntersectionPoints);
+                if (!shadowRaysCase && !intersectionFoundInVoxel)
+                    intersectionFoundInVoxel = currentVoxel.isIntersectInVoxelRange(geometryIntersectionPoints);
+                    // if found intersections in current voxel then they are the closest points
+                else if (intersectionFoundInVoxel)
+                    return geoPoints;
+            }
+            currentVoxel = getNextVoxel(currentVoxel, ray, deltaAndTArr);
+        }
+        return geoPoints;
+    }
+
+        /**
      * return new ray with point on the box
      *
      * @param ray the ray that we work with it
@@ -197,46 +245,6 @@ public class Box {
         if (minT < maxT)
             return null;
         return new Ray(ray.getPoint(maxT), ray.getDir());
-    }
-
-    public List<GeoPoint> getRelevantGeoPointsInBox(Ray ray, boolean shadowRaysCase, double dis) {
-        // for infinite geometries
-        List<GeoPoint> geoPoints = getInfiniteGeometries().findIntersections(ray, dis);
-
-        // to stop run on the voxels when found closest intersections
-        boolean intersectionFoundInVoxel = false;
-        List<GeoPoint> geometryIntersectionPoints;
-
-        // update ray's head position
-        ray = getRayOnTheBox(ray);
-        if (ray == null) return null; // in case that the ray not intersect with the box
-
-        Voxel currentVoxel = convertPointToVoxel(ray.getPoint()); // the first voxel
-        double[] deltaAndTArr = getRayFirstDeltaAndT(ray);
-
-        // run over all the voxels through the ray
-        while (currentVoxel != null) {
-            // If there are no geometries in current voxel continue to next voxel
-            if (!getMap().containsKey(currentVoxel)) {
-                currentVoxel = getNextVoxel(currentVoxel, ray, deltaAndTArr);
-                continue;
-            }
-            geometryIntersectionPoints = getMap().get(currentVoxel).findIntersections(ray, dis);
-
-            // run findIntersection func on current geometries
-            if (geometryIntersectionPoints != null) {
-                if (geoPoints == null)
-                    geoPoints = new LinkedList<>();
-                geoPoints.addAll(geometryIntersectionPoints);
-                if (!shadowRaysCase && !intersectionFoundInVoxel)
-                    intersectionFoundInVoxel = currentVoxel.isIntersectInVoxelRange(geometryIntersectionPoints);
-                    // if found intersections in current voxel then they are the closest points
-                else if (intersectionFoundInVoxel)
-                    return geoPoints;
-            }
-            currentVoxel = getNextVoxel(currentVoxel, ray, deltaAndTArr);
-        }
-        return geoPoints;
     }
 
     /**
@@ -332,7 +340,7 @@ public class Box {
      * @param p point
      * @return if the point is within the range of the box
      */
-    private boolean isPointInTheBox(Point3D p) {
+    private static boolean isPointInTheBox(Point3D p) {
         double x = p.getX().get();
         double y = p.getY().get();
         double z = p.getZ().get();
