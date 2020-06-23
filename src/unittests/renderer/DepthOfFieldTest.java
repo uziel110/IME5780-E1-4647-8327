@@ -53,8 +53,12 @@ public class DepthOfFieldTest {
                         100, new Point3D(-900, 0, 0)));
 
         scene.addLights(new DirectionalLight(new primitives.Color(200, 200, 200), new Vector(-1, 1, -1)));
-
-        Statistics.runAndPrintStatistics(startAddGeometries, scene, 600, 600, 800, 800,3,4);
+        ImageWriter imageWriter = new ImageWriter("fourBallsDepthOfFieldTestEnabled", 600, 600, 1200, 1200);
+        scene.setBox(4);
+        Render render = new Render(imageWriter, scene).setMultithreading(3);
+        render.renderImage();
+        render.writeToImage();
+        //Statistics.runAndPrintStatistics(startAddGeometries, scene, 600, 600, 800, 800,3,4);
     }
 
     /**
