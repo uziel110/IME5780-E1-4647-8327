@@ -363,8 +363,11 @@ public class BoxTests {
             }
         }
 
-        geometries.add(new Cylinder(Color.BLACK, new Material(kd, ks, 30, kt, 0),
-                new Point3D(0, moveCenterY, 0), new Vector(0, 0, -1), lightRadius + 50, 1));
+        // Picture base
+        {
+            geometries.add(new Cylinder(Color.BLACK, new Material(kd, ks, 30, kt, 0),
+                    new Point3D(0, moveCenterY, 0), new Vector(0, 0, -1), lightRadius + 50, 1));
+        }
 
         scene.addGeometries(geometries);
         //Statistics.runAndPrintStatistics(startAddGeometries, scene, 320, 200, 1600, 1000, 3, 5);
@@ -373,7 +376,8 @@ public class BoxTests {
         /*scene.setCamera(new Camera(new Point3D(-300, -900, 0), 1300, 1.2, 1.2, Math.PI));
         scene.setDistance(150);*/
         //Statistics.runAndPrintStatistics(startAddGeometries, scene, 320, 200, 1600, 1000, 3, 5);
-        ImageWriter imageWriter = new ImageWriter("mizbeach", 320, 200, 3840, 2160);
+
+        ImageWriter imageWriter = new ImageWriter("mizbeach", 320, 200, 1600, 1000);
         scene.setBox(5);
         Render render = new Render(imageWriter, scene).setDebugPrint().setMultithreading(3);
         System.out.println("Density: " + scene.getBox().getDensity());
@@ -418,7 +422,7 @@ public class BoxTests {
 
         scene.addLights(new DirectionalLight(new Color(48, 170, 176), new Vector(1, 0.5, 0.5)));
 
-        //Statistics.runAndPrintStatistics(startAddGeometries, scene, 1000, 1000, 1000, 1000, 3, 4);
+        //Statistics.runAndPrintStatistics(startAddGeometries, scene, 500, 500, 1000, 1000, 3, 4,false,true,true);
         ImageWriter imageWriter = new ImageWriter("goodImprove10000", 500, 500, 10000, 10000);
         scene.setBox(4);
         Render render = new Render(imageWriter, scene).setMultithreading(3);

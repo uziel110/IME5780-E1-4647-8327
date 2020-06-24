@@ -14,7 +14,8 @@ public class Statistics {
      * @param startAddGeometries the time of starting
      * @param scene              the scene we render
      */
-    public static void runAndPrintStatistics(long startAddGeometries, Scene scene, double width, double height, int nX, int nY, int threads, int lambda) {
+    public static void runAndPrintStatistics(long startAddGeometries, Scene scene, double width, double height, int nX, int nY,
+                                             int threads, int lambda, boolean normal, boolean multithreading, boolean box) {
 
         long endAddGeometries = System.currentTimeMillis();
         double endAddGeometriesDuration = (endAddGeometries - startAddGeometries) / 1000d;
@@ -28,24 +29,28 @@ public class Statistics {
         long startRenderWithoutMultithreading = System.currentTimeMillis();
         ImageWriter imageWriter = new ImageWriter(scene.getName() + " WithoutMultithreading", width, height, nX, nY);
         Render render = new Render(imageWriter, scene).setMultithreading(1);
-        /*render.renderImage();
-        render.writeToImage();*/
-
+        if (normal) {
+            render.renderImage();
+            render.writeToImage();
+        }
         long endRenderWithoutMultithreading = System.currentTimeMillis();
         double renderWithoutMultithreadingDuration = (endRenderWithoutMultithreading - startRenderWithoutMultithreading + endAddGeometriesDuration) / 1000d;
-        print(renderWithoutMultithreadingDuration, "Render time without multithreading:");
+        if (normal)
+            print(renderWithoutMultithreadingDuration, "Render time without multithreading:");
 
         //---------------
 
         long startRenderWithoutBox = System.currentTimeMillis();
         imageWriter = new ImageWriter(scene.getName() + " WithMultithreading", width, height, nX, nY);
         render = new Render(imageWriter, scene).setMultithreading(threads);
-        render.renderImage();
-        render.writeToImage();
-
+        if (multithreading) {
+            render.renderImage();
+            render.writeToImage();
+        }
         long endRenderWithoutBox = System.currentTimeMillis();
         double renderWithMultithreadingDuration = (endRenderWithoutBox - startRenderWithoutBox + endAddGeometriesDuration) / 1000d;
-        print(renderWithMultithreadingDuration, "Render time with multithreading:");
+        if (multithreading)
+            print(renderWithMultithreadingDuration, "Render time with multithreading:");
 
         //---------------
 
@@ -53,24 +58,27 @@ public class Statistics {
         imageWriter = new ImageWriter(scene.getName() + " WithBox", width, height, nX, nY);
         scene.setBox(lambda);
         render = new Render(imageWriter, scene).setMultithreading(threads);
-        render.renderImage();
-        render.writeToImage();
-
+        if (box) {
+            render.renderImage();
+            render.writeToImage();
+        }
         long endRenderWithBox = System.currentTimeMillis();
         double renderWithBoxDuration = (endRenderWithBox - startRenderWithBox + endAddGeometriesDuration) / 1000d;
-        print(renderWithBoxDuration, "Render time with box when density = " + scene.getBox().getDensity() + " is:");
+        if (box)
+            print(renderWithBoxDuration, "Render time with box when density = " + scene.getBox().getDensity() + " is:");
 
         //---------------
 
-        System.out.printf("Normal render/multithreading render ratio is: " + "%.1f\n", 1.0 * renderWithoutMultithreadingDuration / renderWithMultithreadingDuration);
-        System.out.printf("Normal render/box render ratio is: " + "%.1f\n", 1.0 * renderWithoutMultithreadingDuration / renderWithBoxDuration);
-        System.out.printf("Multithreading render/box render ratio is: " + "%.1f\n", 1.0 * renderWithMultithreadingDuration / renderWithBoxDuration);
+        System.out.printf("Normal/multithreading render ratio is: " + "%.1f\n", 1.0 * renderWithoutMultithreadingDuration / renderWithMultithreadingDuration);
+        System.out.printf("Normal/box render ratio is: " + "%.1f\n", 1.0 * renderWithoutMultithreadingDuration / renderWithBoxDuration);
+        System.out.printf("Multithreading/box render ratio is: " + "%.1f\n", 1.0 * renderWithMultithreadingDuration / renderWithBoxDuration);
     }
 
     /**
      * print duration time formatted
+     *
      * @param durationTime duration time to print
-     * @param s text to print
+     * @param s            text to print
      */
     private static void print(double durationTime, String s) {
         if (durationTime < 1)
