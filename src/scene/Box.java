@@ -128,7 +128,7 @@ public class Box {
         }
     }
 
-        /**
+    /**
      * return list of GeoPoints that intersect with the ray
      *
      * @param ray            the ray that we find intersections points on it
