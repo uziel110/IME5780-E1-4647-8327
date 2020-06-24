@@ -175,38 +175,6 @@ public class Render {
     }
 
     /**
-     * create image from the scene
-     * with focus option on or off
-     */
-    public void renderImageWithoutMultithreading() {
-        // scene parameters
-        Camera camera = _scene.getCamera();
-        Color background = _scene.getBackground();
-        double distance = _scene.getDistance();
-        // imageWriter parameters
-        int nX = _imageWriter.getNx();
-        int nY = _imageWriter.getNy();
-        double width = _imageWriter.getWidth();
-        double height = _imageWriter.getHeight();
-        for (int i = 0; i < nY; ++i) {
-            for (int j = 0; j < nX; ++j) {
-                List<Ray> rays = camera.constructBeamOfRays(nX, nY, j, i, distance, width, height);
-                Color averageColor = Color.BLACK;
-                for (Ray ray : rays) {
-                    GeoPoint closestPoint = findClosestIntersection(ray);
-                    Color closestPointColor = (closestPoint == null) ?
-                            background :
-                            calcColor(closestPoint, ray);
-                    averageColor = averageColor.add(closestPointColor);
-                }
-                if (rays.size() > 1)
-                    averageColor = averageColor.reduce(rays.size());
-                _imageWriter.writePixel(j, i, averageColor.getColor());
-            }
-        }
-    }
-
-    /**
      * print grid on the image
      *
      * @param interval distance between the lines of the grid
@@ -411,19 +379,6 @@ public class Render {
      */
     public void writeToImage() {
         _imageWriter.writeToImage();
-    }
-
-    /**
-     * set box
-     *
-     * @param lambda parameter for calculating box density (for optimum results the parameter is between 3 to 5)
-     * @return this box
-     */
-    public Render setBox(int lambda) {
-        if (lambda < 0)
-            throw new IllegalArgumentException("lambda must be 0 or bigger\n");
-        _scene.setBox(lambda);
-        return this;
     }
 
     /**

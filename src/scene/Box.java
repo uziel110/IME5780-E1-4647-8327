@@ -7,10 +7,7 @@ import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import static primitives.Util.alignZero;
 
@@ -21,10 +18,6 @@ import static primitives.Util.alignZero;
  * and divide it to voxels
  */
 public class Box {
-    /**
-     * number of voxels in width / height / depth
-     */
-    private int _density;
     private static double _minX = Double.NEGATIVE_INFINITY;
     private static double _minY = Double.NEGATIVE_INFINITY;
     private static double _minZ = Double.NEGATIVE_INFINITY;
@@ -32,6 +25,10 @@ public class Box {
     private static double _maxY = Double.POSITIVE_INFINITY;
     private static double _maxZ = Double.POSITIVE_INFINITY;
     private static double _voxelSizeX, _voxelSizeY, _voxelSizeZ;
+    /**
+     * number of voxels in width / height / depth
+     */
+    private int _density;
     private Map<Voxel, Geometries> _voxelGeometriesMap;
     private Geometries _infiniteGeometries;
 
@@ -48,11 +45,24 @@ public class Box {
     }
 
     /**
+     * convert point to voxel
+     *
+     * @param point to convert
+     * @return voxel
+     */
+    private static Voxel convertPointToVoxel(Point3D point) {
+        int x = (int) ((point.getX().get() - _minX) / _voxelSizeX);
+        int y = (int) ((point.getY().get() - _minY) / _voxelSizeY);
+        int z = (int) ((point.getZ().get() - _minZ) / _voxelSizeZ);
+        return new Voxel(x, y, z);
+    }
+
+    /**
      * return infinite geometries
      *
      * @return infinite geometries
      */
-    public Geometries getInfiniteGeometries() {
+    private Geometries getInfiniteGeometries() {
         return _infiniteGeometries;
     }
 
@@ -88,25 +98,12 @@ public class Box {
     }
 
     /**
-     * convert point to voxel
-     *
-     * @param point to convert
-     * @return voxel
-     */
-    public static Voxel convertPointToVoxel(Point3D point) {
-        int x = (int) ((point.getX().get() - _minX) / _voxelSizeX);
-        int y = (int) ((point.getY().get() - _minY) / _voxelSizeY);
-        int z = (int) ((point.getZ().get() - _minZ) / _voxelSizeZ);
-        return new Voxel(x, y, z);
-    }
-
-    /**
      * Assigns voxels to each geometry by the location of the geometry, relative to the box,
      * and saves the geometry and voxel where the geometry is in the map
      *
      * @param geometries all the geometries that exist in the scene
      */
-    public void SetMap(Geometries geometries) {
+    private void SetMap(Geometries geometries) {
         _voxelGeometriesMap = new HashMap<>();
         _infiniteGeometries = new Geometries();
         Voxel minVoxel, maxVoxel, voxel;
@@ -131,13 +128,61 @@ public class Box {
         }
     }
 
-    /**
+        /**
+     * return list of GeoPoints that intersect with the ray
+     *
+     * @param ray            the ray that we find intersections points on it
+     * @param shadowRaysCase boolean variable - true in the case that we want all the intersection points
+     * @param dis            upper bound of distance from the ray head to the intersection point
+     * @return list of GeoPoints that intersect with the ray
+     */
+    public List<GeoPoint> getRelevantGeoPointsInBox(Ray ray, boolean shadowRaysCase, double dis) {
+        // for infinite geometries
+        List<GeoPoint> geoPoints = getInfiniteGeometries().findIntersections(ray, dis);
+
+        // to stop run on the voxels when found closest intersections
+        boolean intersectionFoundInVoxel = false;
+        List<GeoPoint> geometryIntersectionPoints;
+
+        // update ray's head position
+        ray = getRayOnTheBox(ray);
+        if (ray == null) return null; // in case that the ray not intersect with the box
+
+        Voxel currentVoxel = convertPointToVoxel(ray.getPoint()); // the first voxel
+        double[] deltaAndTArr = getRayFirstDeltaAndT(ray);
+
+        // run over all the voxels through the ray
+        while (currentVoxel != null) {
+            // If there are no geometries in current voxel continue to next voxel
+            if (!getMap().containsKey(currentVoxel)) {
+                currentVoxel = getNextVoxel(currentVoxel, ray, deltaAndTArr);
+                continue;
+            }
+            geometryIntersectionPoints = getMap().get(currentVoxel).findIntersections(ray, dis);
+
+            // run findIntersection func on current geometries
+            if (geometryIntersectionPoints != null) {
+                if (geoPoints == null)
+                    geoPoints = new LinkedList<>();
+                geoPoints.addAll(geometryIntersectionPoints);
+                if (!shadowRaysCase && !intersectionFoundInVoxel)
+                    intersectionFoundInVoxel = currentVoxel.isIntersectInVoxelRange(geometryIntersectionPoints);
+                    // if found intersections in current voxel then they are the closest points
+                else if (intersectionFoundInVoxel)
+                    return geoPoints;
+            }
+            currentVoxel = getNextVoxel(currentVoxel, ray, deltaAndTArr);
+        }
+        return geoPoints;
+    }
+
+        /**
      * return new ray with point on the box
      *
      * @param ray the ray that we work with it
      * @return new ray with point on the box
      */
-    public Ray getRayOnTheBox(Ray ray) {
+    private Ray getRayOnTheBox(Ray ray) {
         Point3D originRay = ray.getPoint();
         if (isPointInTheBox(originRay))
             return ray;
@@ -210,7 +255,7 @@ public class Box {
      * @param ray the ray that we work with it
      * @return array of parameters to move to next voxel
      */
-    public double[] getRayFirstDeltaAndT(Ray ray) {
+    private double[] getRayFirstDeltaAndT(Ray ray) {
         Vector rayDirection = ray.getDir();
         Point3D rayHead = rayDirection.getHead();
         double rayDirectionX = rayHead.getX().get();
@@ -259,7 +304,7 @@ public class Box {
      *                  [3,4,5] = [deltaX,deltaY,deltaZ]
      * @return next voxel in the track of the ray
      */
-    public Voxel getNextVoxel(Voxel voxel, Ray ray, double[] TandDelta) {
+    private Voxel getNextVoxel(Voxel voxel, Ray ray, double[] TandDelta) {
         int[] voxelIndex = new int[3];
         voxelIndex[0] = voxel.getX();
         voxelIndex[1] = voxel.getY();
@@ -295,39 +340,11 @@ public class Box {
      * @param p point
      * @return if the point is within the range of the box
      */
-    private boolean
-    isPointInTheBox(Point3D p) {
+    private static boolean isPointInTheBox(Point3D p) {
         double x = p.getX().get();
         double y = p.getY().get();
         double z = p.getZ().get();
         return x >= _minX && x <= _maxX && y >= _minY && y <= _maxY && z >= _minZ && z <= _maxZ;
-    }
-
-    /**
-     * return the x size voxel
-     *
-     * @return x size voxel
-     */
-    public double getVoxelSizeX() {
-        return _voxelSizeX;
-    }
-
-    /**
-     * return the y size voxel
-     *
-     * @return y size voxel
-     */
-    public double getVoxelSizeY() {
-        return _voxelSizeY;
-    }
-
-    /**
-     * return the z size voxel
-     *
-     * @return z size voxel
-     */
-    public double getVoxelSizeZ() {
-        return _voxelSizeZ;
     }
 
     /**
@@ -352,60 +369,6 @@ public class Box {
     }
 
     /**
-     * return minimum x coordinate of the box
-     *
-     * @return minimum x coordinate of the box
-     */
-    public double getMinX() {
-        return _minX;
-    }
-
-    /**
-     * return minimum y coordinate of the box
-     *
-     * @return minimum y coordinate of the box
-     */
-    public double getMinY() {
-        return _minY;
-    }
-
-    /**
-     * return minimum z coordinate of the box
-     *
-     * @return minimum z coordinate of the box
-     */
-    public double getMinZ() {
-        return _minZ;
-    }
-
-    /**
-     * return maximum x coordinate of the box
-     *
-     * @return maximum x coordinate of the box
-     */
-    public double getMaxX() {
-        return _maxX;
-    }
-
-    /**
-     * return maximum y coordinate of the box
-     *
-     * @return maximum y coordinate of the box
-     */
-    public double getMaxY() {
-        return _maxY;
-    }
-
-    /**
-     * return maximum z coordinate of the box
-     *
-     * @return maximum z coordinate of the box
-     */
-    public double geMaxZ() {
-        return _maxZ;
-    }
-
-    /**
      * return map
      *
      * @return Map
@@ -417,7 +380,7 @@ public class Box {
     /**
      * class that implement voxel (piece of the volume)
      */
-    public static class Voxel {
+    private static class Voxel {
         private final int _x;
         private final int _y;
         private final int _z;
@@ -433,6 +396,19 @@ public class Box {
             _x = indexX;
             _y = indexY;
             _z = indexZ;
+        }
+
+        /**
+         * return true if has intersections in this voxel
+         *
+         * @param intersections list of intersections
+         * @return true if has intersections in this voxel
+         */
+        private boolean isIntersectInVoxelRange(List<GeoPoint> intersections) {
+            for (GeoPoint geoPoint : intersections)
+                if (convertPointToVoxel(geoPoint._point).equals(this))
+                    return true;
+            return false;
         }
 
         @Override
@@ -459,7 +435,7 @@ public class Box {
          *
          * @return x coordinate
          */
-        public int getX() {
+        private int getX() {
             return _x;
         }
 
@@ -468,7 +444,7 @@ public class Box {
          *
          * @return y coordinate
          */
-        public int getY() {
+        private int getY() {
             return _y;
         }
 
@@ -477,7 +453,7 @@ public class Box {
          *
          * @return Z coordinate
          */
-        public int getZ() {
+        private int getZ() {
             return _z;
         }
     }
